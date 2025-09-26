@@ -309,7 +309,7 @@ ARROW_CFG = VisualizationMarkersCfg(
             arrow_body_radius=0.05,
             arrow_head_radius=0.1,
             arrow_head_length=0.15,
-            visual_material=sim_utils.PreviewSurfaceCfg(diffuse_color=(1.0, 0.0, 0.0)),
+            visual_material=sim_utils.PreviewSurfaceCfg(diffuse_color=(0.92, 0.517, 0.0)),
         ),
     }
 )

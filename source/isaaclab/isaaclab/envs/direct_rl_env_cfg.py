@@ -22,7 +22,12 @@ class DirectRLEnvCfg:
     """
 
     # simulation settings
-    viewer: ViewerCfg = ViewerCfg()
+    viewer: ViewerCfg = ViewerCfg(
+      eye=(125.26,-19.13,6.85),
+      lookat=(125.77,-104.71,-86.84),
+      # origin_type="asset_root",
+      # asset_name="ModularFreeflyer"
+    )
     """Viewer configuration. Default is ViewerCfg()."""
 
     sim: SimulationCfg = SimulationCfg()

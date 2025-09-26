@@ -500,16 +500,16 @@ class TrackVelocitiesTask(TaskCore):
         These arrows are used to visually assess the performance of the robot with regard to its velocity tracking
         task."""
 
-        # Linear velocity goal
-        marker_cfg = ARROW_CFG.copy()
-        marker_cfg.prim_path = f"/Visuals/Command/task_{self._task_uid}/goal_linear_velocity"
-        marker_cfg.markers["arrow"].visual_material = sim_utils.PreviewSurfaceCfg(diffuse_color=(1.0, 0.0, 0.0))
-        self.goal_linvel_visualizer = VisualizationMarkers(marker_cfg)
-        # Angular velocity goal
-        marker_cfg = ARROW_CFG.copy()
-        marker_cfg.prim_path = f"/Visuals/Command/task_{self._task_uid}/goal_angular_velocity"
-        marker_cfg.markers["arrow"].visual_material = sim_utils.PreviewSurfaceCfg(diffuse_color=(0.0, 1.0, 0.0))
-        self.goal_angvel_visualizer = VisualizationMarkers(marker_cfg)
+        # # Linear velocity goal
+        # marker_cfg = ARROW_CFG.copy()
+        # marker_cfg.prim_path = f"/Visuals/Command/task_{self._task_uid}/goal_linear_velocity"
+        # marker_cfg.markers["arrow"].visual_material = sim_utils.PreviewSurfaceCfg(diffuse_color=(1.0, 0.0, 0.0))
+        # self.goal_linvel_visualizer = VisualizationMarkers(marker_cfg)
+        # # Angular velocity goal
+        # marker_cfg = ARROW_CFG.copy()
+        # marker_cfg.prim_path = f"/Visuals/Command/task_{self._task_uid}/goal_angular_velocity"
+        # marker_cfg.markers["arrow"].visual_material = sim_utils.PreviewSurfaceCfg(diffuse_color=(0.0, 1.0, 0.0))
+        # self.goal_angvel_visualizer = VisualizationMarkers(marker_cfg)
         # Robot linear velocity
         marker_cfg = ARROW_CFG.copy()
         marker_cfg.markers["arrow"].visual_material = sim_utils.PreviewSurfaceCfg(diffuse_color=(1.0, 0.0, 1.0))
@@ -545,14 +545,14 @@ class TrackVelocitiesTask(TaskCore):
             )
             * self._task_cfg.visualization_linear_velocity_scale
         )
-        self.goal_linvel_visualizer.visualize(marker_pos, marker_orientation, marker_scale)
+        # self.goal_linvel_visualizer.visualize(marker_pos, marker_orientation, marker_scale)
         # Update the target angular velocity marker
         marker_pos[:, 2] = self._robot._robot_cfg.marker_height
         marker_heading = self._robot.heading_w[self._env_ids] + math.pi / 2.0
         marker_orientation[:, 0] = torch.cos(marker_heading * 0.5)
         marker_orientation[:, 3] = torch.sin(marker_heading * 0.5)
         marker_scale[:, 0] = self._angular_velocity_target * self._task_cfg.visualization_angular_velocity_scale
-        self.goal_angvel_visualizer.visualize(marker_pos, marker_orientation, marker_scale)
+        # self.goal_angvel_visualizer.visualize(marker_pos, marker_orientation, marker_scale)
 
         # Update the robot velocity marker
         marker_pos[:, 2] = self._robot._robot_cfg.marker_height + 0.2
