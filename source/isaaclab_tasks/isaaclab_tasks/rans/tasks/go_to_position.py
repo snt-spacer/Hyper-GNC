@@ -162,6 +162,7 @@ class GoToPositionTask(TaskCore):
         self.scalar_logger.add_log("task_reward", "GoToPosition/AVG/angular_velocity", "mean")
         self.scalar_logger.add_log("task_reward", "GoToPosition/AVG/boundary", "mean")
         self.scalar_logger.add_log("task_reward", "GoToPosition/EMA/action_rate_at_target", "ema")
+        self.scalar_logger.add_log("task_reward", "GoToPosition/AVG/individual_reward", "mean")
         self.scalar_logger.set_ema_coeff(self._task_cfg.ema_coeff)
 
     def get_observations(self) -> torch.Tensor:
@@ -332,7 +333,7 @@ class GoToPositionTask(TaskCore):
 
 
         # Return the reward by combining the different components and adding the robot rewards
-        return (
+        reward =  (
             position_rew * self._task_cfg.position_weight
             # + progress_rew * self._task_cfg.progress_weight
             + heading_rew * self._task_cfg.heading_weight
@@ -341,6 +342,9 @@ class GoToPositionTask(TaskCore):
             + reward_action_rate_at_target
             # + boundary_rew * self._task_cfg.boundary_weight
         ) + self._robot.compute_rewards(env_ids=self._env_ids)
+
+        self.scalar_logger.log("task_reward", "GoToPosition/AVG/individual_reward", reward)
+        return reward
 
     def reset(
         self,

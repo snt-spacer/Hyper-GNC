@@ -67,9 +67,9 @@ class RendezvousCfg(TaskCoreCfg):
     """Minimal cone spread between the goals. Defaults to 0.0 rad."""
     goal_max_cone_spread: float = math.pi
     """Maximal cone spread between the goals. Defaults to pi rad."""
-    max_num_goals: int = 10
+    max_num_goals: int = 15
     """Maximal number of goals. Defaults to 10."""
-    min_num_goals: int = 6
+    min_num_goals: int = 5
     """Minimal number of goals. Defaults to 6."""
     loop: bool = True
     """Whether the goals should loop or not. Defaults to False."""

@@ -228,6 +228,7 @@ class RendezvousTask(TaskCore):
         self.scalar_logger.add_log("task_reward", "Rendezvous/AVG/position_rew", "mean")
         self.scalar_logger.add_log("task_reward", "Rendezvous/SUM/num_goals", "sum")
         self.scalar_logger.add_log("task_reward", "Rendezvous/EMA/action_rate_at_target", "mean")
+        self.scalar_logger.add_log("task_reward", "Rendezvous/AVG/individual_reward", "mean")
 
     def get_observations(self) -> torch.Tensor:
         """
@@ -472,7 +473,7 @@ class RendezvousTask(TaskCore):
         # self.scalar_logger.log("task_reward", "Rendezvous/EMA/action_rate_at_target", reward_action_rate_at_target)
 
         # Return the reward by combining the different components and adding the robot rewards
-        return (
+        reward = (
             # (progress_rew) * (heading_to_target_rew) * self._task_cfg.progress_weight
             (position_rew) * (orientation_rew) * self._task_cfg.progress_weight
             # + orientation_rew * self._task_cfg.position_heading_weight
@@ -484,6 +485,9 @@ class RendezvousTask(TaskCore):
             + self._task_cfg.time_penalty
             + self._task_cfg.reached_bonus * goal_reached
         ) + self._robot.compute_rewards(env_ids=self._env_ids)  # type: ignore[return-value]
+
+        self.scalar_logger.log("task_reward", "Rendezvous/AVG/individual_reward", reward)
+        return reward
 
     def reset(
         self,

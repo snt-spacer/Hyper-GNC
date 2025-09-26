@@ -49,7 +49,7 @@ class FloatingPlatformRobotCfg(RobotCoreCfg):
         enable=False, randomization_modes=["uniform"], body_name="Cylinder", max_delta=0.05
     )
     wrench_rand_cfg = WrenchRandomizationCfg(
-        enable=False,
+        enable=True,
         randomization_modes=["constant_uniform"],
         body_name="Cylinder",
         uniform_force=(0, 0.25),

@@ -65,9 +65,9 @@ def modify_rendezvous_config():
     with open(eval_racing_cfg_path, 'r') as file:
         for line in file:
             if "max_num_goals:" in line:
-                new_content.append(f"    max_num_goals: int = 10\n")
+                new_content.append(f"    max_num_goals: int = 15\n")
             elif "min_num_goals:" in line:
-                new_content.append(f"    min_num_goals: int = 6\n")
+                new_content.append(f"    min_num_goals: int = 5\n")
             elif "position_tolerance:" in line:
                 new_content.append(f"    position_tolerance: float = 0.03\n")
             else:

@@ -88,6 +88,7 @@ class FloatingPlatformRobot(RobotCore):
         )
         
         self._reaction_wheel_action = torch.zeros((self._num_envs, 1), device=self._device, dtype=torch.float32)
+        self.action_rate = torch.zeros((self._num_envs), device=self._device, dtype=torch.float32)
 
     def run_setup(self, robot: Articulation):
         super().run_setup(robot)
@@ -113,17 +114,17 @@ class FloatingPlatformRobot(RobotCore):
     def compute_rewards(self, env_ids: torch.Tensor):
         # TODO: DT should be factored in?
 
-        action_rate = torch.sum(torch.abs(self._unaltered_actions - self._previous_unaltered_actions), dim=1)
+        self.action_rate = torch.sum(torch.abs(self._unaltered_actions - self._previous_unaltered_actions), dim=1)
         joint_accelerations = torch.sum(torch.square(self.joint_acc), dim=1)
 
         # Log data
-        self.scalar_logger.log("robot_state", "AVG/action_rate", action_rate)
+        self.scalar_logger.log("robot_state", "AVG/action_rate", self.action_rate)
         self.scalar_logger.log("robot_state", "AVG/joint_acceleration", joint_accelerations)
-        self.scalar_logger.log("robot_reward", "AVG/action_rate", action_rate)
+        self.scalar_logger.log("robot_reward", "AVG/action_rate", self.action_rate)
         self.scalar_logger.log("robot_reward", "AVG/joint_acceleration", joint_accelerations)
 
         return (
-            action_rate[env_ids] * self._robot_cfg.rew_action_rate_scale
+            self.action_rate[env_ids] * self._robot_cfg.rew_action_rate_scale
             + joint_accelerations[env_ids] * self._robot_cfg.rew_joint_accel_scale
         )
 

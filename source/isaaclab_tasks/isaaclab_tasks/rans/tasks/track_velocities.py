@@ -121,6 +121,7 @@ class TrackVelocitiesTask(TaskCore):
         self.scalar_logger.add_log("task_reward", "TrackVelocities/EMA/lateral_velocity", "ema")
         self.scalar_logger.add_log("task_reward", "TrackVelocities/EMA/angular_velocity", "ema")
         self.scalar_logger.add_log("task_reward", "TrackVelocities/EMA/action_rate_at_target", "ema")
+        self.scalar_logger.add_log("task_reward", "TrackVelocities/AVG/individual_reward", "mean")
         self.scalar_logger.set_ema_coeff(self._task_cfg.ema_coeff)
 
     def initialiaze_buffers(self, env_ids: torch.Tensor | None = None) -> None:
@@ -267,12 +268,15 @@ class TrackVelocitiesTask(TaskCore):
         self.scalar_logger.log("task_reward", "TrackVelocities/EMA/action_rate_at_target", reward_action_rate_at_target)
 
         # Return the reward by combining the different components and adding the robot rewards
-        return (
+        reward = (
             linear_velocity_rew * self._task_cfg.linear_velocity_weight
             + lateral_velocity_rew * self._task_cfg.lateral_velocity_weight
             + angular_velocity_rew * self._task_cfg.angular_velocity_weight
             + reward_action_rate_at_target
         ) + self._robot.compute_rewards(env_ids=self._env_ids)
+
+        self.scalar_logger.log("task_reward", "TrackVelocities/AVG/individual_reward", reward)
+        return reward
 
     def reset(
         self,
