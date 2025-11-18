@@ -13,10 +13,10 @@ class SinglePPORunnerCfg(RslRlOnPolicyRunnerCfg):
     num_steps_per_env = 16
     max_iterations = 4000
     save_interval = 50
-    experiment_name = "multitask_memory_control"
+    experiment_name = "multitask_memory_control_intball_6DOF"
     logger = "wandb"
     wandb_kwargs = {
-        "project": "multitask_memory_control",
+        "project": "multitask_memory_control_intball_6DOF",
         "entity": "spacer-rl",
         "group": "zeroG",
     }
@@ -27,7 +27,7 @@ class SinglePPORunnerCfg(RslRlOnPolicyRunnerCfg):
         critic_hidden_dims=[32, 32],
         activation="elu",
         clip_actions=True,
-        clip_actions_range=[-1, 1],
+        clip_actions_range=[0, 1],
     )
     algorithm = RslRlPpoAlgorithmCfg(
         value_loss_coef=1.0,

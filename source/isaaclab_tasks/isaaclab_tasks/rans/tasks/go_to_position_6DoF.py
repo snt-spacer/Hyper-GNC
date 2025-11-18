@@ -13,6 +13,7 @@ from isaaclab.utils import math as math_utils
 from isaaclab_tasks.rans import GoToPosition3DCfg
 
 from .task_core import TaskCore
+import torch.nn.functional as F
 
 EPS = 1e-6  # small constant to avoid divisions by 0 and log(0)
 
@@ -30,7 +31,6 @@ class GoToPosition3DTask(TaskCore):
         num_envs: int = 1,
         device: str = "cuda",
         env_ids: torch.Tensor | None = None,
-        decimation: int = 1,
     ) -> None:
         """
         Initializes the 3D GoToPosition task.
@@ -44,9 +44,7 @@ class GoToPosition3DTask(TaskCore):
             env_ids: The ids of the environments used by this task.
         """
 
-        super().__init__(
-            scene=scene, task_uid=task_uid, num_envs=num_envs, device=device, env_ids=env_ids, decimation=decimation
-        )
+        super().__init__(scene=scene, task_uid=task_uid, num_envs=num_envs, device=device, env_ids=env_ids)
 
         # Task and reward parameters
         self._task_cfg = task_cfg
@@ -157,8 +155,11 @@ class GoToPosition3DTask(TaskCore):
         target_quat = self._target_orientations[self._env_ids]  # (w, x, y, z)
         self._orientation_error = math_utils.quat_error_magnitude(target_quat, current_quat)
 
+        task_id_one_hot = F.one_hot(torch.tensor([self._task_uid], device=self._device), num_classes=self._num_tasks).squeeze(0).repeat(self._num_envs, 1)
+        task_obs = task_id_one_hot
+
         # Concatenate task observations with robot's internal observations
-        return torch.concat((self._task_data, self._robot.get_observations()), dim=-1)
+        return torch.concat((self._task_data, self._robot.get_observations()), dim=-1)#, task_obs
 
     def compute_rewards(self) -> torch.Tensor:
         """

@@ -11,8 +11,7 @@ from isaaclab.utils.assets import REPO_ROOT_PATH
 
 INTBALL2_LOCAL_CFG = ArticulationCfg(
     spawn=sim_utils.UsdFileCfg(
-        usd_path=f"{REPO_ROOT_PATH}/assets/robots/JAXAIntBall2.usd",
-        activate_contact_sensors=False,
+        usd_path=f"{REPO_ROOT_PATH}/assets/robots/JAXAIntBall2_SM.usd",
         rigid_props=sim_utils.RigidBodyPropertiesCfg(
             rigid_body_enabled=True,
             max_linear_velocity=1000.0,
@@ -28,6 +27,7 @@ INTBALL2_LOCAL_CFG = ArticulationCfg(
             sleep_threshold=0.005,
             stabilization_threshold=0.001,
         ),
+        activate_contact_sensors=True,
     ),
     init_state=ArticulationCfg.InitialStateCfg(
         pos=(0.0, 0.0, 0.5),

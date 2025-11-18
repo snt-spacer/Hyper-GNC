@@ -8,8 +8,8 @@ import math
 from isaaclab_assets.robots.intball2_local import INTBALL2_LOCAL_CFG
 
 from isaaclab.assets import ArticulationCfg
+from isaaclab.sensors import ContactSensorCfg
 
-# from omni.isaac.lab.sensors import ContactSensorCfg
 from isaaclab.utils import configclass
 
 from isaaclab_tasks.rans.domain_randomization import ActionsRescalerCfg, CoMRandomizationCfg, NoisyActionsCfg
@@ -23,7 +23,7 @@ class IntBall2RobotCfg(RobotCoreCfg):
 
     robot_name: str = "intball2"
 
-    robot_cfg: ArticulationCfg = INTBALL2_LOCAL_CFG.replace(prim_path="/World/envs/env_.*/IntBall2")
+    robot_cfg: ArticulationCfg = INTBALL2_LOCAL_CFG.replace(prim_path="/World/envs/env_.*/Robot")
 
     A = 0.035  # Distance from center along X-axis
     B = 0.045  # Distance from center along Y-axis
@@ -33,12 +33,12 @@ class IntBall2RobotCfg(RobotCoreCfg):
     is_reaction_wheel = False
     num_thrusters = 8  # IntBall2 has 8 thrusters, arranged in a 3D cuboid pattern
 
-    root_body_name = "body"
+    root_body_name = "SM_intball2"
     rew_action_rate_scale = -0.12 / 8
-    rew_torque_balance_scale = -0.05  # penalize torque balance
-    # rew_drag_torque_scale = -0.02 # penalize excessive drag torque effects - not yet used since propellers physics is not yet implemented
+    rew_torque_balance_scale = -0.25  # penalize excessive torques
+    rew_drag_torque_penalty_scale = -0.05 # penalize drag torque
 
-    action_mode = "discrete"  # "continuous" or "discrete"
+    action_mode = "continuous"  # "continuous" or "discrete"
 
     # Thruster transforms (pos, rot: 3D): [X, Y, Z, RotX, RotY, RotZ]
     thruster_transforms = [
@@ -58,18 +58,23 @@ class IntBall2RobotCfg(RobotCoreCfg):
     thrust_scale_factors = [0.8] * num_thrusters  # Placeholder
     # drag_torque_factors = [0.1] * num_thrusters  # Placeholder, needs tuning
     split_thrust = True  # Thrusters work in coordinated pairs
+    drag_polarity = [1, -1, 1, -1, 1, -1, 1, -1]
+    # Scalar factor for torque induced per unit thrust
+    drag_torque_scale = 0.078  # empirically from paper
+    # The above scale is determined empirically for 1 propeller in the
+    # JAXA study, but in this code it's assumed same for all 8 propellers
 
-    # # Sensors
-    # body_contact_forces: ContactSensorCfg = ContactSensorCfg(
-    #     prim_path="/World/envs/env_.*/IntBall2/body",
-    #     update_period=0.0,
-    #     history_length=3,
-    #     debug_vis=True,
-    # )
+    # Sensors
+    body_contact_forces: ContactSensorCfg = ContactSensorCfg(
+        prim_path="/World/envs/env_.*/Robot/SM_intball2/sensor",
+        update_period=0.0,
+        history_length=3,
+        debug_vis=True,
+    )
 
     # Randomization
     com_rand_cfg: CoMRandomizationCfg = CoMRandomizationCfg(
-        enable=False, randomization_modes=["uniform"], body_name="body", max_delta=0.05
+        enable=False, randomization_modes=["uniform"], body_name="SM_intball2", max_delta=0.05
     )
     noisy_actions_cfg: NoisyActionsCfg = NoisyActionsCfg(
         enable=False,
@@ -89,7 +94,6 @@ class IntBall2RobotCfg(RobotCoreCfg):
 
     action_space = num_thrusters
     observation_space = num_thrusters
-    # + drag on each propeller
     state_space = 0
     gen_space = 0
 

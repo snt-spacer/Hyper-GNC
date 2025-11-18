@@ -186,6 +186,8 @@ class SingleEnv(DirectRLEnv):
         self.robot_api.apply_actions()
 
     def _get_observations(self) -> dict:
+        general_obs = self.task_api.get_observations()
+        return general_obs
         general_obs, track_obs = self.task_api.get_observations()
         observations = {"policy": 
                             {

@@ -4,17 +4,17 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 import torch
+import numpy as np
 from gymnasium import spaces, vector
 
 from isaaclab.assets import Articulation
 from isaaclab.scene import InteractiveScene
 from isaaclab.utils import math as math_utils
+from isaaclab.sensors import ContactSensor
 
 from isaaclab_tasks.rans import IntBall2RobotCfg
 
 from .robot_core import RobotCore
-
-# from isaaclab.sensors import ContactSensor
 
 
 class IntBall2Robot(RobotCore):
@@ -93,6 +93,7 @@ class IntBall2Robot(RobotCore):
         self.scalar_logger.add_log("robot_state", "AVG/torque", "mean")
         self.scalar_logger.add_log("robot_reward", "AVG/action_rate", "mean")
         self.scalar_logger.add_log("robot_reward", "AVG/torque", "mean")
+        self.scalar_logger.add_log("robot_reward", "AVG/drag_torque_penalty", "mean")
 
     def get_observations(self) -> torch.Tensor:
         """Returns the observation vector (thruster state + velocities)."""
@@ -104,6 +105,14 @@ class IntBall2Robot(RobotCore):
         # Compute
         action_rate = torch.sum(torch.square(self._unaltered_actions - self._previous_unaltered_actions), dim=1)
         observed_torque = torch.sum(torch.abs(self._thrust_torques), dim=(1, 2))
+        # drag torque effects
+        drag_polarity = torch.tensor(self._robot_cfg.drag_polarity, device=self._device).view(1, -1)  # shape (1, 8)
+        drag_torque_scale = self._robot_cfg.drag_torque_scale
+        # Approximate drag torque per propeller
+        drag_torques = self._thrust_actions * drag_torque_scale * drag_polarity  # shape (num_envs, 8)
+        # Sum of signed torques => net undesired residual
+        net_drag_torque = drag_torques.sum(dim=1)  # shape (num_envs,)
+        drag_torque_penalty = net_drag_torque.abs()
 
         # Log data
         self.scalar_logger.log("robot_state", "AVG/action_rate", action_rate)
@@ -111,10 +120,12 @@ class IntBall2Robot(RobotCore):
 
         self.scalar_logger.log("robot_reward", "AVG/action_rate", action_rate)
         self.scalar_logger.log("robot_reward", "AVG/torque", observed_torque)
+        self.scalar_logger.log("robot_reward", "AVG/drag_torque_penalty", drag_torque_penalty)
 
         return (
             action_rate * self._robot_cfg.rew_action_rate_scale
             + observed_torque * self._robot_cfg.rew_torque_balance_scale
+            + drag_torque_penalty * self._robot_cfg.rew_drag_torque_penalty_scale
         )
 
     def get_dones(self) -> tuple[torch.Tensor, torch.Tensor]:
@@ -213,24 +224,31 @@ class IntBall2Robot(RobotCore):
         self._robot.write_root_velocity_to_sim(velocity, env_ids)
 
     def configure_gym_env_spaces(self):
-        single_action_space = spaces.MultiDiscrete([2] * self._robot_cfg.num_thrusters)
+        if self._robot_cfg.action_mode == "continuous":
+            # Continuous action space
+            single_action_space = spaces.Box(
+                low=-1.0,
+                high=1.0,
+                shape=(self._robot_cfg.num_thrusters,),
+                dtype=np.float32,
+            )
+        else:
+            single_action_space = spaces.MultiDiscrete([2] * self._robot_cfg.num_thrusters)
         action_space = vector.utils.batch_space(single_action_space, self._num_envs)
 
         return single_action_space, action_space
 
-    # def activateSensors(self, sensor_type: str, filter: list):
-    #     if sensor_type == "contacts":
-    #         self._robot_cfg.contact_sensor_active=True
-    #         if len(filter) > 0:
-    #             self._robot_cfg.body_contact_forces.filter_prim_paths_expr = filter
+    def activateSensors(self, sensor_type: str, filter: list):
+        if sensor_type == "contacts":
+            self._robot_cfg.contact_sensor_active=True
+            if len(filter) > 0:
+                self._robot_cfg.body_contact_forces.filter_prim_paths_expr = filter
 
-    # def register_sensors(self, scene: InteractiveScene) -> None:
-    #     # Contact sensor
-    #     if self._robot_cfg.contact_sensor_active:
-    #         scene.sensors["robot_contacts"] = ContactSensor(
-    #             self._robot_cfg.body_contact_forces
-    #         )
-    #         self.contacts: ContactSensor = scene["robot_contacts"]
+    def register_sensors(self) -> None:
+        # Contact sensor
+        if self._robot_cfg.contact_sensor_active:
+            self.scene.sensors["robot_contacts"] = ContactSensor(self._robot_cfg.body_contact_forces)
+            self.contacts: ContactSensor = self.scene["robot_contacts"]
 
     ##
     # Derived base properties
@@ -336,14 +354,49 @@ class ThrustGenerator:
         rotated_forces = torch.matmul(R, force_vector.view(-1, 3, 1)).squeeze(-1)  # Shape: (num_envs, num_thrusters, 3)
 
         # Compute torques
-        torques = torch.cross(T, rotated_forces, dim=-1)  # Shape: (num_envs, num_thrusters, 3)
+        torques = torch.cross(T, rotated_forces, dim=-1)  # flattened: (num_envs * num_thrusters, 3)
+        rotated_forces_flat = rotated_forces
 
-        # Return forces and torques applied at thruster positions
-        return (
-            T.reshape(-1, self._robot_cfg.num_thrusters, 3),
-            rotated_forces.reshape(-1, self._robot_cfg.num_thrusters, 3),
-            torques.reshape(-1, self._robot_cfg.num_thrusters, 3),
-        )
+        # # Return forces and torques applied at thruster positions
+        # return (
+        #     T.reshape(-1, self._robot_cfg.num_thrusters, 3),
+        #     rotated_forces.reshape(-1, self._robot_cfg.num_thrusters, 3),
+        #     torques.reshape(-1, self._robot_cfg.num_thrusters, 3),
+        # )
+        
+        # --------------------------------------------------
+        # 2) DRAG TORQUE (NEW)
+        # --------------------------------------------------
+        # Rotor spin axis in world frame:
+        # local spin axis is the same as unit_vector (0,0,1) in thruster frame
+        uv_flat = self.unit_vector.reshape(-1, 3).unsqueeze(-1)         # (num_envs * num_thrusters, 3, 1)
+        rotor_axis_world = torch.matmul(R, uv_flat).squeeze(-1)         # (num_envs * num_thrusters, 3)
+
+        # Drag torque magnitude per propeller (scalar) ~ |thrust| * scale
+        drag_mag_flat = torch.abs(rand_forces).reshape(-1, 1) * self._robot_cfg.drag_torque_scale  # (num_envs * num_thrusters, 1)
+
+        # Polarity per thruster, broadcast over environments
+        pol = torch.tensor(
+            self._robot_cfg.drag_polarity,
+            device=actions.device,
+            dtype=actions.dtype,
+        )                                                                # (num_thrusters,)
+        pol_flat = pol.unsqueeze(0).repeat(self._num_envs, 1).reshape(-1, 1)   # (num_envs * num_thrusters, 1)
+
+        # Drag torque vector in world frame
+        drag_torque_flat = rotor_axis_world * (drag_mag_flat * pol_flat) # (num_envs * num_thrusters, 3)
+
+        # Add drag torque to thrust torque
+        torques_flat = torques + drag_torque_flat                        # (num_envs * num_thrusters, 3)
+
+        # --------------------------------------------------
+        # 3) Reshape back to (num_envs, num_thrusters, 3)
+        # --------------------------------------------------
+        thrust_positions = T.view(self._num_envs, self._robot_cfg.num_thrusters, 3)
+        thrust_forces    = rotated_forces_flat.view(self._num_envs, self._robot_cfg.num_thrusters, 3)
+        thrust_torques   = torques_flat.view(self._num_envs, self._robot_cfg.num_thrusters, 3)
+        
+        return thrust_positions, thrust_forces, thrust_torques
 
     @property
     def compact_transforms(self):
