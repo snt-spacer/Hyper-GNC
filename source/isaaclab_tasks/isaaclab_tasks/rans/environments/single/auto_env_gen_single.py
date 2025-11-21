@@ -24,13 +24,13 @@ from isaaclab_tasks.rans import ROBOT_CFG_FACTORY, ROBOT_FACTORY, TASK_CFG_FACTO
 class SingleEnvCfg(DirectRLEnvCfg):
     # env
     decimation = 6
-    episode_length_s = 120.0
+    episode_length_s = 40.0
 
     robot_name = "Leatherback"
     task_name = "RaceGates"
 
     # scene
-    scene: InteractiveSceneCfg = InteractiveSceneCfg(num_envs=4096, env_spacing=0.0, replicate_physics=True)
+    scene: InteractiveSceneCfg = InteractiveSceneCfg(num_envs=4096, env_spacing=10.0, replicate_physics=True)
 
     # simulation
     sim: SimulationCfg = SimulationCfg(dt=1.0 / 60.0, render_interval=decimation)
@@ -167,7 +167,7 @@ class SingleEnv(DirectRLEnv):
         self.task_api.register_sensors()
 
         # add ground plane
-        spawn_ground_plane(prim_path="/World/ground", cfg=GroundPlaneCfg())
+        #spawn_ground_plane(prim_path="/World/ground", cfg=GroundPlaneCfg())
         # clone, filter, and replicate
         self.scene.clone_environments(copy_from_source=False)
         self.scene.filter_collisions(global_prim_paths=[])
@@ -186,8 +186,8 @@ class SingleEnv(DirectRLEnv):
         self.robot_api.apply_actions()
 
     def _get_observations(self) -> dict:
-        general_obs = self.task_api.get_observations()
-        return general_obs
+        # general_obs = self.task_api.get_observations()
+        # return {"policy": general_obs}
         general_obs, track_obs = self.task_api.get_observations()
         observations = {"policy": 
                             {

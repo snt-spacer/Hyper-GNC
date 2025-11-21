@@ -12,11 +12,11 @@ from isaaclab_rl.rsl_rl import RslRlOnPolicyRunnerCfg, RslRlPpoActorCriticMemory
 class SingleRobotMultiTaskPPORunnerCfg(RslRlOnPolicyRunnerCfg):
     num_steps_per_env = 16
     max_iterations = 4000
-    save_interval = 50
-    experiment_name = "multitask_memory_control"
+    save_interval = 100
+    experiment_name = "mtrl_control_intball_6DOF"
     logger = "wandb"
     wandb_kwargs = {
-        "project": "multitask_memory_control",
+        "project": "mtrl_control_intball_6DOF",
         "entity": "spacer-rl",
         "group": "zeroG",
     }
@@ -27,7 +27,7 @@ class SingleRobotMultiTaskPPORunnerCfg(RslRlOnPolicyRunnerCfg):
         critic_hidden_dims=[256, 256],
         activation="tanh",
         clip_actions=True,
-        clip_actions_range=[-1, 1],
+        clip_actions_range=[0, 1],
         use_embeddings=True,
         embeddings_size=4,
         generator_size=(64, 64),

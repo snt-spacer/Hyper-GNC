@@ -27,8 +27,9 @@ class IntBall2Robot(RobotCore):
         num_envs: int = 1,
         decimation: int = 4,
         device: str = "cuda",
+        num_tasks: int = 1,
     ) -> None:
-        super().__init__(scene=scene, robot_uid=robot_uid, num_envs=num_envs, decimation=decimation, device=device)
+        super().__init__(scene=scene, robot_uid=robot_uid, num_envs=num_envs, decimation=decimation, num_tasks=num_tasks, device=device)
         self._robot_cfg = robot_cfg
         self._dim_robot_obs = self._robot_cfg.observation_space
         self._dim_robot_act = self._robot_cfg.action_space
@@ -95,13 +96,13 @@ class IntBall2Robot(RobotCore):
         self.scalar_logger.add_log("robot_reward", "AVG/torque", "mean")
         self.scalar_logger.add_log("robot_reward", "AVG/drag_torque_penalty", "mean")
 
-    def get_observations(self) -> torch.Tensor:
+    def get_observations(self, env_ids: torch.Tensor) -> torch.Tensor:
         """Returns the observation vector (thruster state + velocities)."""
         # return torch.cat([self._thrust_actions, self.root_lin_vel_w, self.root_ang_vel_w], dim=-1)
         # return self._thrust_actions
-        return self._unaltered_actions
+        return self._unaltered_actions[env_ids]
 
-    def compute_rewards(self) -> torch.Tensor:
+    def compute_rewards(self, env_ids: torch.Tensor) -> torch.Tensor:
         # Compute
         action_rate = torch.sum(torch.square(self._unaltered_actions - self._previous_unaltered_actions), dim=1)
         observed_torque = torch.sum(torch.abs(self._thrust_torques), dim=(1, 2))
@@ -123,9 +124,9 @@ class IntBall2Robot(RobotCore):
         self.scalar_logger.log("robot_reward", "AVG/drag_torque_penalty", drag_torque_penalty)
 
         return (
-            action_rate * self._robot_cfg.rew_action_rate_scale
-            + observed_torque * self._robot_cfg.rew_torque_balance_scale
-            + drag_torque_penalty * self._robot_cfg.rew_drag_torque_penalty_scale
+            action_rate[env_ids] * self._robot_cfg.rew_action_rate_scale
+            + observed_torque[env_ids] * self._robot_cfg.rew_torque_balance_scale
+            + drag_torque_penalty[env_ids] * self._robot_cfg.rew_drag_torque_penalty_scale
         )
 
     def get_dones(self) -> tuple[torch.Tensor, torch.Tensor]:

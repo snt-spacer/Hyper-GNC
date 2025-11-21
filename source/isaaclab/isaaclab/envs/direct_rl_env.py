@@ -567,6 +567,7 @@ class DirectRLEnv(gym.Env):
             env_ids: List of environment ids which must be reset
         """
         self.scene.reset(env_ids)
+        self.scene.reset(env_ids)
 
         # apply events such as randomization for environments that need a reset
         if self.cfg.events:

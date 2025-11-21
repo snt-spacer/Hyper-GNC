@@ -13,6 +13,7 @@ from isaaclab.utils import math as math_utils
 from isaaclab_tasks.rans import GoThroughPoses3DCfg
 
 from .task_core import TaskCore
+import torch.nn.functional as F
 
 EPS = 1e-6  # small constant to avoid divisions by 0 and log(0)
 
@@ -30,6 +31,7 @@ class GoThroughPoses3DTask(TaskCore):
         num_envs: int = 1,
         device: str = "cuda",
         env_ids: torch.Tensor | None = None,
+        num_tasks: int = 1,
     ) -> None:
         """
         Initializes the GoThroughPoses task.
@@ -42,7 +44,7 @@ class GoThroughPoses3DTask(TaskCore):
             task_id: The id of the task.
             env_ids: The ids of the environments used by this task."""
 
-        super().__init__(scene=scene, task_uid=task_uid, num_envs=num_envs, device=device, env_ids=env_ids)
+        super().__init__(scene=scene, task_uid=task_uid, num_envs=num_envs, device=device, env_ids=env_ids, num_tasks=num_tasks)
 
         # Task and reward parameters
         self._task_cfg = task_cfg
@@ -52,7 +54,7 @@ class GoThroughPoses3DTask(TaskCore):
         self._dim_gen_act = self._task_cfg.gen_space
 
         # Buffers
-        self.initialize_buffers()
+        self.initialize_buffers(env_ids=env_ids)
 
     def initialize_buffers(self, env_ids: torch.Tensor | None = None) -> None:
         """
@@ -90,19 +92,29 @@ class GoThroughPoses3DTask(TaskCore):
 
         super().create_logs()
 
-        self.scalar_logger.add_log("task_state", "AVG/normed_linear_velocity", "mean")
-        self.scalar_logger.add_log("task_state", "AVG/absolute_angular_velocity", "mean")
-        self.scalar_logger.add_log("task_state", "EMA/position_distance", "ema")
-        self.scalar_logger.add_log("task_state", "EMA/orientation_error", "ema")
-        self.scalar_logger.add_log("task_state", "EMA/boundary_distance", "ema")
+        self.scalar_logger.add_log("task_state", "GoThroughPoses6DoF/AVG/normed_linear_velocity", "mean")
+        self.scalar_logger.add_log("task_state", "GoThroughPoses6DoF/AVG/absolute_angular_velocity", "mean")
+        self.scalar_logger.add_log("task_state", "GoThroughPoses6DoF/EMA/position_distance", "ema")
+        self.scalar_logger.add_log("task_state", "GoThroughPoses6DoF/EMA/orientation_error", "ema")
+        self.scalar_logger.add_log("task_state", "GoThroughPoses6DoF/EMA/boundary_distance", "ema")
 
-        self.scalar_logger.add_log("task_reward", "AVG/position", "mean")
-        self.scalar_logger.add_log("task_reward", "AVG/orientation", "mean")
-        self.scalar_logger.add_log("task_reward", "AVG/linear_velocity", "mean")
-        self.scalar_logger.add_log("task_reward", "AVG/angular_velocity", "mean")
-        self.scalar_logger.add_log("task_reward", "AVG/boundary", "mean")
-        self.scalar_logger.add_log("task_reward", "AVG/progress", "mean")
-        self.scalar_logger.add_log("task_reward", "SUM/num_goals", "sum")
+        self.scalar_logger.add_log("task_reward", "GoThroughPoses6DoF/AVG/position", "mean")
+        self.scalar_logger.add_log("task_reward", "GoThroughPoses6DoF/AVG/orientation", "mean")
+        self.scalar_logger.add_log("task_reward", "GoThroughPoses6DoF/AVG/linear_velocity", "mean")
+        self.scalar_logger.add_log("task_reward", "GoThroughPoses6DoF/AVG/angular_velocity", "mean")
+        self.scalar_logger.add_log("task_reward", "GoThroughPoses6DoF/AVG/boundary", "mean")
+        self.scalar_logger.add_log("task_reward", "GoThroughPoses6DoF/AVG/progress", "mean")
+        self.scalar_logger.add_log("task_reward", "GoThroughPoses6DoF/AVG/num_goals", "sum")
+
+        self.scalar_logger.add_log("task_reward", "GoThroughPoses6DoF/AVG/total_reward", "mean")
+        self.scalar_logger.add_log("task_reward", "GoThroughPoses6DoF/AVG/wheighted_progress_reward", "mean")
+        self.scalar_logger.add_log("task_reward", "GoThroughPoses6DoF/AVG/wheighted_pose_reward", "mean")
+        self.scalar_logger.add_log("task_reward", "GoThroughPoses6DoF/AVG/wheighted_linear_velocity_reward", "mean")
+        self.scalar_logger.add_log("task_reward", "GoThroughPoses6DoF/AVG/wheighted_angular_velocity_reward", "mean")
+        self.scalar_logger.add_log("task_reward", "GoThroughPoses6DoF/AVG/wheighted_boundary_reward", "mean")
+        self.scalar_logger.add_log("task_reward", "GoThroughPoses6DoF/AVG/time_penalty", "mean")
+        self.scalar_logger.add_log("task_reward", "GoThroughPoses6DoF/AVG/wheighted_reached_bonus_reward", "mean")
+
 
         self.scalar_logger.set_ema_coeff(self._task_cfg.ema_coeff)
 
@@ -138,7 +150,7 @@ class GoThroughPoses3DTask(TaskCore):
 
         # log the global distance for debugging
         self._position_dist = self._position_error.norm(dim=-1)  # shape [N]
-        self.scalar_logger.log("task_state", "EMA/position_distance", self._position_dist)
+        self.scalar_logger.log("task_state", "GoThroughPoses6DoF/EMA/position_distance", self._position_dist)
 
         # robot orientation
         # Compute a relative quaternion from robot -> target
@@ -170,7 +182,7 @@ class GoThroughPoses3DTask(TaskCore):
         # Update also the orientation error magnitude
         target_quat_w = torch.nn.functional.normalize(target_quat_w, dim=-1, eps=EPS)
         current_quat_w = torch.nn.functional.normalize(current_quat_w, dim=-1, eps=EPS)
-        self._orientation_error[self._env_ids] = math_utils.quat_error_magnitude(target_quat_w, current_quat_w)
+        self._orientation_error = math_utils.quat_error_magnitude(target_quat_w, current_quat_w)
 
         # We compute the observations of the subsequent goals in the previous goal's frame.
         for i in range(self._task_cfg.num_subsequent_goals - 1):
@@ -213,9 +225,12 @@ class GoThroughPoses3DTask(TaskCore):
             start_idx = 15 + 9 * i
             self._task_data[:, start_idx : start_idx + 3] = local_subsequent_error  # Position error
             self._task_data[:, start_idx + 3 : start_idx + 9] = goal_rel_mat_6  # rotation to next goal
+        
+        task_id_one_hot = F.one_hot(torch.tensor([self._task_uid], device=self._device), num_classes=self._num_tasks).squeeze(0).repeat(self._num_envs, 1)
+        task_obs = task_id_one_hot
 
         # Concatenate task observations with robot's internal observations
-        return torch.concat((self._task_data, self._robot.get_observations()), dim=-1)
+        return torch.concat((self._task_data, self._robot.get_observations(env_ids=self._env_ids)), dim=-1), task_obs
 
     def compute_rewards(self) -> torch.Tensor:
         """
@@ -254,12 +269,11 @@ class GoThroughPoses3DTask(TaskCore):
         progress_rew = self._previous_position_dist - self._position_dist
 
         # Logging
-        self.scalar_logger.log("task_state", "EMA/position_distance", self._position_dist)
-        self.scalar_logger.log("task_state", "EMA/orientation_error", torch.norm(self._orientation_error))
-        self.scalar_logger.log("task_state", "EMA/boundary_distance", boundary_dist)
-        self.scalar_logger.log("task_state", "AVG/normed_linear_velocity", linear_velocity)
-        self.scalar_logger.log("task_state", "AVG/absolute_angular_velocity", angular_velocity)
-
+        self.scalar_logger.log("task_state", "GoThroughPoses6DoF/EMA/position_distance", self._position_dist)
+        self.scalar_logger.log("task_state", "GoThroughPoses6DoF/EMA/orientation_error", torch.norm(self._orientation_error))
+        self.scalar_logger.log("task_state", "GoThroughPoses6DoF/EMA/boundary_distance", boundary_dist)
+        self.scalar_logger.log("task_state", "GoThroughPoses6DoF/AVG/normed_linear_velocity", linear_velocity)
+        self.scalar_logger.log("task_state", "GoThroughPoses6DoF/AVG/absolute_angular_velocity", angular_velocity)
         # Position reward (exponential decay based on distance)
         position_rew = torch.exp(-self._position_dist / self._task_cfg.position_exponential_reward_coeff)
         # orientation reward (encourages the robot to orient the same way as the target)
@@ -279,12 +293,12 @@ class GoThroughPoses3DTask(TaskCore):
         self._previous_position_dist[reached_ids] = 0
 
         # Logging rewards
-        self.scalar_logger.log("task_reward", "AVG/linear_velocity", linear_velocity_rew)
-        self.scalar_logger.log("task_reward", "AVG/angular_velocity", angular_velocity_rew)
-        self.scalar_logger.log("task_reward", "AVG/boundary", boundary_rew)
-        self.scalar_logger.log("task_reward", "AVG/orientation", orientation_rew)
-        self.scalar_logger.log("task_reward", "AVG/progress", progress_rew)
-        self.scalar_logger.log("task_reward", "SUM/num_goals", goal_reached)
+        self.scalar_logger.log("task_reward", "GoThroughPoses6DoF/AVG/linear_velocity", linear_velocity_rew)
+        self.scalar_logger.log("task_reward", "GoThroughPoses6DoF/AVG/angular_velocity", angular_velocity_rew)
+        self.scalar_logger.log("task_reward", "GoThroughPoses6DoF/AVG/boundary", boundary_rew)
+        self.scalar_logger.log("task_reward", "GoThroughPoses6DoF/AVG/orientation", orientation_rew)
+        self.scalar_logger.log("task_reward", "GoThroughPoses6DoF/AVG/progress", progress_rew)
+        self.scalar_logger.log("task_reward", "GoThroughPoses6DoF/AVG/num_goals", goal_reached)
 
         # Compute final reward
         total_reward = (
@@ -296,7 +310,17 @@ class GoThroughPoses3DTask(TaskCore):
             + boundary_rew * self._task_cfg.boundary_weight
             + self._task_cfg.time_penalty
             + self._task_cfg.reached_bonus * goal_reached
-        ) + self._robot.compute_rewards()
+        ) + self._robot.compute_rewards(env_ids=self._env_ids)
+
+        self.scalar_logger.log("task_reward", "GoThroughPoses6DoF/AVG/total_reward", total_reward)
+        self.scalar_logger.log("task_reward", "GoThroughPoses6DoF/AVG/wheighted_progress_reward", progress_rew * self._task_cfg.progress_weight)
+        self.scalar_logger.log("task_reward", "GoThroughPoses6DoF/AVG/wheighted_pose_reward", (position_rew * orientation_rew) * self._task_cfg.pose_weight)
+        self.scalar_logger.log("task_reward", "GoThroughPoses6DoF/AVG/wheighted_linear_velocity_reward", linear_velocity_rew * self._task_cfg.linear_velocity_weight)
+        self.scalar_logger.log("task_reward", "GoThroughPoses6DoF/AVG/wheighted_angular_velocity_reward", angular_velocity_rew * self._task_cfg.angular_velocity_weight)
+        self.scalar_logger.log("task_reward", "GoThroughPoses6DoF/AVG/wheighted_boundary_reward", boundary_rew * self._task_cfg.boundary_weight)
+        self.scalar_logger.log("task_reward", "GoThroughPoses6DoF/AVG/time_penalty", self._task_cfg.time_penalty)
+        self.scalar_logger.log("task_reward", "GoThroughPoses6DoF/AVG/wheighted_reached_bonus_reward", self._task_cfg.reached_bonus * goal_reached)
+
 
         return total_reward
 
@@ -335,6 +359,10 @@ class GoThroughPoses3DTask(TaskCore):
             env_seeds (torch.Tensor | None): The seeds for the environments to ensure reproducibility. Defaults to None.
         """
         super().reset(env_ids, gen_actions=gen_actions, env_seeds=env_seeds)
+
+        # Randomizes goals and initial conditions
+        self.set_goals(env_ids)
+        self.set_initial_conditions(env_ids)
 
         # Reset the target index and trajectory completed
         self._target_index[env_ids] = 0
@@ -376,7 +404,7 @@ class GoThroughPoses3DTask(TaskCore):
         self._previous_position_dist = self._position_dist.clone()
         self._position_dist = torch.linalg.norm(self._position_error, dim=-1)
         current_quat = self._robot.root_quat_w[self._env_ids]  # (w, x, y, z)
-        target_quat = self._target_orientations[self._env_ids, self._target_index[self._env_ids]]  # (w, x, y, z)
+        target_quat = self._target_orientations[self._ALL_INDICES, self._target_index]  # (w, x, y, z)
         self._orientation_error = math_utils.quat_error_magnitude(target_quat, current_quat)
 
         ones = torch.ones_like(self._goal_reached, dtype=torch.long)
@@ -603,8 +631,8 @@ class GoThroughPoses3DTask(TaskCore):
         ) * torch.randn((num_resets, 3), device=self._device)
 
         # Apply to articulation
-        self._robot.set_pose(initial_pose, env_ids)
-        self._robot.set_velocity(initial_velocity, env_ids)
+        self._robot.set_pose(initial_pose, self._env_ids[env_ids])
+        self._robot.set_velocity(initial_velocity, self._env_ids[env_ids])
 
     def create_task_visualization(self) -> None:
         """
@@ -718,5 +746,5 @@ class GoThroughPoses3DTask(TaskCore):
             self.subsequent_goal_sphere_visualizer.set_visibility(False)
 
         # Update robot visualization
-        self._robot_marker_pos[:, :3] = self._robot.root_link_pos_w[:, :3]
-        self.robot_visualizer.visualize(self._robot_marker_pos, self._robot.root_link_quat_w)
+        self._robot_marker_pos[:, :3] = self._robot.root_link_pos_w[self._env_ids, :3]
+        self.robot_visualizer.visualize(self._robot_marker_pos, self._robot.root_link_quat_w[self._env_ids])

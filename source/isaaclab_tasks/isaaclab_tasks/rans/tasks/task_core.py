@@ -219,6 +219,9 @@ class TaskCore:
         for randomizer in self.randomizers:
             randomizer.reset(env_ids)
 
+        # Resets the goal reached flag
+        self._goal_reached[env_ids] = 0
+
     def set_goals(self, env_ids: torch.Tensor) -> None:
         raise NotImplementedError
 

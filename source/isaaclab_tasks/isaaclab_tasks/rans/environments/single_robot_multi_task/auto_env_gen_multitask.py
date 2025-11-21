@@ -32,7 +32,7 @@ class MultiTaskEnvCfg(DirectRLEnvCfg):
     tasks_names = ["GoToPosition"]
 
     # scene
-    scene: InteractiveSceneCfg = InteractiveSceneCfg(num_envs=4096, env_spacing=50.0, replicate_physics=True)
+    scene: InteractiveSceneCfg = InteractiveSceneCfg(num_envs=4096, env_spacing=5.0, replicate_physics=True)
 
     # Steps per episode
     #spe = 1/hz * decumation * episode_length_s
@@ -80,7 +80,7 @@ class MultiTaskEnvCfg(DirectRLEnvCfg):
     gen_space = 0
 
     # Multitask control
-    type_of_training = "padd" #hyper, padd
+    type_of_training = "hyper" #hyper, padd
 
 
 class MultiTaskEnv(DirectRLEnv):
@@ -216,10 +216,11 @@ class MultiTaskEnv(DirectRLEnv):
             task_api.register_sensors()
 
         # add ground plane
-        spawn_ground_plane(prim_path="/World/ground", cfg=GroundPlaneCfg(
-            size=(500.0, 500.0),
-            color=(0.01, 0.01, 0.01)
-        ))
+        if "3D" not in self.cfg.tasks_names[0]:
+            spawn_ground_plane(prim_path="/World/ground", cfg=GroundPlaneCfg(
+                size=(500.0, 500.0),
+                color=(0.01, 0.01, 0.01)
+            ))
         # clone, filter, and replicate
         self.scene.clone_environments(copy_from_source=False)
         self.scene.filter_collisions(global_prim_paths=[])

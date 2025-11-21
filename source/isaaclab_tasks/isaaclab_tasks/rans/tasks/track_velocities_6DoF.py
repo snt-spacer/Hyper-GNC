@@ -14,6 +14,7 @@ from isaaclab.utils import math as math_utils
 from isaaclab_tasks.rans import TrackVelocities3DCfg
 
 from .task_core import TaskCore
+import torch.nn.functional as F
 
 EPS = 1e-6  # small constant to avoid divisions by 0 and log(0)
 
@@ -31,6 +32,7 @@ class TrackVelocities3DTask(TaskCore):
         num_envs: int = 1,
         device: str = "cuda",
         env_ids: torch.Tensor | None = None,
+        num_tasks: int = 1,
     ) -> None:
         """
         Initializes the TrackVelocities task.
@@ -44,7 +46,7 @@ class TrackVelocities3DTask(TaskCore):
             env_ids: The ids of the environments used by this task.
         """
 
-        super().__init__(scene=scene, task_uid=task_uid, num_envs=num_envs, device=device, env_ids=env_ids)
+        super().__init__(scene=scene, task_uid=task_uid, num_envs=num_envs, device=device, env_ids=env_ids, num_tasks=num_tasks)
 
         # Task and reward parameters
         self._task_cfg = task_cfg
@@ -54,7 +56,7 @@ class TrackVelocities3DTask(TaskCore):
         self._dim_gen_act = self._task_cfg.gen_space
 
         # Buffers
-        self.initialize_buffers()
+        self.initialize_buffers(env_ids=env_ids)
 
     def create_logs(self) -> None:
         """
@@ -65,24 +67,35 @@ class TrackVelocities3DTask(TaskCore):
 
         super().create_logs()
 
-        self.scalar_logger.add_log("task_state", "AVG/absolute_linear_velocity", "mean")
-        self.scalar_logger.add_log("task_state", "AVG/absolute_lateral_velocity", "mean")
-        self.scalar_logger.add_log("task_state", "AVG/absolute_vertical_velocity", "mean")
-        self.scalar_logger.add_log("task_state", "AVG/absolute_yaw_velocity", "mean")
-        self.scalar_logger.add_log("task_state", "AVG/absolute_pitch_velocity", "mean")
-        self.scalar_logger.add_log("task_state", "AVG/absolute_roll_velocity", "mean")
-        self.scalar_logger.add_log("task_state", "EMA/linear_velocity_distance", "ema")
-        self.scalar_logger.add_log("task_state", "EMA/lateral_velocity_distance", "ema")
-        self.scalar_logger.add_log("task_state", "EMA/vertical_velocity_distance", "ema")
-        self.scalar_logger.add_log("task_state", "EMA/yaw_velocity_distance", "ema")
-        self.scalar_logger.add_log("task_state", "EMA/pitch_velocity_distance", "ema")
-        self.scalar_logger.add_log("task_state", "EMA/roll_velocity_distance", "ema")
-        self.scalar_logger.add_log("task_reward", "EMA/linear_velocity", "ema")
-        self.scalar_logger.add_log("task_reward", "EMA/lateral_velocity", "ema")
-        self.scalar_logger.add_log("task_reward", "EMA/vertical_velocity", "ema")
-        self.scalar_logger.add_log("task_reward", "EMA/yaw_velocity", "ema")
-        self.scalar_logger.add_log("task_reward", "EMA/pitch_velocity", "ema")
-        self.scalar_logger.add_log("task_reward", "EMA/roll_velocity", "ema")
+        self.scalar_logger.add_log("task_state", "TrackVelocities6DoF/AVG/absolute_linear_velocity", "mean")
+        self.scalar_logger.add_log("task_state", "TrackVelocities6DoF/AVG/absolute_lateral_velocity", "mean")
+        self.scalar_logger.add_log("task_state", "TrackVelocities6DoF/AVG/absolute_vertical_velocity", "mean")
+        self.scalar_logger.add_log("task_state", "TrackVelocities6DoF/AVG/absolute_yaw_velocity", "mean")
+        self.scalar_logger.add_log("task_state", "TrackVelocities6DoF/AVG/absolute_pitch_velocity", "mean")
+        self.scalar_logger.add_log("task_state", "TrackVelocities6DoF/AVG/absolute_roll_velocity", "mean")
+        self.scalar_logger.add_log("task_state", "TrackVelocities6DoF/EMA/linear_velocity_distance", "ema")
+        self.scalar_logger.add_log("task_state", "TrackVelocities6DoF/EMA/lateral_velocity_distance", "ema")
+        self.scalar_logger.add_log("task_state", "TrackVelocities6DoF/EMA/vertical_velocity_distance", "ema")
+        self.scalar_logger.add_log("task_state", "TrackVelocities6DoF/EMA/yaw_velocity_distance", "ema")
+        self.scalar_logger.add_log("task_state", "TrackVelocities6DoF/EMA/pitch_velocity_distance", "ema")
+        self.scalar_logger.add_log("task_state", "TrackVelocities6DoF/EMA/roll_velocity_distance", "ema")
+
+        self.scalar_logger.add_log("task_reward", "TrackVelocities6DoF/EMA/linear_velocity", "ema")
+        self.scalar_logger.add_log("task_reward", "TrackVelocities6DoF/EMA/lateral_velocity", "ema")
+        self.scalar_logger.add_log("task_reward", "TrackVelocities6DoF/EMA/vertical_velocity", "ema")
+        self.scalar_logger.add_log("task_reward", "TrackVelocities6DoF/EMA/yaw_velocity", "ema")
+        self.scalar_logger.add_log("task_reward", "TrackVelocities6DoF/EMA/pitch_velocity", "ema")
+        self.scalar_logger.add_log("task_reward", "TrackVelocities6DoF/EMA/roll_velocity", "ema")
+
+        self.scalar_logger.add_log("task_reward", "TrackVelocities6DoF/AVG/total_reward", "mean")
+        self.scalar_logger.add_log("task_reward", "TrackVelocities6DoF/AVG/wheighted_linear_velocity_reward", "mean")
+        self.scalar_logger.add_log("task_reward", "TrackVelocities6DoF/AVG/wheighted_lateral_velocity_reward", "mean")
+        self.scalar_logger.add_log("task_reward", "TrackVelocities6DoF/AVG/wheighted_vertical_velocity_reward", "mean")
+        self.scalar_logger.add_log("task_reward", "TrackVelocities6DoF/AVG/wheighted_yaw_velocity_reward", "mean")
+        self.scalar_logger.add_log("task_reward", "TrackVelocities6DoF/AVG/wheighted_pitch_velocity_reward", "mean")
+        self.scalar_logger.add_log("task_reward", "TrackVelocities6DoF/AVG/wheighted_roll_velocity_reward", "mean")
+
+
         self.scalar_logger.set_ema_coeff(self._task_cfg.ema_coeff)
 
     def initialize_buffers(self, env_ids: torch.Tensor | None = None) -> None:
@@ -141,18 +154,17 @@ class TrackVelocities3DTask(TaskCore):
         """
 
         # linear velocity error in the robot's frame
-        err_lin_vel = self._linear_velocity_target - self._robot.root_com_lin_vel_b[:, 0]
+        err_lin_vel = self._linear_velocity_target - self._robot.root_com_lin_vel_b[self._env_ids, 0]
         # lateral velocity error in the robot's frame
-        err_lat_vel = self._lateral_velocity_target - self._robot.root_com_lin_vel_b[:, 1]
+        err_lat_vel = self._lateral_velocity_target - self._robot.root_com_lin_vel_b[self._env_ids, 1]
         # vertical velocity error in the robot's frame
-        err_ver_vel = self._vertical_velocity_target - self._robot.root_com_lin_vel_b[:, 2]
+        err_ver_vel = self._vertical_velocity_target - self._robot.root_com_lin_vel_b[self._env_ids, 2]
         # yaw velocity error in the robot's frame
-        err_yaw_vel = self._yaw_velocity_target - self._robot.root_com_ang_vel_b[:, 2]
+        err_yaw_vel = self._yaw_velocity_target - self._robot.root_com_ang_vel_b[self._env_ids, 2]
         # pitch velocity error in the robot's frame
-        err_pitch_vel = self._pitch_velocity_target - self._robot.root_com_ang_vel_b[:, 1]
+        err_pitch_vel = self._pitch_velocity_target - self._robot.root_com_ang_vel_b[self._env_ids, 1]
         # roll velocity error in the robot's frame
-        err_roll_vel = self._roll_velocity_target - self._robot.root_com_ang_vel_b[:, 0]
-
+        err_roll_vel = self._roll_velocity_target - self._robot.root_com_ang_vel_b[self._env_ids, 0]
         # Store in buffer
         self._task_data[:, 0] = err_lin_vel * self._task_cfg.enable_linear_velocity
         self._task_data[:, 1] = err_lat_vel * self._task_cfg.enable_lateral_velocity
@@ -165,26 +177,29 @@ class TrackVelocities3DTask(TaskCore):
 
         # Update logs
         self.scalar_logger.log(
-            "task_state", "AVG/absolute_linear_velocity", torch.abs(self._robot.root_com_lin_vel_b[:, 0])
+            "task_state", "TrackVelocities6DoF/AVG/absolute_linear_velocity", torch.abs(self._robot.root_com_lin_vel_b[self._env_ids, 0])
         )
         self.scalar_logger.log(
-            "task_state", "AVG/absolute_lateral_velocity", torch.abs(self._robot.root_com_lin_vel_b[:, 1])
+            "task_state", "TrackVelocities6DoF/AVG/absolute_lateral_velocity", torch.abs(self._robot.root_com_lin_vel_b[self._env_ids, 1])
         )
         self.scalar_logger.log(
-            "task_state", "AVG/absolute_vertical_velocity", torch.abs(self._robot.root_com_lin_vel_b[:, 2])
+            "task_state", "TrackVelocities6DoF/AVG/absolute_vertical_velocity", torch.abs(self._robot.root_com_lin_vel_b[self._env_ids, 2])
         )
         self.scalar_logger.log(
-            "task_state", "AVG/absolute_yaw_velocity", torch.abs(self._robot.root_com_ang_vel_b[:, 2])
+            "task_state", "TrackVelocities6DoF/AVG/absolute_yaw_velocity", torch.abs(self._robot.root_com_ang_vel_b[self._env_ids, 2])
         )
         self.scalar_logger.log(
-            "task_state", "AVG/absolute_pitch_velocity", torch.abs(self._robot.root_com_ang_vel_b[:, 1])
+            "task_state", "TrackVelocities6DoF/AVG/absolute_pitch_velocity", torch.abs(self._robot.root_com_ang_vel_b[self._env_ids, 1])
         )
         self.scalar_logger.log(
-            "task_state", "AVG/absolute_roll_velocity", torch.abs(self._robot.root_com_ang_vel_b[:, 0])
+            "task_state", "TrackVelocities6DoF/AVG/absolute_roll_velocity", torch.abs(self._robot.root_com_ang_vel_b[self._env_ids, 0])
         )
 
+        task_id_one_hot = F.one_hot(torch.tensor([self._task_uid], device=self._device), num_classes=self._num_tasks).squeeze(0).repeat(self._num_envs, 1)
+        task_obs = task_id_one_hot
+
         # Concatenate the task observations with the robot observations
-        return torch.concat((self._task_data, self._robot.get_observations()), dim=-1)
+        return torch.concat((self._task_data, self._robot.get_observations(env_ids=self._env_ids)), dim=-1), task_obs
 
     def compute_rewards(self) -> torch.Tensor:
         """
@@ -194,25 +209,25 @@ class TrackVelocities3DTask(TaskCore):
             torch.Tensor: The reward for the current state of the robot."""
 
         # Linear velocity error
-        linear_velocity_distance = torch.abs(self._linear_velocity_target - self._robot.root_com_lin_vel_b[:, 0])
+        linear_velocity_distance = torch.abs(self._linear_velocity_target - self._robot.root_com_lin_vel_b[self._env_ids, 0])
         # Lateral velocity error
-        lateral_velocity_distance = torch.abs(self._lateral_velocity_target - self._robot.root_com_lin_vel_b[:, 1])
+        lateral_velocity_distance = torch.abs(self._lateral_velocity_target - self._robot.root_com_lin_vel_b[self._env_ids, 1])
         # Vertical velocity error
-        vertical_velocity_distance = torch.abs(self._vertical_velocity_target - self._robot.root_com_lin_vel_b[:, 2])
+        vertical_velocity_distance = torch.abs(self._vertical_velocity_target - self._robot.root_com_lin_vel_b[self._env_ids, 2])
         # Yaw velocity error
-        yaw_velocity_distance = torch.abs(self._yaw_velocity_target - self._robot.root_com_ang_vel_b[:, 2])
+        yaw_velocity_distance = torch.abs(self._yaw_velocity_target - self._robot.root_com_ang_vel_b[self._env_ids, 2])
         # Pitch velocity error
-        pitch_velocity_distance = torch.abs(self._pitch_velocity_target - self._robot.root_com_ang_vel_b[:, 1])
+        pitch_velocity_distance = torch.abs(self._pitch_velocity_target - self._robot.root_com_ang_vel_b[self._env_ids, 1])
         # Roll velocity error
-        roll_velocity_distance = torch.abs(self._roll_velocity_target - self._robot.root_com_ang_vel_b[:, 0])
+        roll_velocity_distance = torch.abs(self._roll_velocity_target - self._robot.root_com_ang_vel_b[self._env_ids, 0])
 
         # Update logs (exponential moving average to see the performance at the end of the episode)
-        self.scalar_logger.log("task_state", "EMA/linear_velocity_distance", linear_velocity_distance)
-        self.scalar_logger.log("task_state", "EMA/lateral_velocity_distance", lateral_velocity_distance)
-        self.scalar_logger.log("task_state", "EMA/vertical_velocity_distance", vertical_velocity_distance)
-        self.scalar_logger.log("task_state", "EMA/yaw_velocity_distance", yaw_velocity_distance)
-        self.scalar_logger.log("task_state", "EMA/pitch_velocity_distance", pitch_velocity_distance)
-        self.scalar_logger.log("task_state", "EMA/roll_velocity_distance", roll_velocity_distance)
+        self.scalar_logger.log("task_state", "TrackVelocities6DoF/EMA/linear_velocity_distance", linear_velocity_distance)
+        self.scalar_logger.log("task_state", "TrackVelocities6DoF/EMA/lateral_velocity_distance", lateral_velocity_distance)
+        self.scalar_logger.log("task_state", "TrackVelocities6DoF/EMA/vertical_velocity_distance", vertical_velocity_distance)
+        self.scalar_logger.log("task_state", "TrackVelocities6DoF/EMA/yaw_velocity_distance", yaw_velocity_distance)
+        self.scalar_logger.log("task_state", "TrackVelocities6DoF/EMA/pitch_velocity_distance", pitch_velocity_distance)
+        self.scalar_logger.log("task_state", "TrackVelocities6DoF/EMA/roll_velocity_distance", roll_velocity_distance)
 
         # linear velotiy reward
         linear_velocity_rew = torch.exp(
@@ -273,22 +288,34 @@ class TrackVelocities3DTask(TaskCore):
         self._goal_reached += goal_is_reached
 
         # Update logs (exponential moving average to see the performance at the end of the episode)
-        self.scalar_logger.log("task_reward", "EMA/linear_velocity", linear_velocity_rew)
-        self.scalar_logger.log("task_reward", "EMA/lateral_velocity", lateral_velocity_rew)
-        self.scalar_logger.log("task_reward", "EMA/vertical_velocity", vertical_velocity_rew)
-        self.scalar_logger.log("task_reward", "EMA/yaw_velocity", yaw_velocity_rew)
-        self.scalar_logger.log("task_reward", "EMA/pitch_velocity", pitch_velocity_rew)
-        self.scalar_logger.log("task_reward", "EMA/roll_velocity", roll_velocity_rew)
+        self.scalar_logger.log("task_reward", "TrackVelocities6DoF/EMA/linear_velocity", linear_velocity_rew)
+        self.scalar_logger.log("task_reward", "TrackVelocities6DoF/EMA/lateral_velocity", lateral_velocity_rew)
+        self.scalar_logger.log("task_reward", "TrackVelocities6DoF/EMA/vertical_velocity", vertical_velocity_rew)
+        self.scalar_logger.log("task_reward", "TrackVelocities6DoF/EMA/yaw_velocity", yaw_velocity_rew)
+        self.scalar_logger.log("task_reward", "TrackVelocities6DoF/EMA/pitch_velocity", pitch_velocity_rew)
+        self.scalar_logger.log("task_reward", "TrackVelocities6DoF/EMA/roll_velocity", roll_velocity_rew)
 
         # Return the reward by combining the different components and adding the robot rewards
-        return (
+
+        total_reward = (
             linear_velocity_rew * self._task_cfg.linear_velocity_weight
             + lateral_velocity_rew * self._task_cfg.lateral_velocity_weight
             + vertical_velocity_rew * self._task_cfg.vertical_velocity_weight
             + yaw_velocity_rew * self._task_cfg.yaw_velocity_weight
             + pitch_velocity_rew * self._task_cfg.pitch_velocity_weight
             + roll_velocity_rew * self._task_cfg.roll_velocity_weight
-        ) + self._robot.compute_rewards()
+        ) + self._robot.compute_rewards(env_ids=self._env_ids)
+
+        self.scalar_logger.log("task_reward", "TrackVelocities6DoF/AVG/total_reward", total_reward)
+        self.scalar_logger.log("task_reward", "TrackVelocities6DoF/AVG/wheighted_linear_velocity_reward", linear_velocity_rew * self._task_cfg.linear_velocity_weight)
+        self.scalar_logger.log("task_reward", "TrackVelocities6DoF/AVG/wheighted_lateral_velocity_reward", lateral_velocity_rew * self._task_cfg.lateral_velocity_weight)
+        self.scalar_logger.log("task_reward", "TrackVelocities6DoF/AVG/wheighted_vertical_velocity_reward", vertical_velocity_rew * self._task_cfg.vertical_velocity_weight)
+        self.scalar_logger.log("task_reward", "TrackVelocities6DoF/AVG/wheighted_yaw_velocity_reward", yaw_velocity_rew * self._task_cfg.yaw_velocity_weight)
+        self.scalar_logger.log("task_reward", "TrackVelocities6DoF/AVG/wheighted_pitch_velocity_reward", pitch_velocity_rew * self._task_cfg.pitch_velocity_weight)
+        self.scalar_logger.log("task_reward", "TrackVelocities6DoF/AVG/wheighted_roll_velocity_reward", roll_velocity_rew * self._task_cfg.roll_velocity_weight)
+
+        return total_reward
+
 
     def reset(
         self,
@@ -315,6 +342,10 @@ class TrackVelocities3DTask(TaskCore):
             env_ids (torch.Tensor): The ids of the environments.
         """
         super().reset(env_ids, gen_actions=gen_actions, env_seeds=env_seeds)
+
+        # Randomizes goals and initial conditions
+        self.set_goals(env_ids)
+        self.set_initial_conditions(env_ids)
 
         self._num_steps[env_ids] = 0
         self.update_goals()
@@ -369,37 +400,37 @@ class TrackVelocities3DTask(TaskCore):
                 self._gen_actions[env_ids, 0] * (self._task_cfg.goal_max_lin_vel - self._task_cfg.goal_min_lin_vel)
                 + self._task_cfg.goal_min_lin_vel
             ) * self._rng.sample_sign_torch("float", 1, ids=env_ids)
-            self._linear_velocity_desired[env_ids] = self._linear_velocity_target.clone()
+            self._linear_velocity_desired[env_ids] = self._linear_velocity_target[env_ids].clone()
         if self._task_cfg.enable_lateral_velocity:
             self._lateral_velocity_target[env_ids] = (
                 self._gen_actions[env_ids, 1] * (self._task_cfg.goal_max_lat_vel - self._task_cfg.goal_min_lat_vel)
                 + self._task_cfg.goal_min_lat_vel
             ) * self._rng.sample_sign_torch("float", 1, ids=env_ids)
-            self._lateral_velocity_desired[env_ids] = self._lateral_velocity_target.clone()
+            self._lateral_velocity_desired[env_ids] = self._lateral_velocity_target[env_ids].clone()
         if self._task_cfg.enable_vertical_velocity:
             self._vertical_velocity_target[env_ids] = (
                 self._gen_actions[env_ids, 2] * (self._task_cfg.goal_max_ver_vel - self._task_cfg.goal_min_ver_vel)
                 + self._task_cfg.goal_min_ver_vel
             ) * self._rng.sample_sign_torch("float", 1, ids=env_ids)
-            self._vertical_velocity_desired[env_ids] = self._vertical_velocity_target.clone()
+            self._vertical_velocity_desired[env_ids] = self._vertical_velocity_target[env_ids].clone()
         if self._task_cfg.enable_yaw_velocity:
             self._yaw_velocity_target[env_ids] = (
                 self._gen_actions[env_ids, 3] * (self._task_cfg.goal_max_yaw_vel - self._task_cfg.goal_min_yaw_vel)
                 + self._task_cfg.goal_min_yaw_vel
             ) * self._rng.sample_sign_torch("float", 1, ids=env_ids)
-            self._yaw_velocity_desired[env_ids] = self._yaw_velocity_target.clone()
+            self._yaw_velocity_desired[env_ids] = self._yaw_velocity_target[env_ids].clone()
         if self._task_cfg.enable_pitch_velocity:
             self._pitch_velocity_target[env_ids] = (
                 self._gen_actions[env_ids, 4] * (self._task_cfg.goal_max_pitch_vel - self._task_cfg.goal_min_pitch_vel)
                 + self._task_cfg.goal_min_pitch_vel
             ) * self._rng.sample_sign_torch("float", 1, ids=env_ids)
-            self._pitch_velocity_desired[env_ids] = self._pitch_velocity_target.clone()
+            self._pitch_velocity_desired[env_ids] = self._pitch_velocity_target[env_ids].clone()
         if self._task_cfg.enable_roll_velocity:
             self._roll_velocity_target[env_ids] = (
                 self._gen_actions[env_ids, 5] * (self._task_cfg.goal_max_roll_vel - self._task_cfg.goal_min_roll_vel)
                 + self._task_cfg.goal_min_roll_vel
             ) * self._rng.sample_sign_torch("float", 1, ids=env_ids)
-            self._roll_velocity_desired[env_ids] = self._roll_velocity_target.clone()
+            self._roll_velocity_desired[env_ids] = self._roll_velocity_target[env_ids].clone()
 
         # Pick a random smoothing factor
         self._smoothing_factor[env_ids] = (
@@ -568,8 +599,8 @@ class TrackVelocities3DTask(TaskCore):
         initial_velocity[:, 5] = yaw_ang_vel
 
         # Apply to articulation
-        self._robot.set_pose(initial_pose, env_ids)
-        self._robot.set_velocity(initial_velocity, env_ids)
+        self._robot.set_pose(initial_pose, self._env_ids[env_ids])
+        self._robot.set_velocity(initial_velocity, self._env_ids[env_ids])
 
     def create_task_visualization(self) -> None:
         """Adds the visual marker to the scene.
@@ -677,9 +708,9 @@ class TrackVelocities3DTask(TaskCore):
             (self._linear_velocity_target, self._lateral_velocity_target, self._vertical_velocity_target), dim=-1
         )  # shape [N, 3], in body frame
         # Rotate from body to world
-        target_lin_w = math_utils.quat_rotate(self._robot.root_link_quat_w, target_lin_b)
+        target_lin_w = math_utils.quat_rotate(self._robot.root_link_quat_w[self._env_ids], target_lin_b)
 
-        marker_pos = self._robot.root_link_pos_w.clone()
+        marker_pos = self._robot.root_link_pos_w[self._env_ids].clone()
 
         # Orientation: align +X with velocity direction
         marker_orientation = direction_to_quaternion(target_lin_w)
@@ -696,9 +727,9 @@ class TrackVelocities3DTask(TaskCore):
             (self._roll_velocity_target, self._pitch_velocity_target, self._yaw_velocity_target), dim=-1
         )
         # rotate from body to world
-        target_ang_w = math_utils.quat_rotate(self._robot.root_link_quat_w, target_ang_b)
+        target_ang_w = math_utils.quat_rotate(self._robot.root_link_quat_w[self._env_ids], target_ang_b)
 
-        marker_pos = self._robot.root_link_pos_w.clone()
+        marker_pos = self._robot.root_link_pos_w[self._env_ids].clone()
         marker_orientation = direction_to_quaternion(target_ang_w)
         ang_magnitudes = torch.norm(target_ang_w, dim=-1)
         marker_scale = torch.ones_like(marker_pos)
@@ -707,9 +738,9 @@ class TrackVelocities3DTask(TaskCore):
         self.goal_angvel_visualizer.visualize(marker_pos, marker_orientation, marker_scale)
 
         # robot's linear velocity in world frame
-        robot_lin_w = self._robot.root_com_lin_vel_w[:, :3]
+        robot_lin_w = self._robot.root_com_lin_vel_w[self._env_ids, :3]
 
-        marker_pos = self._robot.root_link_pos_w.clone()
+        marker_pos = self._robot.root_link_pos_w[self._env_ids].clone()
         marker_pos[:, 2] += 0.2  # offset
 
         marker_orientation = direction_to_quaternion(robot_lin_w)
@@ -720,9 +751,9 @@ class TrackVelocities3DTask(TaskCore):
         self.robot_linvel_visualizer.visualize(marker_pos, marker_orientation, marker_scale)
 
         # robot's angular velocity in world frame
-        robot_ang_w = self._robot.root_com_ang_vel_w[:, :3]
+        robot_ang_w = self._robot.root_com_ang_vel_w[self._env_ids, :3]
 
-        marker_pos = self._robot.root_link_pos_w.clone()
+        marker_pos = self._robot.root_link_pos_w[self._env_ids].clone()
         marker_pos[:, 2] += 0.2
 
         marker_orientation = direction_to_quaternion(robot_ang_w)

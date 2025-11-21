@@ -12,20 +12,21 @@ from isaaclab_rl.rsl_rl import RslRlOnPolicyRunnerCfg, RslRlPpoActorCriticCfg, R
 class SinglePPORunnerCfg(RslRlOnPolicyRunnerCfg):
     num_steps_per_env = 16
     max_iterations = 4000
-    save_interval = 50
-    experiment_name = "multitask_memory_control_intball_6DOF"
+    save_interval = 100
+    experiment_name = "single_control_intball_6DOF"
     logger = "wandb"
     wandb_kwargs = {
-        "project": "multitask_memory_control_intball_6DOF",
+        "project": "single_control_intball_6DOF",
         "entity": "spacer-rl",
         "group": "zeroG",
     }
     empirical_normalization = False
     policy = RslRlPpoActorCriticCfg(
         init_noise_std=1.0,
-        actor_hidden_dims=[32, 32],
-        critic_hidden_dims=[32, 32],
-        activation="elu",
+        noise_std_type="scalar",
+        actor_hidden_dims=[128, 64, 32],
+        critic_hidden_dims=[128, 128, 128],
+        activation="tanh",
         clip_actions=True,
         clip_actions_range=[0, 1],
     )
