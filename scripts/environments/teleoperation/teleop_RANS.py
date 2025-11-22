@@ -108,6 +108,8 @@ def pre_process_actions(prev_action: torch.Tensor, delta_pose: torch.Tensor, gri
     elif args_cli.robot_name == "LeoRover":
         return delta_pose[0, :2].unsqueeze(0)
         # return torch.tensor([[0.1, 1.0]], device=delta_pose.device)
+    elif args_cli.robot_name == "IntBall2":
+        return torch.zeros((1,8), device=delta_pose.device)
     else:
         # resolve gripper command
         gripper_vel = torch.zeros(delta_pose.shape[0], 1, device=delta_pose.device)

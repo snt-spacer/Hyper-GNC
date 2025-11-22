@@ -66,7 +66,7 @@ class IntBall2RobotCfg(RobotCoreCfg):
 
     # Sensors
     body_contact_forces: ContactSensorCfg = ContactSensorCfg(
-        prim_path="/World/envs/env_.*/Robot/SM_intball2/sensor",
+        prim_path="/World/envs/env_.*/Robot/Robot/SM_intball2",
         update_period=0.0,
         history_length=3,
         debug_vis=True,

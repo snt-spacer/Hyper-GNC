@@ -14,7 +14,7 @@ from isaaclab.markers import SPHERE_CFG, VisualizationMarkers
 from isaaclab.scene import InteractiveScene
 from isaaclab.utils import math as math_utils
 
-from isaaclab_tasks.rans import GoToPosition3DCfg
+from isaaclab_tasks.rans import GoToPosition3DWithObstaclesCfg
 from isaaclab_tasks.rans.utils import ObjectStorage
 
 from .go_to_position_6DoF import GoToPosition3DTask
@@ -31,7 +31,7 @@ class GoToPosition3DWithObstaclesTask(GoToPosition3DTask):
     def __init__(
         self,
         scene: InteractiveScene | None = None,
-        task_cfg: GoToPosition3DCfg = GoToPosition3DCfg(),
+        task_cfg: GoToPosition3DWithObstaclesCfg = GoToPosition3DWithObstaclesCfg(),
         task_uid: int = 0,
         num_envs: int = 1,
         device: str = "cuda",
@@ -65,7 +65,7 @@ class GoToPosition3DWithObstaclesTask(GoToPosition3DTask):
         self.obstacles_generator = ObjectStorage(
             num_envs=num_envs,
             max_num_vis_objects_in_env=self._task_cfg.max_num_vis_obstacles,
-            store_height=self._task_cfg.obstacles_storage_height_pos,
+            store_height=self._task_cfg.obstacles_storage_height_pos, 
             rng=self._rng,
             device=device,
         )
@@ -214,7 +214,7 @@ class GoToPosition3DWithObstaclesTask(GoToPosition3DTask):
         obstacles_positions = self.obstacles.data.object_link_pos_w[self._env_ids]
         filtered_obstacles = obstacles_positions.clone()
 
-        mask = obstacles_positions[:, :, 2] < self._task_cfg.obstacle_storage_height_pos # Big negative value for obstacles in storage 
+        mask = obstacles_positions[:, :, 2] < self._task_cfg.obstacles_storage_height_pos # Big negative value for obstacles in storage 
         filtered_obstacles[mask] = 2 * self._task_cfg.max_obstacle_distance_from_target
 
         # Calculate distances and angles for the filtered obstacles
@@ -246,27 +246,14 @@ class GoToPosition3DWithObstaclesTask(GoToPosition3DTask):
         
         # Reshape back to [N, 3, 3]
         closest_obstacles_error_local = closest_obstacles_error_local_flat.reshape(-1, 3, 3)
+
+        # Normalize the local obstacle position errors by max distance
+        normalized_closest_obstacles_error_local = closest_obstacles_error_local / self._task_cfg.max_obstacle_distance_from_target
+        # normalized_closest_obstacles_hight TODO
+        # normalized_closes_obstacles_radius
         
-        # Flatten the 3 closest obstacle 3D position errors for observation [N, 9]
-        obstacles_observation = closest_obstacles_error_local.flatten(start_dim=1)
-        # The closest_distances [N, 3] are still useful.
-
-        obstacles_observation
-        closest_distances
-
-
-
-        closest_obstacles = torch.gather(
-            filtered_obstacles, 1, closest_indices.unsqueeze(-1).expand(-1, -1, filtered_obstacles.size(-1))
-        )
-
-        obstacles_heading = torch.atan2(
-            closest_obstacles[self._env_ids, :, 1] - self._robot.root_link_pos_w[self._env_ids, 1].unsqueeze(1),
-            closest_obstacles[self._env_ids, :, 0] - self._robot.root_link_pos_w[self._env_ids, 0].unsqueeze(1),
-        )
-        obstacles_heading_error = torch.atan2(
-            torch.sin(obstacles_heading - heading.unsqueeze(1)), torch.cos(obstacles_heading - heading.unsqueeze(1))
-        )
+        # Flatten the 3 closest obstacle 3D position errors for observation [N, 15]
+        obstacles_observation = normalized_closest_obstacles_error_local.flatten(start_dim=1)
 
         # Store in buffer [position_dist, rotation error, linear_vel_xyz, angular_vel_xyz]
         self._task_data[:, 0:3] = self._local_pos_error
@@ -276,6 +263,9 @@ class GoToPosition3DWithObstaclesTask(GoToPosition3DTask):
         self._task_data[:, 3:9] = rel_mat_6
         self._task_data[:, 9:12] = self._robot.root_com_lin_vel_b[self._env_ids]
         self._task_data[:, 12:15] = self._robot.root_com_ang_vel_b[self._env_ids]
+
+        # Append obstacles info
+        self._task_data[:, 15:24] = obstacles_observation
 
         # Make sure that the orientation error magnitude is also updated
         current_quat = self._robot.root_quat_w[self._env_ids]  # (w, x, y, z)
