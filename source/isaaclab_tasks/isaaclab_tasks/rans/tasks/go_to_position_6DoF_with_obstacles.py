@@ -128,12 +128,14 @@ class GoToPosition3DWithObstaclesTask(GoToPosition3DTask):
         self.scalar_logger.add_log("task_reward", "GoToPosition6DoF/AVG/linear_velocity", "mean")
         self.scalar_logger.add_log("task_reward", "GoToPosition6DoF/AVG/angular_velocity", "mean")
         self.scalar_logger.add_log("task_reward", "GoToPosition6DoF/AVG/boundary", "mean")
+        self.scalar_logger.add_log("task_reward", "GoToPosition6DoF/AVG/collision_penalty", "mean")
 
         self.scalar_logger.add_log("task_reward", "GoToPosition6DoF/AVG/total_reward", "mean")
         self.scalar_logger.add_log("task_reward", "GoToPosition6DoF/AVG/wheighted_position_reward", "mean")
         self.scalar_logger.add_log("task_reward", "GoToPosition6DoF/AVG/wheighted_linear_velocity_reward", "mean")
         self.scalar_logger.add_log("task_reward", "GoToPosition6DoF/AVG/wheighted_angular_velocity_reward", "mean")
         self.scalar_logger.add_log("task_reward", "GoToPosition6DoF/AVG/wheighted_boundary_reward", "mean")
+        self.scalar_logger.add_log("task_reward", "GoToPosition6DoF/AVG/wheighted_collision_penalty", "mean")
 
         self.scalar_logger.set_ema_coeff(self._task_cfg.ema_coeff)
 
@@ -181,7 +183,6 @@ class GoToPosition3DWithObstaclesTask(GoToPosition3DTask):
         obstacles_cfg = RigidObjectCollectionCfg(rigid_objects=rigid_objects)
 
         self.obstacles = RigidObjectCollection(obstacles_cfg)
-
 
     def get_observations(self) -> torch.Tensor:
         """
@@ -336,6 +337,14 @@ class GoToPosition3DWithObstaclesTask(GoToPosition3DTask):
         self._goal_reached *= goal_is_reached  # If not reached, reset count
         self._goal_reached += goal_is_reached  # If reached, count steps in goal state
 
+        # Check for collision with obstacles
+        collisions = torch.squeeze(
+            torch.max(torch.norm(self._robot.contacts.data.force_matrix_w, dim=-1), dim=-1)[0], dim=-1
+        )  # first max is for the 3 forces (x,y,z), second max is for obstacles
+
+        num_collisions = 1 * (collisions > self._task_cfg.collision_threshold)
+        collision_penalty_rew = self._task_cfg.collision_penalty * num_collisions
+
         # Logging
         self.scalar_logger.log("task_state", "GoToPosition6DoF/EMA/position_distance", self._position_dist)
         self.scalar_logger.log("task_state", "GoToPosition6DoF/EMA/boundary_distance", boundary_dist)
@@ -347,6 +356,7 @@ class GoToPosition3DWithObstaclesTask(GoToPosition3DTask):
         self.scalar_logger.log("task_reward", "GoToPosition6DoF/AVG/linear_velocity", linear_velocity_rew)
         self.scalar_logger.log("task_reward", "GoToPosition6DoF/AVG/angular_velocity", angular_velocity_rew)
         self.scalar_logger.log("task_reward", "GoToPosition6DoF/AVG/boundary", boundary_rew)
+        self.scalar_logger.log("task_reward", "GoToPosition6DoF/AVG/collision_penalty", collision_penalty_rew)
 
         # NOTE: Check if we need a progress reward here.
 
@@ -356,6 +366,7 @@ class GoToPosition3DWithObstaclesTask(GoToPosition3DTask):
             + linear_velocity_rew * self._task_cfg.linear_velocity_weight
             + angular_velocity_rew * self._task_cfg.angular_velocity_weight
             + boundary_rew * self._task_cfg.boundary_weight
+            + collision_penalty_rew * self._task_cfg.collision_penalty_weight
         ) + self._robot.compute_rewards(env_ids=self._env_ids)
 
         self.scalar_logger.log("task_reward", "GoToPosition6DoF/AVG/total_reward", total_reward)
@@ -363,6 +374,7 @@ class GoToPosition3DWithObstaclesTask(GoToPosition3DTask):
         self.scalar_logger.log("task_reward", "GoToPosition6DoF/AVG/wheighted_linear_velocity_reward", linear_velocity_rew * self._task_cfg.linear_velocity_weight)
         self.scalar_logger.log("task_reward", "GoToPosition6DoF/AVG/wheighted_angular_velocity_reward", angular_velocity_rew * self._task_cfg.angular_velocity_weight)
         self.scalar_logger.log("task_reward", "GoToPosition6DoF/AVG/wheighted_boundary_reward", boundary_rew * self._task_cfg.boundary_weight)
+        self.scalar_logger.log("task_reward", "GoToPosition6DoF/AVG/wheighted_collision_penalty", collision_penalty_rew * self._task_cfg.collision_penalty_weight)
 
         return total_reward
 

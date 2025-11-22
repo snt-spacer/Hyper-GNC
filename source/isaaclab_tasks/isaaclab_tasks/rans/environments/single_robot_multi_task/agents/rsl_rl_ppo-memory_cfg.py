@@ -31,7 +31,7 @@ class SingleRobotMultiTaskPPORunnerCfg(RslRlOnPolicyRunnerCfg):
         use_embeddings=True,
         embeddings_size=4,
         generator_size=(64, 64),
-        num_memory_obs=4,
+        num_memory_obs=5,
         network_type="hybrid", #pure, hybrid
     )
     algorithm = RslRlPpoAlgorithmCfg(

@@ -41,6 +41,15 @@ class GoToPosition3DWithObstaclesCfg(GoToPosition3DCfg):
     obstacles_height: float = 0.5
     """Height of the obstacles. Defaults to 0.5 m."""
 
+    collision_threshold: float = 3.0
+    """Threshold of contact force to consider a collision has happened. Defaults to 3.0"""
+
+    collision_penalty: float = -10.0
+    """Penalty applied when a collision with an obstacle is detected. Defaults to -10.0"""
+
+    collision_penalty_weight: float = 1.0
+    """Weight for the collision penalty in the total reward calculation. Defaults to 1.0"""
+
 
     # Spaces
-    observation_space: int = 24  # pos err xyz + orientn err rpy + root lin vel + root ang vel + 3 x closest obstacle dists xyz, hight, radius
+    observation_space: int = 24  # pos err xyz + orientn err rpy + root lin vel + root ang vel + 3 x closest obstacle dists xyz, TODO hight, radius
