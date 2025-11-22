@@ -99,6 +99,10 @@ class GoToPosition3DWithObstaclesTask(GoToPosition3DTask):
         )  # Orientation error metric
         self._markers_pos = torch.zeros((self._num_envs, 3), device=self._device, dtype=torch.float32)
 
+    def run_setup(self, robot, envs_origin):
+        super().run_setup(robot, envs_origin)
+        self.obstacles_generator.create_storage_buffer(env_origin=self._env_origins)
+
     def register_robot(self, robot) -> None:
         self._robot = robot
 
@@ -141,22 +145,35 @@ class GoToPosition3DWithObstaclesTask(GoToPosition3DTask):
         prim_utils.create_prim("/World/envs/env_0/Obstacles", "Xform")
 
         rigid_objects = {}
-        low, high = 5, 15
+        low, high = 0.5, 5
+        MIN_MASS = 1.0
+        MAX_MASS = 100.0
+        MIN_BRIGHTNESS_SCALE = 0.2  # Darkest shade (prevents pure black)
+        MAX_BRIGHTNESS_SCALE = 1.0  # Lightest shade
 
         for i in range(self._task_cfg.max_num_vis_obstacles):
 
             position = low + (high - low) * torch.rand(3)
             position[2] = 0.5
+            mass = torch.randint(int(MIN_MASS), int(MAX_MASS), (1,)).item()
+            # Color depending on mass. Lighter color red for low mass, darker blue for high mass
+            mass_tensor = torch.tensor([mass], dtype=torch.float32)
+            normalized_mass = (mass_tensor - MIN_MASS) / (MAX_MASS - MIN_MASS)
+            normalized_mass = torch.clamp(normalized_mass, 0.0, 1.0).item()
+            R = 1.0 - normalized_mass  # Red is strong for low mass
+            G = 0.0                    # Keep green at zero for a pure red-blue transition
+            B = normalized_mass        # Blue is strong for high mass
+            color_tuple = (R, G, B)
 
             rigid_objects[f"obstacle_{i}"] = RigidObjectCfg(
                 prim_path=f"/World/envs/env_.*/Obstacles/cylinder_{i}",
                 spawn=sim_utils.CylinderCfg(
                     radius=self._task_cfg.obstacle_radius,
                     height=self._task_cfg.obstacles_height,
-                    rigid_props=sim_utils.RigidBodyPropertiesCfg(kinematic_enabled=True),
-                    mass_props=sim_utils.MassPropertiesCfg(mass=1000.0),
+                    rigid_props=sim_utils.RigidBodyPropertiesCfg(kinematic_enabled=False, disable_gravity=True),
+                    mass_props=sim_utils.MassPropertiesCfg(mass=mass),
                     collision_props=sim_utils.CollisionPropertiesCfg(),
-                    visual_material=sim_utils.PreviewSurfaceCfg(diffuse_color=(1.0, 0.0, 0.0)),
+                    visual_material=sim_utils.PreviewSurfaceCfg(diffuse_color=color_tuple),
                 ),
                 init_state=RigidObjectCfg.InitialStateCfg(pos=position),
             )
@@ -460,6 +477,13 @@ class GoToPosition3DWithObstaclesTask(GoToPosition3DTask):
             Tuple[torch.Tensor, torch.Tensor, torch.Tensor]: The initial position,
             orientation and velocity of the robot.
         """
+
+        obstacles_positions, mask, robot_positions = self.randomize_obstacles_positions(env_ids)
+        self._pos_obstacles_in_env = self.obstacles_generator.get_positions_on_storage(obstacles_positions, mask, env_ids)
+        # pos_obstacles_in_env[:, :, 3:] = self.obstacles.data.object_com_quat_w[env_ids]
+        self.obstacles.write_object_link_pose_to_sim(self._pos_obstacles_in_env, env_ids=env_ids)
+
+
         num_resets = len(env_ids)
 
         # Randomizes the initial pose of the flyer
@@ -467,17 +491,19 @@ class GoToPosition3DWithObstaclesTask(GoToPosition3DTask):
             (num_resets, 7), device=self._device, dtype=torch.float32
         )  # (x, y, z, qw, qx, qy, qz)
 
-        # Define random 3D spawn positions in a sphere around the goal
-        r = (
-            self._gen_actions[env_ids, 0] * (self._task_cfg.spawn_max_dist - self._task_cfg.spawn_min_dist)
-            + self._task_cfg.spawn_min_dist
-        )
-        phi = torch.acos(self._rng.sample_uniform_torch(-1, 1, 1, ids=env_ids))  # polar angle (inclination)
-        theta = self._rng.sample_uniform_torch(-math.pi, math.pi, 1, ids=env_ids)  # azimuthal angle
+        # # Define random 3D spawn positions in a sphere around the goal
+        # r = (
+        #     self._gen_actions[env_ids, 0] * (self._task_cfg.spawn_max_dist - self._task_cfg.spawn_min_dist)
+        #     + self._task_cfg.spawn_min_dist
+        # )
+        # phi = torch.acos(self._rng.sample_uniform_torch(-1, 1, 1, ids=env_ids))  # polar angle (inclination)
+        # theta = self._rng.sample_uniform_torch(-math.pi, math.pi, 1, ids=env_ids)  # azimuthal angle
 
-        initial_pose[:, 0] = r * torch.sin(phi) * torch.cos(theta) + self._target_positions[env_ids, 0]  # x
-        initial_pose[:, 1] = r * torch.sin(phi) * torch.sin(theta) + self._target_positions[env_ids, 1]  # y
-        initial_pose[:, 2] = r * torch.cos(phi) + self._target_positions[env_ids, 2]  # z
+        # initial_pose[:, 0] = r * torch.sin(phi) * torch.cos(theta) + self._target_positions[env_ids, 0]  # x
+        # initial_pose[:, 1] = r * torch.sin(phi) * torch.sin(theta) + self._target_positions[env_ids, 1]  # y
+        # initial_pose[:, 2] = r * torch.cos(phi) + self._target_positions[env_ids, 2]  # z
+
+        initial_pose[:, :3] = robot_positions
 
         # Compute Direction Vector to Target
         direction_to_target = self._target_positions[env_ids] - initial_pose[:, :3]
@@ -546,6 +572,51 @@ class GoToPosition3DWithObstaclesTask(GoToPosition3DTask):
         # Apply to articulation
         self._robot.set_pose(initial_pose, self._env_ids[env_ids])
         self._robot.set_velocity(initial_velocity, self._env_ids[env_ids])
+
+    def randomize_obstacles_positions(self, env_ids: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+        """
+        Randomizes the positions of the obstacles in the environment. It creates an extra obstacle position for the robot.
+        Args:
+            env_ids (torch.Tensor): The ids of the environments.
+        Returns:
+            tuple[torch.Tensor, torch.Tensor, torch.Tensor]: The positions of the obstacles, the mask indicating valid obstacles, and the robot position.
+        """
+        # number_obstacles_to_generate = self._task_cfg.max_num_vis_obstacles * 4
+        # indices_of_obstacles_to_activate = self._rng.sample_unique_integers_torch(
+        #     min=0, max=self._task_cfg.max_num_vis_obstacles**2, num=number_obstacles_to_generate, ids=env_ids
+        # )
+
+        num_envs = len(env_ids)
+        number_obstacles_to_generate_and_robot = self._task_cfg.max_num_vis_obstacles + 1
+        radi = (
+            self._gen_actions[env_ids, 0] * (self._task_cfg.spawn_max_dist - self._task_cfg.spawn_min_dist)
+            + self._task_cfg.spawn_min_dist
+        ).unsqueeze(-1)
+        phi = torch.acos(self._rng.sample_uniform_torch(-1, 1, number_obstacles_to_generate_and_robot, ids=env_ids))  # polar angle (inclination)
+        theta = self._rng.sample_uniform_torch(-math.pi, math.pi, number_obstacles_to_generate_and_robot, ids=env_ids)  # azimuthal angle
+
+        x = radi * torch.sin(phi) * torch.cos(theta) + self._target_positions[env_ids, 0].unsqueeze(-1)
+        y = radi * torch.sin(phi) * torch.sin(theta) + self._target_positions[env_ids, 1].unsqueeze(-1)
+        z = radi * torch.cos(phi) + self._target_positions[env_ids, 2].unsqueeze(-1)
+        xyz = torch.stack((x[:,:-1], y[:,:-1], z[:,:-1]), dim=2) # last one is for the robot
+        # Generate quats
+        xyzw = torch.zeros(num_envs, xyz.shape[1], 4, device=self._device)
+        xyzw[:, :, -1] = 1.0  # identity quats
+        robot_positions = torch.cat((xyz, xyzw), dim=2)
+
+        robot_xyz = torch.stack((x[:,-1], y[:,-1], z[:,-1]), dim=1)
+
+        num_active_obstacles = torch.clip(
+            torch.argsort(torch.rand((num_envs, self._task_cfg.max_num_vis_obstacles), device=self._device), dim=1)[:, 0] + 1,
+            min=self._task_cfg.min_num_vis_obstacles,
+            max=self._task_cfg.max_num_vis_obstacles,
+        )
+        obstacles_indices = torch.arange(self._task_cfg.max_num_vis_obstacles, device=self._device).unsqueeze(0).expand(num_envs, -1)
+        mask = obstacles_indices < num_active_obstacles.unsqueeze(-1)
+        obstacles_mask = mask.unsqueeze(-1).expand_as(robot_positions)
+
+        return robot_positions, obstacles_mask, robot_xyz
+
 
     def create_task_visualization(self) -> None:
         """

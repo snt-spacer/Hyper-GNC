@@ -23,6 +23,9 @@ class GoToPosition3DWithObstaclesCfg(GoToPosition3DCfg):
     max_obstacle_distance_from_target: float = 10.0
     """Maximal distance between the target and the obstacles. Defaults to 10 m."""
 
+    min_num_vis_obstacles: int = 3
+    """Min number of obstacles visible in the environment. Defaults to 3."""
+
     max_num_vis_obstacles: int = 8
     """Max number of obstacles visible in the environment. Defaults to 8."""
 

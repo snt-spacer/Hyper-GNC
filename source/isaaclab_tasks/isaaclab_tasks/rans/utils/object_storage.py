@@ -54,18 +54,18 @@ class ObjectStorage:
         xyz[:, :, :2] += env_origin.unsqueeze(1)[:, :, :2]
         # Generate quats
         xyzw = torch.zeros(self.num_envs, xyz.shape[1], 4, device=self._device)
-        xyzw[:, -1] = 0.0
+        xyzw[:, :, -1] = 1.0
 
         self.storage_buff = torch.cat((xyz, xyzw), dim=2)
         # self.storage_buff = self.storage_buff.reshape(self.num_envs, self.storage_buff.shape[1]**2, 3)
 
         # return self.storage_buff
 
-    def get_positions_with_storage(
+    def get_positions_on_storage(
         self, objects_pos: torch.tensor, mask: torch.tensor, env_ids: torch.tensor
     ) -> torch.tensor:
         """
-        Returns the position of the objects for each environment.
+        Returns the position of the objects for each environment. Sets the ones that will be stored.
 
         Args:
             objects_pos (torch.tensor): The position of the objects.
@@ -76,6 +76,6 @@ class ObjectStorage:
             torch.tensor: The position of the objects for each environment.
         """
 
-        objects_pos[~mask] = self.storage_buff[env_ids, : self._max_num_vis_objects_in_env][~mask]
+        objects_pos[~mask] = self.storage_buff[env_ids, :self._max_num_vis_objects_in_env][~mask]
 
         return objects_pos

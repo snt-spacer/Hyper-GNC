@@ -26,8 +26,8 @@ class SingleEnvCfg(DirectRLEnvCfg):
     decimation = 6
     episode_length_s = 40.0
 
-    robot_name = "Leatherback"
-    task_name = "RaceGates"
+    robot_name = "IntBall2"
+    task_name = "GoToPosition3DWithObstacles"
 
     # scene
     scene: InteractiveSceneCfg = InteractiveSceneCfg(num_envs=4096, env_spacing=10.0, replicate_physics=True)

@@ -109,7 +109,17 @@ def pre_process_actions(prev_action: torch.Tensor, delta_pose: torch.Tensor, gri
         return delta_pose[0, :2].unsqueeze(0)
         # return torch.tensor([[0.1, 1.0]], device=delta_pose.device)
     elif args_cli.robot_name == "IntBall2":
-        return torch.zeros((1,8), device=delta_pose.device)
+        if delta_pose[0][0] > 0:  # forward
+            action = torch.tensor([[0, 0, 0, 0, 1, 1, 1, 1]], dtype=torch.float32, device=delta_pose.device)
+        elif delta_pose[0][0] < 0:  # backward
+            action = torch.tensor([[1, 1, 1, 1, 0, 0, 0, 0]], dtype=torch.float32, device=delta_pose.device)
+        elif delta_pose[0][1] > 0:  # left
+            action = torch.tensor([[0, 1, 1, 0, 0, 0, 1, 1]], dtype=torch.float32, device=delta_pose.device)
+        elif delta_pose[0][1] < 0:  # right
+            action = torch.tensor([[1, 0, 0, 1, 1, 1, 0, 0]], dtype=torch.float32, device=delta_pose.device)
+        else:
+            action = torch.tensor([[0, 0, 0, 0, 0, 0, 0, 0]], dtype=torch.float32, device=delta_pose.device)
+        return action
     else:
         # resolve gripper command
         gripper_vel = torch.zeros(delta_pose.shape[0], 1, device=delta_pose.device)
