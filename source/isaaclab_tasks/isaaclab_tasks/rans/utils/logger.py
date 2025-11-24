@@ -74,7 +74,6 @@ class ScalarLogger:
             type (str): The type of log. It's solely used for naming purposes, it can be "robot" or "task" for instance.
             name (str): The name of the log.
             value (torch.Tensor): The value to be logged."""
-
         op = self._logs_operation[type][name]
         self._step_logs[type][name] = self._operations_map[op](type, name, value)
 
@@ -154,7 +153,6 @@ class ScalarLogger:
 
     def mean_logs(self, type, name, value):
         """Mean operation when adding a new data point to the logs."""
-
         return self._step_logs[type][name] + value
 
     def set_ema_coeff(self, ema_coeff):

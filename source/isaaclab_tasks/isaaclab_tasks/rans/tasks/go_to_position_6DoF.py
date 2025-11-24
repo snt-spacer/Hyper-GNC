@@ -15,6 +15,8 @@ from isaaclab_tasks.rans import GoToPosition3DCfg
 from .task_core import TaskCore
 import torch.nn.functional as F
 
+import isaaclab.sim as sim_utils
+
 EPS = 1e-6  # small constant to avoid divisions by 0 and log(0)
 
 
@@ -450,6 +452,7 @@ class GoToPosition3DTask(TaskCore):
         # Define visual markers: sphere for the goal and pose marker for the robot
         goal_marker_cfg = SPHERE_CFG.copy()
         goal_marker_cfg.markers["sphere"].radius = 0.05
+        goal_marker_cfg.markers["sphere"].visual_material = sim_utils.PreviewSurfaceCfg(diffuse_color=(0.0, 0.0, 1.0))
         robot_marker_cfg = SPHERE_CFG.copy()
         robot_marker_cfg.markers["sphere"].radius = 0.01
 

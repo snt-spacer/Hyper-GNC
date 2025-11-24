@@ -17,7 +17,7 @@ class GoToPosition3DWithObstaclesCfg(GoToPosition3DCfg):
     """Configuration for the GoToPosition with obstacles task in 3D space."""
 
     # Obstacles
-    obstacles_storage_height_pos: float = -3.0
+    obstacles_storage_height_pos: float = -300.0
     """Height where to store the obstacles. Defaults to -2.0 m."""
 
     max_obstacle_distance_from_target: float = 10.0
@@ -26,7 +26,7 @@ class GoToPosition3DWithObstaclesCfg(GoToPosition3DCfg):
     min_num_vis_obstacles: int = 3
     """Min number of obstacles visible in the environment. Defaults to 3."""
 
-    max_num_vis_obstacles: int = 8
+    max_num_vis_obstacles: int = 20
     """Max number of obstacles visible in the environment. Defaults to 8."""
 
     minimum_point_distance: float = 0.05
@@ -49,6 +49,15 @@ class GoToPosition3DWithObstaclesCfg(GoToPosition3DCfg):
 
     collision_penalty_weight: float = 1.0
     """Weight for the collision penalty in the total reward calculation. Defaults to 1.0"""
+
+    min_obstacle_distance_from_target: float = 1.0
+    """Minimal distance between the target and the obstacles. Defaults to 1.0 m."""
+
+    min_obstacle_distance_from_robot: float = 0.5
+    """Minimal distance between the robot and the obstacles. Defaults to 0.5 m."""
+
+    max_hight_from_target: float = 2.0
+    """Max hight of the obstacles from the target position. Defaults to 2.0 m. Positive and negative."""
 
 
     # Spaces

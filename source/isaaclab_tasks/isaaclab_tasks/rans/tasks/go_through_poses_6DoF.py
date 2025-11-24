@@ -112,7 +112,7 @@ class GoThroughPoses3DTask(TaskCore):
         self.scalar_logger.add_log("task_reward", "GoThroughPoses6DoF/AVG/wheighted_linear_velocity_reward", "mean")
         self.scalar_logger.add_log("task_reward", "GoThroughPoses6DoF/AVG/wheighted_angular_velocity_reward", "mean")
         self.scalar_logger.add_log("task_reward", "GoThroughPoses6DoF/AVG/wheighted_boundary_reward", "mean")
-        self.scalar_logger.add_log("task_reward", "GoThroughPoses6DoF/AVG/time_penalty", "mean")
+        # self.scalar_logger.add_log("task_reward", "GoThroughPoses6DoF/AVG/time_penalty", "mean")
         self.scalar_logger.add_log("task_reward", "GoThroughPoses6DoF/AVG/wheighted_reached_bonus_reward", "mean")
 
 
@@ -270,7 +270,7 @@ class GoThroughPoses3DTask(TaskCore):
 
         # Logging
         self.scalar_logger.log("task_state", "GoThroughPoses6DoF/EMA/position_distance", self._position_dist)
-        self.scalar_logger.log("task_state", "GoThroughPoses6DoF/EMA/orientation_error", torch.norm(self._orientation_error))
+        self.scalar_logger.log("task_state", "GoThroughPoses6DoF/EMA/orientation_error", self._orientation_error)
         self.scalar_logger.log("task_state", "GoThroughPoses6DoF/EMA/boundary_distance", boundary_dist)
         self.scalar_logger.log("task_state", "GoThroughPoses6DoF/AVG/normed_linear_velocity", linear_velocity)
         self.scalar_logger.log("task_state", "GoThroughPoses6DoF/AVG/absolute_angular_velocity", angular_velocity)
@@ -318,7 +318,7 @@ class GoThroughPoses3DTask(TaskCore):
         self.scalar_logger.log("task_reward", "GoThroughPoses6DoF/AVG/wheighted_linear_velocity_reward", linear_velocity_rew * self._task_cfg.linear_velocity_weight)
         self.scalar_logger.log("task_reward", "GoThroughPoses6DoF/AVG/wheighted_angular_velocity_reward", angular_velocity_rew * self._task_cfg.angular_velocity_weight)
         self.scalar_logger.log("task_reward", "GoThroughPoses6DoF/AVG/wheighted_boundary_reward", boundary_rew * self._task_cfg.boundary_weight)
-        self.scalar_logger.log("task_reward", "GoThroughPoses6DoF/AVG/time_penalty", self._task_cfg.time_penalty)
+        # self.scalar_logger.log("task_reward", "GoThroughPoses6DoF/AVG/time_penalty", self._task_cfg.time_penalty)
         self.scalar_logger.log("task_reward", "GoThroughPoses6DoF/AVG/wheighted_reached_bonus_reward", self._task_cfg.reached_bonus * goal_reached)
 
 

@@ -32,7 +32,7 @@ class MultiTaskEnvCfg(DirectRLEnvCfg):
     tasks_names = ["GoToPosition"]
 
     # scene
-    scene: InteractiveSceneCfg = InteractiveSceneCfg(num_envs=4096, env_spacing=5.0, replicate_physics=True)
+    scene: InteractiveSceneCfg = InteractiveSceneCfg(num_envs=4096, env_spacing=25.0, replicate_physics=True)
 
     # Steps per episode
     #spe = 1/hz * decumation * episode_length_s
