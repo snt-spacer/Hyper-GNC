@@ -57,3 +57,7 @@ from .go_through_poses_metrics import GoThroughPosesMetrics
 from .track_velocities_metrics import TrackVelocitiesMetrics
 from .rendezvous_metrics import RendezvousMetrics
 from .race_gates_metrics import RaceGatesMetrics
+from .go_to_position_6DoF_with_obstacles import GoToPosition6DoFWithObstaclesMetrics
+from .go_to_pose_6DoF_metrics import GoToPose6DoFMetrics
+from .go_through_poses_6DoF_metrics import GoThroughPoses6DoFMetrics
+from .track_velocities_6DoF_metrics import TrackVelocities6DoFMetrics

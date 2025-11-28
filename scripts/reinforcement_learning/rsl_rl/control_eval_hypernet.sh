@@ -7,11 +7,11 @@ mkdir -p "$BASE_OUTPUT_DIR"
 EVALUATION_LOG_FILE="${BASE_OUTPUT_DIR}/evaluation_run_$(date +"%Y-%m-%d_%H-%M-%S").log"
 
 # Define your robot and tasks
-robot="ModularFreeflyer"
-BASE_TASKS=(GoToPosition GoToPose TrackVelocities Rendezvous)
-num_envs=1024 # Base number of environments, adjust if needed
-algorithm="ppo-memory" #ppo, ppo-memory, ppo-beta
-runs_per_env=1
+robot="IntBall2"
+BASE_TASKS=(GoToPose3D TrackVelocities3D GoThroughPoses3D GoToPosition3DWithObstacles)
+num_envs=64 # Base number of environments, adjust if needed
+algorithm="ppo-beta-memory" #ppo, ppo-memory, ppo-beta, ppo-beta-memory
+runs_per_env=2
 
 # Hypernetwork 32x32
 # MODEL_PATHS=(
@@ -277,12 +277,20 @@ MODEL_PATHS=(
 # VANILLA 2.0
 ########################################################################################################################
 # Hypernet Critic L Emb 64x64 w Tinf in Gobs (tanh, 256C) 
+# MODEL_PATHS=(
+# /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-30_18-31-29_rsl-rl_ppo-memory_GoToPosition-GoToPose-TrackVelocities-Rendezvous_ModularFreeflyer_r-0_seed-1/model_3999.pt
+# /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-30_19-30-27_rsl-rl_ppo-memory_GoToPosition-GoToPose-TrackVelocities-Rendezvous_ModularFreeflyer_r-0_seed-2/model_3999.pt
+# /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-30_20-28-46_rsl-rl_ppo-memory_GoToPosition-GoToPose-TrackVelocities-Rendezvous_ModularFreeflyer_r-0_seed-3/model_3999.pt
+# /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-30_21-27-06_rsl-rl_ppo-memory_GoToPosition-GoToPose-TrackVelocities-Rendezvous_ModularFreeflyer_r-0_seed-4/model_3400.pt
+# /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-30_22-25-46_rsl-rl_ppo-memory_GoToPosition-GoToPose-TrackVelocities-Rendezvous_ModularFreeflyer_r-0_seed-5/model_3900.pt
+# )
+
+########################################################################################################################
+# IntBall2
+########################################################################################################################
+# Hypernet Beta
 MODEL_PATHS=(
-/workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-30_18-31-29_rsl-rl_ppo-memory_GoToPosition-GoToPose-TrackVelocities-Rendezvous_ModularFreeflyer_r-0_seed-1/model_3999.pt
-/workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-30_19-30-27_rsl-rl_ppo-memory_GoToPosition-GoToPose-TrackVelocities-Rendezvous_ModularFreeflyer_r-0_seed-2/model_3999.pt
-/workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-30_20-28-46_rsl-rl_ppo-memory_GoToPosition-GoToPose-TrackVelocities-Rendezvous_ModularFreeflyer_r-0_seed-3/model_3999.pt
-/workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-30_21-27-06_rsl-rl_ppo-memory_GoToPosition-GoToPose-TrackVelocities-Rendezvous_ModularFreeflyer_r-0_seed-4/model_3400.pt
-/workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-30_22-25-46_rsl-rl_ppo-memory_GoToPosition-GoToPose-TrackVelocities-Rendezvous_ModularFreeflyer_r-0_seed-5/model_3900.pt
+/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta/2025-11-28_10-07-51_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-42/model_0.pt
 )
 
 # Check if model paths are provided

@@ -13,10 +13,10 @@ class SingleRobotMultiTaskPPORunnerCfg(RslRlOnPolicyRunnerCfg):
     num_steps_per_env = 16
     max_iterations = 4000
     save_interval = 100
-    experiment_name = "mtrl_control_intball_6DOF"
+    experiment_name = "multitask_memory_control"
     logger = "wandb"
     wandb_kwargs = {
-        "project": "mtrl_control_intball_6DOF",
+        "project": "multitask_memory_control",
         "entity": "spacer-rl",
         "group": "zeroG",
     }
@@ -27,11 +27,11 @@ class SingleRobotMultiTaskPPORunnerCfg(RslRlOnPolicyRunnerCfg):
         critic_hidden_dims=[256, 256],
         activation="tanh",
         clip_actions=True,
-        clip_actions_range=[0, 1],
+        clip_actions_range=[-1, 1],
         use_embeddings=True,
         embeddings_size=4,
         generator_size=(64, 64),
-        num_memory_obs=5,
+        num_memory_obs=4, # task specific dimension
         network_type="hybrid", #pure, hybrid
     )
     algorithm = RslRlPpoAlgorithmCfg(

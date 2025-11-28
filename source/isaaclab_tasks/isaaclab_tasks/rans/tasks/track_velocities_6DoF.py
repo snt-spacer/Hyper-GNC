@@ -58,6 +58,97 @@ class TrackVelocities3DTask(TaskCore):
         # Buffers
         self.initialize_buffers(env_ids=env_ids)
 
+    @property
+    def eval_data_keys(self) -> list[str]:
+        """
+        Returns the keys of the data used for evaluation.
+
+        Returns:
+            list[str]: The keys of the data used for evaluation.
+        """
+        return [
+            "linear_velocity_target",
+            "lateral_velocity_target",
+            "vertical_velocity_target",
+            "yaw_velocity_target",
+            "pitch_velocity_target",
+            "roll_velocity_target",
+            "target_linear_velocity",
+            "target_lateral_velocity",
+            "target_vertical_velocity",
+            "target_yaw_velocity",
+            "target_pitch_velocity",
+            "target_roll_velocity",
+        ]
+    
+    @property
+    def eval_data_specs(self)->dict[str, list[str]]:
+
+        return {
+            "linear_velocity_target": ["(N,)"],
+            "lateral_velocity_target": ["(N,)"],
+            "vertical_velocity_target": ["(N,)"],
+            "yaw_velocity_target": ["(N,)"],
+            "pitch_velocity_target": ["(N,)"],
+            "roll_velocity_target": ["(N,)"],
+            "target_linear_velocity": ["(N,)"],
+            "target_lateral_velocity": ["(N,)"],
+            "target_vertical_velocity": ["(N,)"],
+            "target_yaw_velocity": ["(N,)"],
+            "target_pitch_velocity": ["(N,)"],
+            "target_roll_velocity": ["(N,)"],
+        }
+    
+    @property
+    def eval_data(self) -> dict:
+        """
+        Returns the data used for evaluation.
+
+        Returns:
+            dict: The data used for evaluation.
+        """
+        return {
+            "linear_velocity_target": self._linear_velocity_target,
+            "lateral_velocity_target": self._lateral_velocity_target,
+            "vertical_velocity_target": self._vertical_velocity_target,
+            "yaw_velocity_target": self._yaw_velocity_target,
+            "pitch_velocity_target": self._pitch_velocity_target,
+            "roll_velocity_target": self._roll_velocity_target,
+            "target_linear_velocity": self._linear_velocity_desired,
+            "target_lateral_velocity": self._lateral_velocity_desired,
+            "target_vertical_velocity": self._vertical_velocity_desired,
+            "target_yaw_velocity": self._yaw_velocity_desired,
+            "target_pitch_velocity": self._pitch_velocity_desired,
+            "target_roll_velocity": self._roll_velocity_desired,
+        }
+
+    def initialize_buffers(self, env_ids: torch.Tensor | None = None) -> None:
+        """
+        Initializes the buffers used by the task.
+
+        Args:
+            env_ids: The ids of the environments used by this task."""
+
+        super().initialize_buffers(env_ids)
+        # Target velocities
+        self._linear_velocity_target = torch.zeros((self._num_envs), device=self._device, dtype=torch.float32)
+        self._lateral_velocity_target = torch.zeros((self._num_envs), device=self._device, dtype=torch.float32)
+        self._vertical_velocity_target = torch.zeros((self._num_envs), device=self._device, dtype=torch.float32)
+        self._yaw_velocity_target = torch.zeros((self._num_envs), device=self._device, dtype=torch.float32)
+        self._pitch_velocity_target = torch.zeros((self._num_envs), device=self._device, dtype=torch.float32)
+        self._roll_velocity_target = torch.zeros((self._num_envs), device=self._device, dtype=torch.float32)
+        # Desired velocities
+        self._linear_velocity_desired = torch.zeros((self._num_envs), device=self._device, dtype=torch.float32)
+        self._lateral_velocity_desired = torch.zeros((self._num_envs), device=self._device, dtype=torch.float32)
+        self._vertical_velocity_desired = torch.zeros((self._num_envs), device=self._device, dtype=torch.float32)
+        self._yaw_velocity_desired = torch.zeros((self._num_envs), device=self._device, dtype=torch.float32)
+        self._pitch_velocity_desired = torch.zeros((self._num_envs), device=self._device, dtype=torch.float32)
+        self._roll_velocity_desired = torch.zeros((self._num_envs), device=self._device, dtype=torch.float32)
+        # Number of steps (used to compute when to change goals)
+        self._num_steps = torch.zeros((self._num_envs), device=self._device, dtype=torch.int32)
+        self._smoothing_factor = torch.zeros((self._num_envs), device=self._device, dtype=torch.float32)
+        self._update_after_n_steps = torch.zeros((self._num_envs), device=self._device, dtype=torch.int32)
+
     def create_logs(self) -> None:
         """
         Creates a dictionary to store the training statistics for the task.
@@ -97,33 +188,6 @@ class TrackVelocities3DTask(TaskCore):
 
 
         self.scalar_logger.set_ema_coeff(self._task_cfg.ema_coeff)
-
-    def initialize_buffers(self, env_ids: torch.Tensor | None = None) -> None:
-        """
-        Initializes the buffers used by the task.
-
-        Args:
-            env_ids: The ids of the environments used by this task."""
-
-        super().initialize_buffers(env_ids)
-        # Target velocities
-        self._linear_velocity_target = torch.zeros((self._num_envs), device=self._device, dtype=torch.float32)
-        self._lateral_velocity_target = torch.zeros((self._num_envs), device=self._device, dtype=torch.float32)
-        self._vertical_velocity_target = torch.zeros((self._num_envs), device=self._device, dtype=torch.float32)
-        self._yaw_velocity_target = torch.zeros((self._num_envs), device=self._device, dtype=torch.float32)
-        self._pitch_velocity_target = torch.zeros((self._num_envs), device=self._device, dtype=torch.float32)
-        self._roll_velocity_target = torch.zeros((self._num_envs), device=self._device, dtype=torch.float32)
-        # Desired velocities
-        self._linear_velocity_desired = torch.zeros((self._num_envs), device=self._device, dtype=torch.float32)
-        self._lateral_velocity_desired = torch.zeros((self._num_envs), device=self._device, dtype=torch.float32)
-        self._vertical_velocity_desired = torch.zeros((self._num_envs), device=self._device, dtype=torch.float32)
-        self._yaw_velocity_desired = torch.zeros((self._num_envs), device=self._device, dtype=torch.float32)
-        self._pitch_velocity_desired = torch.zeros((self._num_envs), device=self._device, dtype=torch.float32)
-        self._roll_velocity_desired = torch.zeros((self._num_envs), device=self._device, dtype=torch.float32)
-        # Number of steps (used to compute when to change goals)
-        self._num_steps = torch.zeros((self._num_envs), device=self._device, dtype=torch.int32)
-        self._smoothing_factor = torch.zeros((self._num_envs), device=self._device, dtype=torch.float32)
-        self._update_after_n_steps = torch.zeros((self._num_envs), device=self._device, dtype=torch.int32)
 
     def get_observations(self) -> torch.Tensor:
         """
@@ -196,10 +260,12 @@ class TrackVelocities3DTask(TaskCore):
         )
 
         task_id_one_hot = F.one_hot(torch.tensor([self._task_uid], device=self._device), num_classes=self._num_tasks).squeeze(0).repeat(self._num_envs, 1)
-        task_obs = task_id_one_hot
+        semantic_emb = torch.tensor([[0.0, 0.0, 1.0, 0.0, 0.0]], device=self._device).repeat(self._num_envs, 1)
+        noise = self._rng.sample_uniform_torch(low=-0.1, high=0.1, shape=semantic_emb.shape[-1], ids=self._env_ids)
+        semantic_emb += noise
 
         # Concatenate the task observations with the robot observations
-        return torch.concat((self._task_data, self._robot.get_observations(env_ids=self._env_ids)), dim=-1), task_obs
+        return torch.concat((self._task_data, self._robot.get_observations(env_ids=self._env_ids)), dim=-1), task_id_one_hot, semantic_emb
 
     def compute_rewards(self) -> torch.Tensor:
         """
@@ -365,11 +431,11 @@ class TrackVelocities3DTask(TaskCore):
         )
         ones = torch.ones_like(self._goal_reached, dtype=torch.long)
         task_completed = torch.zeros_like(self._goal_reached, dtype=torch.long)
-        task_completed = torch.where(
-            position_distance > self._task_cfg.maximum_robot_distance,
-            ones,
-            task_completed,
-        )
+        # task_completed = torch.where(
+        #     position_distance > self._task_cfg.maximum_robot_distance,
+        #     ones,
+        #     task_completed,
+        # )
 
         # This task cannot be failed.
         zeros = torch.zeros_like(self._goal_reached, dtype=torch.long)

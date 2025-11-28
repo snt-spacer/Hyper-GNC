@@ -77,6 +77,52 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
 
         self.design_scene()
 
+    @property
+    def eval_data_keys(self) -> list[str]:
+        """
+        Returns the keys of the data used for evaluation.
+
+        Returns:
+            list[str]: The keys of the data used for evaluation.
+        """
+        return [
+            "position_distance",
+            "orientation_error",
+            "target_positions",
+            "position_error",
+            "local_pos_error",
+            "target_orientations",
+        ]
+    
+    @property
+    def eval_data_specs(self)->dict[str, list[str]]:
+
+        return {
+            "position_distance": ["(N,)"],
+            "orientation_error": ["(N,)"],
+            "target_positions": ["(N, 3)"],
+            "position_error": ["(N, 3)"],
+            "local_pos_error": ["(N, 3)"],
+            "target_orientations": ["(N, 4)"],
+        }
+    
+    @property
+    def eval_data(self) -> dict:
+        """
+        Returns the data used for evaluation.
+
+        Returns:
+            dict: The data used for evaluation.
+        """
+        return {
+            "position_distance": self._position_dist,
+            "orientation_error": self._orientation_error,
+            "target_positions": self._target_positions,
+            "position_error": self._position_error,
+            "local_pos_error": self._local_pos_error,
+            "target_orientations": self._target_orientations,
+        }
+
     def initialize_buffers(self, env_ids: torch.Tensor | None = None) -> None:
         """
         Initializes the buffers used by the 3D task.
@@ -119,23 +165,23 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
 
         super().create_logs()
 
-        self.scalar_logger.add_log("task_state", "GoToPosition6DoFWithObstacles//AVG/normed_linear_velocity", "mean")
-        self.scalar_logger.add_log("task_state", "GoToPosition6DoFWithObstacles//AVG/absolute_angular_velocity", "mean")
-        self.scalar_logger.add_log("task_state", "GoToPosition6DoFWithObstacles//EMA/position_distance", "ema")
-        self.scalar_logger.add_log("task_state", "GoToPosition6DoFWithObstacles//EMA/boundary_distance", "ema")
+        self.scalar_logger.add_log("task_state", "GoToPosition6DoFWithObstacles/AVG/normed_linear_velocity", "mean")
+        self.scalar_logger.add_log("task_state", "GoToPosition6DoFWithObstacles/AVG/absolute_angular_velocity", "mean")
+        self.scalar_logger.add_log("task_state", "GoToPosition6DoFWithObstacles/EMA/position_distance", "ema")
+        self.scalar_logger.add_log("task_state", "GoToPosition6DoFWithObstacles/EMA/boundary_distance", "ema")
 
-        self.scalar_logger.add_log("task_reward", "GoToPosition6DoFWithObstacles//AVG/position", "mean")
-        self.scalar_logger.add_log("task_reward", "GoToPosition6DoFWithObstacles//AVG/linear_velocity", "mean")
-        self.scalar_logger.add_log("task_reward", "GoToPosition6DoFWithObstacles//AVG/angular_velocity", "mean")
-        self.scalar_logger.add_log("task_reward", "GoToPosition6DoFWithObstacles//AVG/boundary", "mean")
-        self.scalar_logger.add_log("task_reward", "GoToPosition6DoFWithObstacles//AVG/collision_penalty", "mean")
+        self.scalar_logger.add_log("task_reward", "GoToPosition6DoFWithObstacles/AVG/position", "mean")
+        self.scalar_logger.add_log("task_reward", "GoToPosition6DoFWithObstacles/AVG/linear_velocity", "mean")
+        self.scalar_logger.add_log("task_reward", "GoToPosition6DoFWithObstacles/AVG/angular_velocity", "mean")
+        self.scalar_logger.add_log("task_reward", "GoToPosition6DoFWithObstacles/AVG/boundary", "mean")
+        self.scalar_logger.add_log("task_reward", "GoToPosition6DoFWithObstacles/AVG/collision_penalty", "mean")
 
-        self.scalar_logger.add_log("task_reward", "GoToPosition6DoFWithObstacles//AVG/total_reward", "mean")
-        self.scalar_logger.add_log("task_reward", "GoToPosition6DoFWithObstacles//AVG/wheighted_position_reward", "mean")
-        self.scalar_logger.add_log("task_reward", "GoToPosition6DoFWithObstacles//AVG/wheighted_linear_velocity_reward", "mean")
-        self.scalar_logger.add_log("task_reward", "GoToPosition6DoFWithObstacles//AVG/wheighted_angular_velocity_reward", "mean")
-        self.scalar_logger.add_log("task_reward", "GoToPosition6DoFWithObstacles//AVG/wheighted_boundary_reward", "mean")
-        self.scalar_logger.add_log("task_reward", "GoToPosition6DoFWithObstacles//AVG/wheighted_collision_penalty", "mean")
+        self.scalar_logger.add_log("task_reward", "GoToPosition6DoFWithObstacles/AVG/total_reward", "mean")
+        self.scalar_logger.add_log("task_reward", "GoToPosition6DoFWithObstacles/AVG/wheighted_position_reward", "mean")
+        self.scalar_logger.add_log("task_reward", "GoToPosition6DoFWithObstacles/AVG/wheighted_linear_velocity_reward", "mean")
+        self.scalar_logger.add_log("task_reward", "GoToPosition6DoFWithObstacles/AVG/wheighted_angular_velocity_reward", "mean")
+        self.scalar_logger.add_log("task_reward", "GoToPosition6DoFWithObstacles/AVG/wheighted_boundary_reward", "mean")
+        self.scalar_logger.add_log("task_reward", "GoToPosition6DoFWithObstacles/AVG/wheighted_collision_penalty", "mean")
 
         self.scalar_logger.set_ema_coeff(self._task_cfg.ema_coeff)
 
@@ -201,7 +247,7 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
 
         # log the global distance for debugging
         self._position_dist = self._position_error.norm(dim=-1)  # shape [N]
-        self.scalar_logger.log("task_state", "GoToPosition6DoFWithObstacles//EMA/position_distance", self._position_dist)
+        self.scalar_logger.log("task_state", "GoToPosition6DoFWithObstacles/EMA/position_distance", self._position_dist)
 
         # robot orientation
         # Compute a relative quaternion from robot -> target
@@ -291,18 +337,12 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
         self._orientation_error = math_utils.quat_error_magnitude(target_quat, current_quat)
         
         task_id_one_hot = F.one_hot(torch.tensor([self._task_uid], device=self._device), num_classes=self._num_tasks).squeeze(0).repeat(self._num_envs, 1)
-        task_obs = task_id_one_hot
-
-        if torch.any(torch.isnan(self._task_data)):
-            print(f"ID w/ 0 on quats: {torch.where(torch.sum(self._robot.root_link_quat_w[self._env_ids], dim=-1) == 0)}")
-            print(torch.where(torch.isnan(self._task_data)))
-            print(f"quat at 0: {self._robot.root_link_quat_w[self._env_ids][0]}")
-            print(f"daata at 0: {self._task_data[0]}")
-            # breakpoint()
-
+        semantic_emb = torch.tensor([[1.0, 0.0, 0.0, 0.0, 1.0]], device=self._device).repeat(self._num_envs, 1)
+        noise = self._rng.sample_uniform_torch(low=-0.1, high=0.1, shape=semantic_emb.shape[-1], ids=self._env_ids)
+        semantic_emb += noise
+        
         # Concatenate task observations with robot's internal observations
-        return torch.concat((self._task_data, self._robot.get_observations(env_ids=self._env_ids)), dim=-1), task_obs
-
+        return torch.concat((self._task_data, self._robot.get_observations(env_ids=self._env_ids)), dim=-1), task_id_one_hot, semantic_emb
     def compute_rewards(self) -> torch.Tensor:
         """
         Computes the reward for the current state of the robot.
@@ -353,17 +393,17 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
         collision_penalty_rew = self._task_cfg.collision_penalty * num_collisions
 
         # Logging
-        self.scalar_logger.log("task_state", "GoToPosition6DoFWithObstacles//EMA/position_distance", self._position_dist)
-        self.scalar_logger.log("task_state", "GoToPosition6DoFWithObstacles//EMA/boundary_distance", boundary_dist)
-        self.scalar_logger.log("task_state", "GoToPosition6DoFWithObstacles//AVG/normed_linear_velocity", linear_velocity)
-        self.scalar_logger.log("task_state", "GoToPosition6DoFWithObstacles//AVG/absolute_angular_velocity", angular_velocity)
+        self.scalar_logger.log("task_state", "GoToPosition6DoFWithObstacles/EMA/position_distance", self._position_dist)
+        self.scalar_logger.log("task_state", "GoToPosition6DoFWithObstacles/EMA/boundary_distance", boundary_dist)
+        self.scalar_logger.log("task_state", "GoToPosition6DoFWithObstacles/AVG/normed_linear_velocity", linear_velocity)
+        self.scalar_logger.log("task_state", "GoToPosition6DoFWithObstacles/AVG/absolute_angular_velocity", angular_velocity)
 
         # Logging rewards
-        self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles//AVG/position", position_rew)
-        self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles//AVG/linear_velocity", linear_velocity_rew)
-        self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles//AVG/angular_velocity", angular_velocity_rew)
-        self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles//AVG/boundary", boundary_rew)
-        self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles//AVG/collision_penalty", collision_penalty_rew)
+        self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles/AVG/position", position_rew)
+        self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles/AVG/linear_velocity", linear_velocity_rew)
+        self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles/AVG/angular_velocity", angular_velocity_rew)
+        self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles/AVG/boundary", boundary_rew)
+        self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles/AVG/collision_penalty", collision_penalty_rew)
 
         # NOTE: Check if we need a progress reward here.
 
@@ -376,12 +416,12 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
             + collision_penalty_rew * self._task_cfg.collision_penalty_weight
         ) + self._robot.compute_rewards(env_ids=self._env_ids)
 
-        self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles//AVG/total_reward", total_reward)
-        self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles//AVG/wheighted_position_reward", position_rew * self._task_cfg.position_weight)
-        self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles//AVG/wheighted_linear_velocity_reward", linear_velocity_rew * self._task_cfg.linear_velocity_weight)
-        self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles//AVG/wheighted_angular_velocity_reward", angular_velocity_rew * self._task_cfg.angular_velocity_weight)
-        self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles//AVG/wheighted_boundary_reward", boundary_rew * self._task_cfg.boundary_weight)
-        self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles//AVG/wheighted_collision_penalty", collision_penalty_rew * self._task_cfg.collision_penalty_weight)
+        self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles/AVG/total_reward", total_reward)
+        self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles/AVG/wheighted_position_reward", position_rew * self._task_cfg.position_weight)
+        self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles/AVG/wheighted_linear_velocity_reward", linear_velocity_rew * self._task_cfg.linear_velocity_weight)
+        self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles/AVG/wheighted_angular_velocity_reward", angular_velocity_rew * self._task_cfg.angular_velocity_weight)
+        self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles/AVG/wheighted_boundary_reward", boundary_rew * self._task_cfg.boundary_weight)
+        self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles/AVG/wheighted_collision_penalty", collision_penalty_rew * self._task_cfg.collision_penalty_weight)
 
         return total_reward
 

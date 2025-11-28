@@ -80,12 +80,12 @@ class TrackVelocities3DCfg(TaskCoreCfg):
     resample_after_steps_in_tolerance: int = 50
 
     # Reward
-    lin_vel_exponential_reward_coeff: float = 0.1
-    lat_vel_exponential_reward_coeff: float = 0.1
-    ver_vel_exponential_reward_coeff: float = 0.1
-    yaw_vel_exponential_reward_coeff: float = 0.1
-    pitch_vel_exponential_reward_coeff: float = 0.1
-    roll_vel_exponential_reward_coeff: float = 0.1
+    lin_vel_exponential_reward_coeff: float = 1.0
+    lat_vel_exponential_reward_coeff: float = 1.0
+    ver_vel_exponential_reward_coeff: float = 1.0
+    yaw_vel_exponential_reward_coeff: float = 1.0
+    pitch_vel_exponential_reward_coeff: float = 1.0
+    roll_vel_exponential_reward_coeff: float = 1.0
     linear_velocity_weight: float = 0.2
     lateral_velocity_weight: float = 0.2
     vertical_velocity_weight: float = 0.2

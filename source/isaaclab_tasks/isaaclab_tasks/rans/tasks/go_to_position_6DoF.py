@@ -301,11 +301,11 @@ class GoToPosition3DTask(TaskCore):
         )
         task_completed = torch.zeros_like(self._goal_reached, dtype=torch.long)
         # Task completion if goal is reached for required number of steps
-        task_completed = torch.where(
-            self._goal_reached > self._task_cfg.reset_after_n_steps_in_tolerance,
-            ones,
-            task_completed,
-        )
+        # task_completed = torch.where(
+        #     self._goal_reached > self._task_cfg.reset_after_n_steps_in_tolerance,
+        #     ones,
+        #     task_completed,
+        # )
         return task_failed, task_completed
 
     def set_goals(self, env_ids: torch.Tensor) -> None:

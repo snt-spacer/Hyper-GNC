@@ -27,7 +27,7 @@ class SingleEnvCfg(DirectRLEnvCfg):
     episode_length_s = 40.0
 
     robot_name = "IntBall2"
-    task_name = "GoToPosition3DWithObstacles"
+    task_name = "GoToPose3D"
 
     # scene
     scene: InteractiveSceneCfg = InteractiveSceneCfg(num_envs=4096, env_spacing=10.0, replicate_physics=True)
@@ -192,7 +192,7 @@ class SingleEnv(DirectRLEnv):
         observations = {"policy": 
                             {
                                 "general_obs": general_obs,
-                                "track_obs": track_obs, 
+                                "task_obs": track_obs, 
                             },
                         }
         return observations

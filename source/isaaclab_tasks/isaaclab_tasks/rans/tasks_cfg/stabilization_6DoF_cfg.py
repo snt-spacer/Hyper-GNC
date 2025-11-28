@@ -13,8 +13,8 @@ from .task_core_cfg import TaskCoreCfg
 
 
 @configclass
-class GoToPosition3DCfg(TaskCoreCfg):
-    """Configuration for the GoToPosition task in 3D space."""
+class Stabilization3DCfg(TaskCoreCfg):
+    """Configuration for the Stabilization task in 3D space."""
 
     # Initial conditions
     spawn_min_dist: float = 0.5
@@ -62,8 +62,8 @@ class GoToPosition3DCfg(TaskCoreCfg):
     angular_velocity_max_value: float = 20.0
     boundary_exponential_reward_coeff: float = 1.0
     position_weight: float = 1.0
-    linear_velocity_weight: float = 0.0 #-0.05
-    angular_velocity_weight: float = 0.0 #-0.05
+    linear_velocity_weight: float = -0.05
+    angular_velocity_weight: float = -0.05
     boundary_weight: float = -10.0
 
     # Randomization # TODO: adjust the slices according to the observation space

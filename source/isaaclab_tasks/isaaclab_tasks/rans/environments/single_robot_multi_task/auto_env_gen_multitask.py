@@ -32,7 +32,7 @@ class MultiTaskEnvCfg(DirectRLEnvCfg):
     tasks_names = ["GoToPosition"]
 
     # scene
-    scene: InteractiveSceneCfg = InteractiveSceneCfg(num_envs=4096, env_spacing=25.0, replicate_physics=True)
+    scene: InteractiveSceneCfg = InteractiveSceneCfg(num_envs=4096, env_spacing=5.0, replicate_physics=True)
 
     # Steps per episode
     #spe = 1/hz * decumation * episode_length_s
@@ -80,7 +80,7 @@ class MultiTaskEnvCfg(DirectRLEnvCfg):
     gen_space = 0
 
     # Multitask control
-    type_of_training = "hyper" #hyper, padd
+    padd_task_id_into_obs: bool = False
 
 
 class MultiTaskEnv(DirectRLEnv):
@@ -126,7 +126,10 @@ class MultiTaskEnv(DirectRLEnv):
             task_api.register_rigid_objects()
 
         self.set_debug_vis(self.cfg.debug_vis)
-        self.observation_buffer = torch.zeros((self.num_envs, self.cfg.observation_space), device=self.device, dtype=torch.float32)
+
+        task_combined_obs = 51 + self.cfg.action_space
+        self.observation_buffer = torch.zeros((self.num_envs, task_combined_obs), device=self.device, dtype=torch.float32)
+        self.semantic_embedding = torch.zeros((self.num_envs, 4), device=self.device, dtype=torch.float32)
 
     @property
     def eval_data_keys(self) -> list[str]:
@@ -178,7 +181,7 @@ class MultiTaskEnv(DirectRLEnv):
         self.num_tasks = len(self.tasks_cfgs)
         cfg.action_space = self.robot_cfg.action_space + max_action_space
         base_observation_space = self.robot_cfg.observation_space + max_observation_space
-        cfg.observation_space = base_observation_space + (self.num_tasks if cfg.type_of_training == "padd" else 0)
+        cfg.observation_space = base_observation_space + (self.num_tasks if cfg.padd_task_id_into_obs else 0)
         cfg.state_space = self.robot_cfg.state_space + max_state_space
         cfg.gen_space = self.robot_cfg.gen_space + max_gen_space
         return cfg
@@ -237,32 +240,16 @@ class MultiTaskEnv(DirectRLEnv):
         self.robot_api.apply_actions()
 
     def _get_observations(self) -> dict:
-        # Each task_api.get_observations() returns a tuple: (general_obs, task_obs)
-        if self.cfg.type_of_training != "padd":
+        # Each task_api.get_observations() returns a tuple: (general_obs, task_id_one_hot, semantic_emb)
+        if self.cfg.padd_task_id_into_obs:
             general_obs_list = []
-            task_obs_list = []
+            task_id_one_hot_list = []
+            semantic_emb_list = []
             for task_api in self.tasks_apis:
-                general_obs, task_obs = task_api.get_observations()
+                general_obs, task_id_one_hot, semantic_emb = task_api.get_observations()
                 general_obs_list.append(general_obs)
-                task_obs_list.append(task_obs)
-
-            padded_general_obs = []
-            for i, t in enumerate(general_obs_list):
-                pad_width = self.cfg.observation_space - t.shape[1]
-                padded = F.pad(t, (0, pad_width))
-                padded_general_obs.append(padded)
-
-            # Concatenate along the batch (env) dimension
-            general_obs_cat = torch.cat(padded_general_obs, dim=0).type(torch.float32)
-            task_obs_cat = torch.cat(task_obs_list, dim=0).type(torch.float32)
-
-        else:
-            general_obs_list = []
-            task_obs_list = []
-            for task_api in self.tasks_apis:
-                general_obs, task_obs = task_api.get_observations()
-                general_obs_list.append(general_obs)
-                task_obs_list.append(task_obs)
+                task_id_one_hot_list.append(task_id_one_hot)
+                semantic_emb_list.append(semantic_emb)
 
             padded_tensors = []
             for i, t in enumerate(general_obs_list):
@@ -272,13 +259,123 @@ class MultiTaskEnv(DirectRLEnv):
                 padded_tensors.append(padded)
 
             general_obs_cat = torch.cat(padded_tensors, dim=0).type(torch.float32)
-            task_obs_cat = torch.cat(task_obs_list, dim=0).type(torch.float32)
+            task_id_one_hot_cat = torch.cat(task_id_one_hot_list, dim=0).type(torch.float32)
+            semantic_emb_cat = torch.cat(semantic_emb_list, dim=0).type(torch.float32)
+
+        else:
+            general_obs_list = []
+            task_id_one_hot_list = []
+            semantic_emb_list = []
+            for task_api in self.tasks_apis:
+                general_obs, task_id_one_hot, semantic_emb = task_api.get_observations()
+                general_obs_list.append(general_obs)
+                task_id_one_hot_list.append(task_id_one_hot)
+                semantic_emb_list.append(semantic_emb)
+            padded_general_obs = []
+            for i, t in enumerate(general_obs_list):
+                pad_width = self.cfg.observation_space - t.shape[1]
+                padded = F.pad(t, (0, pad_width))
+                padded_general_obs.append(padded)
+
+            # Concatenate along the batch (env) dimension
+            general_obs_cat = torch.cat(padded_general_obs, dim=0).type(torch.float32)
+            task_id_one_hot_cat = torch.cat(task_id_one_hot_list, dim=0).type(torch.float32)
+            semantic_emb_cat = torch.cat(semantic_emb_list, dim=0).type(torch.float32)
+            
 
         result = {
             "general_obs": general_obs_cat,
-            "track_obs": task_obs_cat
+            "task_id_one_hot": task_id_one_hot_cat,
+            "semantic_emb": semantic_emb_cat
         }
         return {"policy": result}
+
+        """
+        Create tensors for the correct observation shapes. This assumes there's only 5 tasks (Stabilization3D, GoToPose3D, 
+        TrackVelocities3D, GoThroughPoses3D, GoToPosition3DWithObstacles)
+        The tensor will always contain:
+        general_obs_cat[:, :3] -> Robot Normalized Linear Velocity
+        general_obs_cat[:, 3:6] -> Robot Normalized Angular Velocity
+        general_obs_cat[:, 6:9] -> Robot Normalized Position (x - min_x) / (max_x - min_x)
+        general_obs_cat[:, 9:15] -> Robot Normalized 6D Rotation Matrix (GoToPose3D, GoToPosition3DWithObstacles)
+        general_obs_cat[:, 15:18] -> Local Pose error (GoToPose3D, GoToPosition3DWithObstacles)
+        general_obs_cat[:, 18:24] -> Velocities errors (TrackVelocities3D), linear, lateral, vertical, yaw, pithch, roll
+        general_obs_cat[:, 24: 24 + 9*N] -> N: num next target local Pose error and 6D Rotation Matrix (GoThroughPoses3D)
+
+        general_obs_cat[:, 32:35] -> Task 4 (GoThroughPoses3D) Subsequent Local Pose error
+        general_obs_cat[:, 35:38] -> Task 4 (GoThroughPoses3D) Subsequent Rotation matrix
+        general_obs_cat[:, 41:44] -> Task 5 (GoToPosition3DWithObstacles) N closest obstacles relative positions
+        """
+        
+        # for task_api in self.tasks_apis:
+        #     general_obs, task_obs = task_api.get_observations()
+        #     env_ids = task_api._env_ids
+        #     if task_api.__class__.__name__[:-4] == "GoToPose3D":
+        #         normalized_linear_vel = self.robot_api.root_com_lin_vel_b[env_ids] / (torch.linalg.norm(self.robot_api.root_com_lin_vel_w[env_ids], dim=-1) + 1e-8).unsqueeze(-1)
+        #         normalized_angular_vel = self.robot_api.root_com_ang_vel_b[env_ids] / (torch.linalg.norm(self.robot_api.root_com_ang_vel_w[env_ids], dim=-1) + 1e-8).unsqueeze(-1)
+        #         normalized_position = -1 + 2 * ((self.robot_api.root_link_pos_w[env_ids] - (task_api._env_origins - task_api._task_cfg.maximum_robot_distance)) / (2 * task_api._task_cfg.maximum_robot_distance))
+        #         normalized_position.fill_(0.0)
+
+        #         self.observation_buffer[env_ids, :3] = self.robot_api.root_com_lin_vel_w[env_ids]
+        #         self.observation_buffer[env_ids, 3:6] = self.robot_api.root_com_ang_vel_w[env_ids]
+        #         self.observation_buffer[env_ids, 6:9] = normalized_position
+        #         self.observation_buffer[env_ids, 9:15] = general_obs[:, 3:9]
+        #         self.observation_buffer[env_ids, 15:18] = general_obs[:, :3]
+        #         self.observation_buffer[env_ids, -self.cfg.action_space:] = general_obs[:, -self.cfg.action_space:]
+        #         self.semantic_embedding[env_ids] = task_obs
+            
+        #     elif task_api.__class__.__name__[:-4] == "TrackVelocities3D":
+        #         normalized_linear_vel = self.robot_api.root_com_lin_vel_b[env_ids] / (torch.linalg.norm(self.robot_api.root_com_lin_vel_w[env_ids], dim=-1) + 1e-8).unsqueeze(-1)
+        #         normalized_angular_vel = self.robot_api.root_com_ang_vel_b[env_ids] / (torch.linalg.norm(self.robot_api.root_com_ang_vel_w[env_ids], dim=-1) + 1e-8).unsqueeze(-1)
+        #         normalized_position = -1 + 2 * ((self.robot_api.root_link_pos_w[env_ids] - (task_api._env_origins - task_api._task_cfg.maximum_robot_distance)) / (2 * task_api._task_cfg.maximum_robot_distance))
+        #         normalized_position.fill_(0.0)
+
+        #         self.observation_buffer[env_ids, :3] = self.robot_api.root_com_lin_vel_w[env_ids]
+        #         self.observation_buffer[env_ids, 3:6] = self.robot_api.root_com_ang_vel_w[env_ids]
+        #         self.observation_buffer[env_ids, 6:9] = normalized_position
+        #         self.observation_buffer[env_ids, 18:24] = general_obs[:, :6]
+        #         self.observation_buffer[env_ids, -self.cfg.action_space:] = general_obs[:, -self.cfg.action_space:]
+        #         self.semantic_embedding[env_ids] = task_obs
+
+
+        #     elif task_api.__class__.__name__[:-4] == "GoThroughPoses3D":
+        #         normalized_linear_vel = self.robot_api.root_com_lin_vel_b[env_ids] / (torch.linalg.norm(self.robot_api.root_com_lin_vel_w[env_ids], dim=-1) + 1e-8).unsqueeze(-1)
+        #         normalized_angular_vel = self.robot_api.root_com_ang_vel_b[env_ids] / (torch.linalg.norm(self.robot_api.root_com_ang_vel_w[env_ids], dim=-1) + 1e-8).unsqueeze(-1)
+        #         normalized_position = -1 + 2 * ((self.robot_api.root_link_pos_w[env_ids] - (task_api._env_origins - task_api._task_cfg.maximum_robot_distance)) / (2 * task_api._task_cfg.maximum_robot_distance))
+        #         normalized_position.fill_(0.0)
+
+        #         self.observation_buffer[env_ids, :3] = self.robot_api.root_com_lin_vel_w[env_ids]
+        #         self.observation_buffer[env_ids, 3:6] = self.robot_api.root_com_ang_vel_w[env_ids]
+        #         self.observation_buffer[env_ids, 6:9] = normalized_position
+        #         self.observation_buffer[env_ids, 9:15] = general_obs[:, 3:9]
+        #         self.observation_buffer[env_ids, 15:18] = general_obs[:, :3]
+        #         dim_for_subsequent_poses = 9 * task_api._task_cfg.num_subsequent_goals # Robot action space, 9 for the first pose error and rotation mtx
+        #         self.upper_idx = 24 + dim_for_subsequent_poses
+        #         self.observation_buffer[env_ids, 24: self.upper_idx] = general_obs[:, 9: 9 + dim_for_subsequent_poses]
+        #         self.observation_buffer[env_ids, -self.cfg.action_space:] = general_obs[:, -self.cfg.action_space:]
+        #         self.semantic_embedding[env_ids] = task_obs
+
+        #     elif task_api.__class__.__name__[:-4] == "GoToPosition3DWithObstacles":
+        #         normalized_linear_vel = self.robot_api.root_com_lin_vel_b[env_ids] / (torch.linalg.norm(self.robot_api.root_com_lin_vel_w[env_ids], dim=-1) + 1e-8).unsqueeze(-1)
+        #         normalized_angular_vel = self.robot_api.root_com_ang_vel_b[env_ids] / (torch.linalg.norm(self.robot_api.root_com_ang_vel_w[env_ids], dim=-1) + 1e-8).unsqueeze(-1)
+        #         normalized_position = -1 + 2 * ((self.robot_api.root_link_pos_w[env_ids] - (task_api._env_origins - task_api._task_cfg.maximum_robot_distance)) / (2 * task_api._task_cfg.maximum_robot_distance))  
+        #         normalized_position.fill_(0.0)
+
+        #         self.observation_buffer[env_ids, :3] = self.robot_api.root_com_lin_vel_w[env_ids]
+        #         self.observation_buffer[env_ids, 3:6] = self.robot_api.root_com_ang_vel_w[env_ids]
+        #         self.observation_buffer[env_ids, 6:9] = normalized_position
+        #         self.observation_buffer[env_ids, 9:15] = general_obs[:, 3:9]
+        #         self.observation_buffer[env_ids, 15:18] = general_obs[:, :3]
+        #         self.observation_buffer[env_ids, self.upper_idx:-self.cfg.action_space] = general_obs[:, 9:18]
+        #         self.observation_buffer[env_ids, -self.cfg.action_space:] = general_obs[:, -self.cfg.action_space:]
+        #         self.semantic_embedding[env_ids] = task_obs
+
+
+        # result = {
+        #     "general_obs": self.observation_buffer,
+        #     "track_obs": self.semantic_embedding,
+        # }
+        # return {"policy": result}
 
     def _get_rewards(self) -> torch.Tensor:
         task_rewards = [task_api.compute_rewards() for task_api in self.tasks_apis]

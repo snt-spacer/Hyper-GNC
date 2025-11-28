@@ -24,6 +24,7 @@ from .race_gates_cfg import RaceGatesCfg  # noqa: F401, F403
 from .track_velocities_6DoF_cfg import TrackVelocities3DCfg  # noqa: F401, F403
 from .track_velocities_cfg import TrackVelocitiesCfg  # noqa: F401, F403
 from .rendezvous_cfg import RendezvousCfg  # noqa: F401, F403
+from .stabilization_6DoF_cfg import Stabilization3DCfg  # noqa: F401, F403
 
 TASK_CFG_FACTORY = factory()
 TASK_CFG_FACTORY.register("GoThroughPoses", GoThroughPosesCfg)
@@ -40,3 +41,4 @@ TASK_CFG_FACTORY.register("GoToPositionWithObstacles", GoToPositionWithObstacles
 TASK_CFG_FACTORY.register("GoToPosition3DWithObstacles", GoToPosition3DWithObstaclesCfg)
 TASK_CFG_FACTORY.register("RaceGates", RaceGatesCfg)
 TASK_CFG_FACTORY.register("Rendezvous", RendezvousCfg)
+TASK_CFG_FACTORY.register("Stabilization3D", Stabilization3DCfg)

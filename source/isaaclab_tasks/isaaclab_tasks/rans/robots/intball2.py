@@ -167,7 +167,7 @@ class IntBall2Robot(RobotCore):
         """
 
         # Enforce action limits at the robot level
-        actions.clip_(min=0.0, max=1.0)
+        # actions.clip_(min=0.01, max=1.0)
         # Store the unaltered actions, by default the robot should only observe the unaltered actions.
         self._previous_unaltered_actions = self._unaltered_actions.clone()
         self._unaltered_actions = actions.clone()
@@ -185,6 +185,7 @@ class IntBall2Robot(RobotCore):
         # Normalize the actions to [0, 1] range if in continuous mode
         if self._robot_cfg.action_mode == "continuous":
             self._thrust_actions = (self._actions + 1) / 2.0  # mapping from [-1, 1] to [0, 1]
+            # self._thrust_actions = self._actions
         else:
             self._thrust_actions = (self._actions > 0).float()  # binary action
 
@@ -228,7 +229,7 @@ class IntBall2Robot(RobotCore):
         if self._robot_cfg.action_mode == "continuous":
             # Continuous action space
             single_action_space = spaces.Box(
-                low=-1.0,
+                low=0.0,
                 high=1.0,
                 shape=(self._robot_cfg.num_thrusters,),
                 dtype=np.float32,

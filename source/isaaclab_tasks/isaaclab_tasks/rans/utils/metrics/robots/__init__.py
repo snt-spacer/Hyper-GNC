@@ -55,3 +55,4 @@ from .jetbot_metrics import JetbotMetrics
 from .turtlebot2_metrics import Turtlebot2Metrics
 from .leatherback_metrics import LeatherbackMetrics
 from .modular_freeflyer_metrics import ModularFreeflyerMetrics
+from .intBall2 import IntBall2Metrics

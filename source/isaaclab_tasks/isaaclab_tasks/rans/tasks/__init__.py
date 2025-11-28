@@ -26,6 +26,7 @@ from .task_core import TaskCore  # noqa: F401, F403
 from .track_velocities import TrackVelocitiesTask  # noqa: F401, F403
 from .track_velocities_6DoF import TrackVelocities3DTask  # noqa: F401, F403
 from .rendezvous import RendezvousTask  # noqa: F401, F403
+from .stabilization_6DoF import Stabilization3DTask  # noqa: F401, F403
 
 TASK_FACTORY = factory()
 TASK_FACTORY.register("GoThroughPoses", GoThroughPosesTask)
@@ -43,3 +44,4 @@ TASK_FACTORY.register("GoToPosition3DWithObstacles", GoToPosition3DWithObstacles
 TASK_FACTORY.register("GoToPositionWithObstacles", GoToPositionWithObstaclesTask)
 TASK_FACTORY.register("RaceGates", RaceGatesTask)
 TASK_FACTORY.register("Rendezvous", RendezvousTask)
+TASK_FACTORY.register("Stabilization3D", Stabilization3DTask)

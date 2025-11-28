@@ -73,8 +73,8 @@ class GoThroughPoses3DCfg(TaskCoreCfg):
     """Maximal number of goals. Defaults to 10."""
     min_num_goals: int = 6
     """Minimal number of goals. Defaults to 6."""
-    loop: bool = True
-    """Whether the goals should loop or not. Defaults to True."""
+    loop: bool = False
+    """Whether the goals should loop or not. Defaults to False."""
 
     # Observation
     num_subsequent_goals: int = 2

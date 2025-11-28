@@ -59,6 +59,48 @@ class RslRlPpoActorCriticBetaCfg:
 
     clip_actions_range: list[float] = [-1.0, 1.0]
     """The range for clipping the actions. Default is [-1, 1]."""
+
+@configclass
+class RslRlPpoActorCriticBetaMemoryCfg:
+    """Configuration for the PPO actor-critic networks."""
+
+    class_name: str = "ActorCriticBetaMemory"
+    """The policy class name. Default is ActorCritic."""
+
+    init_noise_std: float = MISSING
+    """The initial noise standard deviation for the policy."""
+
+    actor_hidden_dims: list[int] = MISSING
+    """The hidden dimensions of the actor network."""
+
+    critic_hidden_dims: list[int] = MISSING
+    """The hidden dimensions of the critic network."""
+
+    activation: str = MISSING
+    """The activation function for the actor and critic networks."""
+
+    clip_actions: bool = False
+    """Whether to clip the actions. Default is False."""
+    
+    clip_actions_range: list[float] = [-1.0, 1.0]
+    """The range for clipping the actions. Default is [-1, 1]."""
+
+    use_embeddings: bool = MISSING
+    """Whether to use an embedding layer to transform the input observation space."""
+
+    embeddings_size: int = 32
+    """The output dimension of the embedding layer if use_embeddings is true."""
+
+    generator_size: tuple[int] = MISSING
+    """A list specifying the hidden layer sizes of the generator network."""
+
+    num_memory_obs: int = MISSING
+    """The size of the memory observation input."""
+
+    network_type: str = "pure" #pure, hybrid
+    """The type of network to use."""
+
+
 @configclass
 class RslRlPpoActorCriticMemoryCfg:
     """Configuration for the PPO actor-critic networks."""
@@ -162,7 +204,7 @@ class RslRlOnPolicyRunnerCfg:
     empirical_normalization: bool = MISSING
     """Whether to use empirical normalization."""
 
-    policy: RslRlPpoActorCriticCfg | RslRlPpoActorCriticBetaCfg | RslRlPpoActorCriticMemoryCfg = MISSING
+    policy: RslRlPpoActorCriticCfg | RslRlPpoActorCriticBetaCfg | RslRlPpoActorCriticBetaMemoryCfg | RslRlPpoActorCriticMemoryCfg = MISSING
     """The policy configuration."""
 
     algorithm: RslRlPpoAlgorithmCfg = MISSING

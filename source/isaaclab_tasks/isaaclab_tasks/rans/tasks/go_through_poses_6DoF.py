@@ -56,6 +56,58 @@ class GoThroughPoses3DTask(TaskCore):
         # Buffers
         self.initialize_buffers(env_ids=env_ids)
 
+    @property
+    def eval_data_keys(self) -> list[str]:
+        """
+        Returns the keys of the data used for evaluation.
+
+        Returns:
+            list[str]: The keys of the data used for evaluation.
+        """
+        return [
+            "target_positions",
+            "target_orientations",
+            "num_goals",
+            "trajectory_completed",
+            "target_index",
+            "position_dist",
+            "local_pos_error",
+            "orientation_error",
+        ]
+    
+    @property
+    def eval_data_specs(self)->dict[str, list[str]]:
+
+        return {
+            "target_positions": ["(N, max_num_goals, 3)"],
+            "target_orientations": ["(N, max_num_goals, 4)"],
+            "num_goals": ["(N,)"],
+            "trajectory_completed": ["(N,)"],
+            "target_index": ["(N,)"],
+            "position_dist": ["(N,)"],
+            "local_pos_error": ["(N, 3)"],
+            "orientation_error": ["(N,)"],
+        }
+    
+    @property
+    def eval_data(self) -> dict:
+        """
+        Returns the data used for evaluation.
+
+        Returns:
+            dict: The data used for evaluation.
+        """
+        return {
+            "target_positions": self._target_positions,
+            "target_orientations": self._target_orientations,
+            "num_goals": self._num_goals,
+            "trajectory_completed": self._trajectory_completed,
+            "target_index": self._target_index,
+            "position_dist": self._position_dist,
+            "local_pos_error": self._local_pos_error,
+            "orientation_error": self._orientation_error,
+        }
+
     def initialize_buffers(self, env_ids: torch.Tensor | None = None) -> None:
         """
         Initializes the buffers used by the 3D task.
@@ -227,10 +279,12 @@ class GoThroughPoses3DTask(TaskCore):
             self._task_data[:, start_idx + 3 : start_idx + 9] = goal_rel_mat_6  # rotation to next goal
         
         task_id_one_hot = F.one_hot(torch.tensor([self._task_uid], device=self._device), num_classes=self._num_tasks).squeeze(0).repeat(self._num_envs, 1)
-        task_obs = task_id_one_hot
+        semantic_emb = torch.tensor([[0.5, 1.0, 0.0, 0.0, 0.0]], device=self._device).repeat(self._num_envs, 1)
+        noise = self._rng.sample_uniform_torch(low=-0.1, high=0.1, shape=semantic_emb.shape[-1], ids=self._env_ids)
+        semantic_emb += noise
 
         # Concatenate task observations with robot's internal observations
-        return torch.concat((self._task_data, self._robot.get_observations(env_ids=self._env_ids)), dim=-1), task_obs
+        return torch.concat((self._task_data, self._robot.get_observations(env_ids=self._env_ids)), dim=-1), task_id_one_hot, semantic_emb
 
     def compute_rewards(self) -> torch.Tensor:
         """

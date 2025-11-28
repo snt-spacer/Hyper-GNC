@@ -5,40 +5,37 @@
 
 from isaaclab.utils import configclass
 
-from isaaclab_rl.rsl_rl import RslRlOnPolicyRunnerCfg, RslRlPpoActorCriticCfg, RslRlPpoAlgorithmCfg
+from isaaclab_rl.rsl_rl import RslRlOnPolicyRunnerCfg, RslRlPpoActorCriticBetaCfg, RslRlPpoAlgorithmCfg
 
 
 @configclass
 class SinglePPORunnerCfg(RslRlOnPolicyRunnerCfg):
     num_steps_per_env = 16
-    max_iterations = 4000
+    max_iterations = 3500
     save_interval = 100
     experiment_name = "single_control_intball_6DOF"
     logger = "wandb"
-    wandb_project = "single_control_intball_6DOF"
     wandb_kwargs = {
         "project": "single_control_intball_6DOF",
         "entity": "spacer-rl",
         "group": "zeroG",
     }
     empirical_normalization = False
-    policy = RslRlPpoActorCriticCfg(
+    policy = RslRlPpoActorCriticBetaCfg(
         init_noise_std=1.0,
-        noise_std_type="scalar",
-        actor_hidden_dims=[128, 64, 32],
-        critic_hidden_dims=[128, 128, 128],
-        activation="tanh",
-        clip_actions=True,
-        clip_actions_range=[-1, 1],
+        actor_hidden_dims=[32, 32],
+        critic_hidden_dims=[32, 32],
+        activation="elu",
+        clip_actions_range=[0, 1],
     )
     algorithm = RslRlPpoAlgorithmCfg(
         value_loss_coef=1.0,
         use_clipped_value_loss=True,
         clip_param=0.2,
-        entropy_coef=0.005,
+        entropy_coef=0.01,
         num_learning_epochs=5,
         num_mini_batches=4,
-        learning_rate=1.0e-4,
+        learning_rate=2.0e-3,
         schedule="adaptive", #adaptive, fixed
         gamma=0.99,
         lam=0.95,

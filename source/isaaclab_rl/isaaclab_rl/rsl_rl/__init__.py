@@ -16,5 +16,5 @@ The following example shows how to wrap an environment for RSL-RL:
 """
 
 from .exporter import export_policy_as_jit, export_policy_as_onnx
-from .rl_cfg import RslRlOnPolicyRunnerCfg, RslRlPpoActorCriticBetaCfg, RslRlPpoActorCriticMemoryCfg, RslRlPpoActorCriticCfg, RslRlPpoAlgorithmCfg
+from .rl_cfg import RslRlOnPolicyRunnerCfg, RslRlPpoActorCriticBetaMemoryCfg, RslRlPpoActorCriticBetaCfg, RslRlPpoActorCriticMemoryCfg, RslRlPpoActorCriticCfg, RslRlPpoAlgorithmCfg
 from .vecenv_wrapper import RslRlVecEnvWrapper

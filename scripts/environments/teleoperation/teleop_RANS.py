@@ -117,6 +117,22 @@ def pre_process_actions(prev_action: torch.Tensor, delta_pose: torch.Tensor, gri
             action = torch.tensor([[0, 1, 1, 0, 0, 0, 1, 1]], dtype=torch.float32, device=delta_pose.device)
         elif delta_pose[0][1] < 0:  # right
             action = torch.tensor([[1, 0, 0, 1, 1, 1, 0, 0]], dtype=torch.float32, device=delta_pose.device)
+        elif delta_pose[0][2] > 0:  # up
+            action = torch.tensor([[0, 0, 1, 1, 1, 0, 0, 1]], dtype=torch.float32, device=delta_pose.device)
+        elif delta_pose[0][2] < 0:  # down
+            action = torch.tensor([[1, 1, 0, 0, 0, 1, 1, 0]], dtype=torch.float32, device=delta_pose.device)
+        elif delta_pose[0][3] < 0: # -Roll
+            action = torch.tensor([[1, 0, 1, 0, 0, 1, 0, 1]], dtype=torch.float32, device=delta_pose.device)
+        elif delta_pose[0][3] > 0: # +Roll
+            action = torch.tensor([[0, 1, 0, 1, 1, 0, 1, 0]], dtype=torch.float32, device=delta_pose.device)
+        elif delta_pose[0][4] < 0: # -Pitch
+            action = torch.tensor([[1, 1, 0, 0, 1, 0, 0, 1]], dtype=torch.float32, device=delta_pose.device)
+        elif delta_pose[0][4] > 0: # +Pitch
+            action = torch.tensor([[0, 0, 1, 1, 0, 1, 1, 0]], dtype=torch.float32, device=delta_pose.device)
+        elif delta_pose[0][5] > 0: # +Yaw
+            action = torch.tensor([[1, 0, 0, 1, 0, 0, 1, 1]], dtype=torch.float32, device=delta_pose.device)
+        elif delta_pose[0][5] < 0: # -Yaw
+            action = torch.tensor([[0, 1, 1, 0, 1, 1, 0, 0]], dtype=torch.float32, device=delta_pose.device)
         else:
             action = torch.tensor([[0, 0, 0, 0, 0, 0, 0, 0]], dtype=torch.float32, device=delta_pose.device)
         return action
