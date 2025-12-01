@@ -10,7 +10,7 @@ import numpy as np
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 class EvalMetrics:
-    def __init__(self, env, robot_name: str, task_name: str, folder_path: str, device: str = "cuda", num_runs_per_env: int = 1, task_index: int = 0):
+    def __init__(self, env, robot_name: str, task_name: str, folder_path: str, device: str = "cuda", num_runs_per_env: int = 1, task_index: int = 0, skip_first_reset: bool = False):
         self._env = env
         self.device = device
         self.num_runs_per_env = num_runs_per_env
@@ -18,6 +18,7 @@ class EvalMetrics:
         self.robot_name = robot_name
         self.save_path = folder_path
         self.task_index = task_index
+        self.skip_first_reset = skip_first_reset
 
         self.task_metrics_factory = TaskMetricsFactory.create(
             task_name, 
@@ -114,10 +115,10 @@ class EvalMetrics:
         self.num_envs = all_dones.shape[1]
         cumulative_dones = torch.cumsum(all_dones, dim=0)
         self.cutoff_indices = torch.full((self.num_envs,), fill_value=self.num_steps, dtype=torch.long, device=self.device)
-
-        self.cutoff_indices = torch.full((self.num_envs,), fill_value=self.num_steps, dtype=torch.long, device=self.device)
+        
+        target_runs = self.num_runs_per_env + 1 if self.skip_first_reset else self.num_runs_per_env
         for i in range(self.num_envs):
-            valid_indices = torch.where(cumulative_dones[:, i] >= self.num_runs_per_env)[0]
+            valid_indices = torch.where(cumulative_dones[:, i] >= target_runs)[0]
             if len(valid_indices) > 0:
                 self.cutoff_indices[i] = valid_indices[0] # The step where target is met
             else:
@@ -156,11 +157,16 @@ class EvalMetrics:
             end_steps_for_env = []
 
             # Take the first num_runs_per_env completed trajectories
-            end_steps_for_env = valid_done_steps[:self.num_runs_per_env]
+            if self.skip_first_reset:
+                end_steps_for_env = valid_done_steps[1 : self.num_runs_per_env + 1]
+                last_end_step = valid_done_steps[0]
+            else:
+                end_steps_for_env = valid_done_steps[:self.num_runs_per_env]
+                last_end_step = -1
+
             final_num_valid_trajectories_per_env[env_idx] = self.num_runs_per_env
 
             # Extract trajectories based on these end_steps
-            last_end_step = -1
             for i, current_end_step in enumerate(end_steps_for_env):
                 start_step = last_end_step + 1
                 length = current_end_step - start_step 

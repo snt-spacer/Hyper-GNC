@@ -55,3 +55,4 @@ from .jetbot_plots import JetbotPlots
 from .turtlebot2_plots import Turtlebot2Plots
 from .leatherback_plots import LeatherbackPlots
 from .modular_freeflyer_plots import ModularFreeflyerPlots
+from .intball2_plots import IntBall2Plots

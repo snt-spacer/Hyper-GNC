@@ -207,7 +207,8 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
                 folder_path=log_dir,  # Use main log directory
                 device=args_cli.device,
                 num_runs_per_env=args_cli.runs_per_env,
-                task_index=i
+                task_index=i,
+                skip_first_reset=True
             )
             eval_metrics_list.append(eval_metrics)
         
@@ -229,6 +230,7 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
             folder_path=log_dir, 
             device=env.unwrapped.device,
             num_runs_per_env=args_cli.runs_per_env,
+            skip_first_reset=True
         )
 
     print(f"[INFO]: Loading model checkpoint from: {resume_path}")
@@ -376,7 +378,7 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
             # print(f"[INFO] Calculating metrics for task {i}: {task_name}")
             task_data_processed = {k: torch.stack(v, dim=0) for k, v in tasks_data[i].items()}
             # Intball remove the first reset data
-            breakpoint()
+            torch.sum(task_data_processed["dones"], dim=0)
             
             eval_metrics.calculate_metrics(data=task_data_processed)
             # Save extracted trajectories

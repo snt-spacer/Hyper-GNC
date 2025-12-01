@@ -38,6 +38,54 @@ class IntBall2Robot(RobotCore):
         # Buffers
         self.initialize_buffers()
 
+    @property
+    def eval_data_keys(self) -> list[str]:
+        return [
+            "position",
+            "heading",
+            "linear_velocity",
+            "angular_velocity",
+            "thruster_action",
+            "transforms",
+            "thrust_forces",
+            "thrust_torques",
+            "thrust_positions",
+            "actions",
+            "unaltered_actions",
+        ]
+    
+    @property
+    def eval_data_specs(self)->dict[str, list[str]]:
+        return {
+            "position": [".robot_pos.x.m", ".robot_pos.y.m", ".robot_pos.z.m"],
+            "heading": [".robot_heading.rad"],
+            "linear_velocity": [".robot_lin_vel.x.m/s", ".robot_lin_vel.y.m/s", ".robot_lin_vel.z.m/s"],
+            "angular_velocity": [".robot_ang_vel.x.rad/s", ".robot_ang_vel.y.rad/s", ".robot_ang_vel.z.rad/s"],
+            "thruster_action": [".robot_thrust.x.u", ".robot_thrust.y.u", ".robot_thrust.z.u"],
+            "transforms": [f".robot_thruster_transform{i}.{comp}" for i in range(self._robot_cfg.num_thrusters) for comp in ['m00','m01','m02','m03','m10','m11','m12','m13','m20','m21','m22','m23']],
+            "thrust_forces": [f".robot_thrust_force{i}.N" for i in range(self._robot_cfg.num_thrusters)],
+            "thrust_torques": [f".robot_thrust_torque{i}.N.m" for i in range(self._robot_cfg.num_thrusters)],
+            "thrust_positions": [f".robot_thrust_position{i}.m" for i in range(self._robot_cfg.num_thrusters)],
+            "actions": [f".robot_actions{i}.u" for i in range(self._robot_cfg.action_space)],
+            "unaltered_actions": [f".robot_unaltered_actions{i}.u" for i in range(self._robot_cfg.action_space)],
+        }
+    
+    @property
+    def eval_data(self) -> dict:
+        return {
+            "position": self.root_pos_w,
+            "heading": self.heading_w,
+            "linear_velocity": self.root_lin_vel_b,
+            "angular_velocity": self.root_ang_vel_b,
+            "thruster_action": self._thruster_action,
+            "transforms": self._transforms,
+            "thrust_forces": self._thrust_forces,
+            "thrust_torques": self._thrust_torques,
+            "thrust_positions": self._thrust_positions,
+            "actions": self._actions,
+            "unaltered_actions": self._unaltered_actions,
+        }
+
     def initialize_buffers(self, env_ids=None) -> None:
         super().initialize_buffers(env_ids)
         self._previous_actions = torch.zeros(

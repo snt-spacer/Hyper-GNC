@@ -79,6 +79,12 @@ class TrackVelocities3DTask(TaskCore):
             "target_yaw_velocity",
             "target_pitch_velocity",
             "target_roll_velocity",
+            "error_linear_velocity",
+            "error_lateral_velocity",
+            "error_vertical_velocity",
+            "error_yaw_velocity",
+            "error_pitch_velocity",
+            "error_roll_velocity",
         ]
     
     @property
@@ -97,6 +103,12 @@ class TrackVelocities3DTask(TaskCore):
             "target_yaw_velocity": ["(N,)"],
             "target_pitch_velocity": ["(N,)"],
             "target_roll_velocity": ["(N,)"],
+            "error_linear_velocity": ["(N,)"],
+            "error_lateral_velocity": ["(N,)"],
+            "error_vertical_velocity": ["(N,)"],
+            "error_yaw_velocity": ["(N,)"],
+            "error_pitch_velocity": ["(N,)"],
+            "error_roll_velocity": ["(N,)"],
         }
     
     @property
@@ -120,6 +132,12 @@ class TrackVelocities3DTask(TaskCore):
             "target_yaw_velocity": self._yaw_velocity_desired,
             "target_pitch_velocity": self._pitch_velocity_desired,
             "target_roll_velocity": self._roll_velocity_desired,
+            "error_linear_velocity": self._task_data[:, 0],
+            "error_lateral_velocity": self._task_data[:, 1],
+            "error_vertical_velocity": self._task_data[:, 2],
+            "error_yaw_velocity": self._task_data[:, 3],
+            "error_pitch_velocity": self._task_data[:, 4],
+            "error_roll_velocity": self._task_data[:, 5],
         }
 
     def initialize_buffers(self, env_ids: torch.Tensor | None = None) -> None:

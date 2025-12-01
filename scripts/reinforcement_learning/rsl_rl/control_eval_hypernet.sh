@@ -290,7 +290,7 @@ MODEL_PATHS=(
 ########################################################################################################################
 # Hypernet Beta
 MODEL_PATHS=(
-/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta/2025-11-28_10-07-51_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-42/model_0.pt
+/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta/2025-12-01_14-44-03_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-42/model_700.pt
 )
 
 # Check if model paths are provided

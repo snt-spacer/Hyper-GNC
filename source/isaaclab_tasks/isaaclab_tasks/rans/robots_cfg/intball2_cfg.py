@@ -21,7 +21,7 @@ from .robot_core_cfg import RobotCoreCfg
 class IntBall2RobotCfg(RobotCoreCfg):
     """Configuration for the JAXA Int-Ball2 robot in RANS tasks."""
 
-    robot_name: str = "intball2"
+    robot_name: str = "IntBall2"
 
     robot_cfg: ArticulationCfg = INTBALL2_LOCAL_CFG.replace(prim_path="/World/envs/env_.*/Robot")
 

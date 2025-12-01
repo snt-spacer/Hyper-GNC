@@ -57,3 +57,7 @@ from .go_through_poses_plots import GoThroughPosesPlots
 from .track_velocities_plots import TrackVelocitiesPlots
 from .race_gates_plots import RaceGatesPlots
 from .rendezvous_plots import RendezvousPlots
+from .go_to_position_6DoF_with_obstacles_plots import GoToPosition3DWithObstaclesPlots
+from .go_to_pose_6DoF_plots import GoToPose3DPlots
+from .go_through_poses_6DoF_plots import GoThroughPoses3DPlots
+from .track_velocities_6DoF_plots import TrackVelocities3DPlots
