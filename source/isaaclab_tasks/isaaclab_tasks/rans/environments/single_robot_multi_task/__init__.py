@@ -20,6 +20,7 @@ gym.register(
         "rsl_rl_cfg_entry_point": f"{agents.__name__}.rsl_rl_ppo_cfg:SingleRobotMultiTaskPPORunnerCfg",
         "rsl_rl_ppo-beta_cfg_entry_point": f"{agents.__name__}.rsl_rl_ppo-beta_cfg:SingleRobotMultiTaskPPORunnerCfg",
         "rsl_rl_ppo-beta-memory_cfg_entry_point": f"{agents.__name__}.rsl_rl_ppo-beta-memory_cfg:SingleRobotMultiTaskPPORunnerCfg",
+        "rsl_rl_ppo-multi-critic_cfg_entry_point": f"{agents.__name__}.rsl_rl_ppo-multi-critic_cfg:SingleRobotMultiTaskPPORunnerCfg",
         "rsl_rl_ppo-memory_cfg_entry_point": f"{agents.__name__}.rsl_rl_ppo-memory_cfg:SingleRobotMultiTaskPPORunnerCfg",
     },
 )
