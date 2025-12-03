@@ -16,7 +16,7 @@ runs_per_env=4
 ########################################################################################################################
 # IntBall2 Multi-critic
 ########################################################################################################################
-# Multi-critic
+# Multi-critic Hot-id
 MODEL_PATHS=(
 /workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic/2025-12-01_20-51-17_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/model_3999.pt
 /workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic/2025-12-02_08-27-36_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/model_3999.pt
