@@ -19,6 +19,8 @@ from isaaclab.utils import configclass
 
 from isaaclab_tasks.rans import ROBOT_CFG_FACTORY, ROBOT_FACTORY, TASK_CFG_FACTORY, TASK_FACTORY
 
+import torch.nn.functional as F
+
 
 @configclass
 class SingleEnvCfg(DirectRLEnvCfg):
@@ -30,7 +32,7 @@ class SingleEnvCfg(DirectRLEnvCfg):
     task_name = "GoToPose3D"
 
     # scene
-    scene: InteractiveSceneCfg = InteractiveSceneCfg(num_envs=4096, env_spacing=10.0, replicate_physics=True)
+    scene: InteractiveSceneCfg = InteractiveSceneCfg(num_envs=4096, env_spacing=0.0, replicate_physics=True)
 
     # simulation
     sim: SimulationCfg = SimulationCfg(dt=1.0 / 60.0, render_interval=decimation)
@@ -188,14 +190,26 @@ class SingleEnv(DirectRLEnv):
     def _get_observations(self) -> dict:
         # general_obs = self.task_api.get_observations()
         # return {"policy": general_obs}
-        general_obs, track_obs = self.task_api.get_observations()
-        observations = {"policy": 
-                            {
-                                "general_obs": general_obs,
-                                "task_obs": track_obs, 
-                            },
-                        }
-        return observations
+        # general_obs, track_obs = self.task_api.get_observations()
+        # observations = {"policy": 
+        #                     {
+        #                         "general_obs": general_obs,
+        #                         "task_obs": track_obs, 
+        #                     },
+        #                 }
+        # return observations
+
+        general_obs_cat, task_id_one_hot_cat, semantic_emb_cat = self.task_api.get_observations()
+        pad_width = 41 - general_obs_cat.shape[1]
+        general_obs_cat_padded = F.pad(general_obs_cat, (0, pad_width))
+        result = {
+            "general_obs": general_obs_cat_padded,
+            "task_id_one_hot": task_id_one_hot_cat,
+            "semantic_emb": semantic_emb_cat
+        }
+        return {"policy": result}
+    
+
 
     def _get_rewards(self) -> torch.Tensor:
         return self.task_api.compute_rewards()

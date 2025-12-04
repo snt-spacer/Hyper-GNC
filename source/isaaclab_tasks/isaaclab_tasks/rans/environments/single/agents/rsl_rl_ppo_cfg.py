@@ -12,12 +12,12 @@ from isaaclab_rl.rsl_rl import RslRlOnPolicyRunnerCfg, RslRlPpoActorCriticCfg, R
 class SinglePPORunnerCfg(RslRlOnPolicyRunnerCfg):
     num_steps_per_env = 16
     max_iterations = 4000
-    save_interval = 100
-    experiment_name = "single_control_intball_6DOF"
+    save_interval = 10
+    experiment_name = "intball_obstacles_6DOF"
     logger = "wandb"
-    wandb_project = "single_control_intball_6DOF"
+    wandb_project = "intball_obstacles_6DOF"
     wandb_kwargs = {
-        "project": "single_control_intball_6DOF",
+        "project": "intball_obstacles_6DOF",
         "entity": "spacer-rl",
         "group": "zeroG",
     }
@@ -25,8 +25,8 @@ class SinglePPORunnerCfg(RslRlOnPolicyRunnerCfg):
     policy = RslRlPpoActorCriticCfg(
         init_noise_std=1.0,
         noise_std_type="scalar",
-        actor_hidden_dims=[128, 64, 32],
-        critic_hidden_dims=[128, 128, 128],
+        actor_hidden_dims=[32, 32],
+        critic_hidden_dims=[256, 256],
         activation="tanh",
         clip_actions=True,
         clip_actions_range=[-1, 1],

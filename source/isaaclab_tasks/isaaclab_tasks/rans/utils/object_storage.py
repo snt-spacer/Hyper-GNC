@@ -1,13 +1,6 @@
-# Copyright (c) 2022-2025, The Isaac Lab Project Developers.
-# All rights reserved.
-#
-# SPDX-License-Identifier: BSD-3-Clause
-
 import math
 import torch
-
 from .rng_utils import PerEnvSeededRNG
-
 
 class ObjectStorage:
     def __init__(
@@ -36,36 +29,47 @@ class ObjectStorage:
         self._device = device
         self.storage_buff = None
 
-    def create_storage_buffer(self, env_origin: torch.tensor) -> torch.tensor:
+    def create_storage_buffer(self, env_origin: torch.Tensor) -> torch.Tensor:
         """
-        Generates a tensor representing hidden objects positions for each environment.
+        Generates a tensor representing hidden objects' positions for each environment in 3D space.
+
+        Args:
+            env_origin (torch.Tensor): The origin positions for each environment (shape: [num_envs, 3]).
 
         Returns:
-            torch.tensor: A tensor containing the coordinates of hidden objects.
+            torch.Tensor: A tensor containing the coordinates and quaternions of hidden objects (shape: [num_envs, num_objects, 7]).
         """
-        # Generate positions
-        num = torch.arange(int(math.sqrt(self._max_num_vis_objects_in_env)) + 1, device=self._device)
-        x, y = torch.meshgrid(num, num, indexing="ij")
+        # Define grid size in each axis
+        grid_size = int(math.ceil(self._max_num_vis_objects_in_env ** (1/3)))  # Cubic root for 3D grid
+
+        # Create 3D grid of positions
+        num = torch.arange(grid_size, device=self._device)
+        x, y, z = torch.meshgrid(num, num, num, indexing="ij")  # 3D grid
         x = x.flatten()
         y = y.flatten()
-        z = torch.ones_like(x) * self._store_height
-        xyz = torch.stack((x, y, z), dim=1)
-        xyz = torch.repeat_interleave(xyz.unsqueeze(0), self.num_envs, dim=0)
-        xyz[:, :, :2] += env_origin.unsqueeze(1)[:, :, :2]
-        # Generate quats
+        z = z.flatten()
+
+        # Scale positions & offset by environment origin
+        spacing = self._store_height / grid_size
+        xyz = torch.stack((x, y, z), dim=1).float() * spacing
+        xyz = xyz.unsqueeze(0).repeat(self.num_envs, 1, 1)
+        xyz += env_origin.unsqueeze(1)
+
+        # Generate default quaternions (identity rot)
         xyzw = torch.zeros(self.num_envs, xyz.shape[1], 4, device=self._device)
-        xyzw[:, :, -1] = 1.0
+        xyzw[:, :, 0] = 1.0 
 
-        self.storage_buff = torch.cat((xyz, xyzw), dim=2)
-        # self.storage_buff = self.storage_buff.reshape(self.num_envs, self.storage_buff.shape[1]**2, 3)
+        # Concatenate positions & quaternions
+        self.storage_buff = torch.cat((xyz, xyzw), dim=2)  # Shape: [num_envs, num_objects, 7]
 
-        # return self.storage_buff
+        return self.storage_buff
 
-    def get_positions_on_storage(
+
+    def get_positions_with_storage(
         self, objects_pos: torch.tensor, mask: torch.tensor, env_ids: torch.tensor
     ) -> torch.tensor:
         """
-        Returns the position of the objects for each environment. Sets the ones that will be stored.
+        Returns the position of the objects for each environment.
 
         Args:
             objects_pos (torch.tensor): The position of the objects.

@@ -70,3 +70,5 @@ multitask*/
 *.zip
 
 source/isaaclab_tasks/isaaclab_tasks/rans/utils/multiTask_scripts_plus_summaries/*
+source/isaaclab_tasks/isaaclab_tasks/rans/utils/multiTask_scripts_plus_summaries/*
+source/isaaclab_tasks/isaaclab_tasks/rans/utils/mtrl_control_eval_intball_hypernet_beta/*

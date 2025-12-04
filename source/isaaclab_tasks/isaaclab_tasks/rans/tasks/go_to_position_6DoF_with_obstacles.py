@@ -193,11 +193,12 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
         prim_utils.create_prim("/World/envs/env_0/Obstacles", "Xform")
 
         rigid_objects = {}
-        low, high = 0.5, 5
         MIN_MASS = 1.0
         MAX_MASS = 100.0
         MIN_BRIGHTNESS_SCALE = 0.2  # Darkest shade (prevents pure black)
         MAX_BRIGHTNESS_SCALE = 1.0  # Lightest shade
+        low, high = -5.0, 5.0  # X and Y range
+        min_z, max_z = 0.2, 3.0  # Z range (height variation)
 
         for i in range(self._task_cfg.max_num_vis_obstacles):
 
@@ -630,105 +631,135 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
 
         # Add obstacles to the scene
         obstacles_positions, mask = self.randomize_obstacles_positions(env_ids)
-        self._pos_obstacles_in_env = self.obstacles_generator.get_positions_on_storage(obstacles_positions, mask, env_ids)
+        self._pos_obstacles_in_env = self.obstacles_generator.get_positions_with_storage(obstacles_positions, mask, env_ids)
+        self._pos_obstacles_in_env[:, :, 3:] = self.obstacles.data.object_com_quat_w[env_ids]
         self.obstacles.write_object_link_pose_to_sim(self._pos_obstacles_in_env, env_ids=env_ids)
 
 
 
-    def randomize_obstacles_positions(self, env_ids: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
+    def randomize_obstacles_positions(self, env_ids: torch.tensor) -> tuple:
         """
-        Randomizes the positions of the obstacles in the environment. It creates an extra obstacle position for the robot.
+        Randomizes the positions of obstacles in a 3D space, ensuring they are not placed too close to the target or robot.
+        It also generates random orientations and creates a mask indicating which obstacles are visible.
+
         Args:
-            env_ids (torch.Tensor): The ids of the environments.
+            env_ids (torch.tensor): The ids of the environments to randomize the obstacles in.
+
         Returns:
-                tuple[torch.Tensor, torch.Tensor]: The positions of the obstacles and the mask indicating valid obstacles.
+            tuple: A tuple containing the positions of the obstacles and a mask indicating which obstacles are visible.
         """
-        # Randomize obstacles positions
+
+        # **Step 1: Generate obstacle positions**
         number_obstacles_to_generate = self._task_cfg.max_num_vis_obstacles * 4
         indices_of_obstacles_to_activate = self._rng.sample_unique_integers_torch(
             min=0, max=self._task_cfg.max_num_vis_obstacles**2, num=number_obstacles_to_generate, ids=env_ids
         )
 
-        x = (indices_of_obstacles_to_activate % self._num_cells) - self._num_cells / 2
-        y = (indices_of_obstacles_to_activate // self._num_cells) - self._num_cells / 2
-        # Scale to world coordinates
-        cell_size = self._task_cfg.maximum_robot_distance / self._num_cells  # Calculate the size of a grid cell
-        x = self._rng.sample_sign_torch("int", (number_obstacles_to_generate), ids=env_ids) * x * cell_size / 2
-        y = self._rng.sample_sign_torch("int", (number_obstacles_to_generate), ids=env_ids) * y * cell_size / 2
-        z = self._rng.sample_uniform_torch(- self._task_cfg.max_hight_from_target, self._task_cfg.max_hight_from_target, x.shape[-1], ids=env_ids)#torch.ones_like(x) * self._task_cfg.obstacles_height / 2
+        # **Step 2: Compute x, y positions on a grid**
+        # x = (indices_of_obstacles_to_activate % self._num_cells) - self._num_cells / 2
+        # y = (indices_of_obstacles_to_activate // self._num_cells) - self._num_cells / 2
+        
+        # Sample X and Y positions more flexibly instead of rigid grid
+        spread_factor = 1.0 + (self._gen_actions[env_ids, 7] * 1.5)  # Use gen_actions to widen spread
+
+        x = self._rng.sample_uniform_torch(
+            -self._task_cfg.maximum_robot_distance / 2 * spread_factor, 
+            self._task_cfg.maximum_robot_distance / 2 * spread_factor, 
+            (number_obstacles_to_generate,), 
+            ids=env_ids
+        )
+
+        y = self._rng.sample_uniform_torch(
+            -self._task_cfg.maximum_robot_distance / 2 * spread_factor, 
+            self._task_cfg.maximum_robot_distance / 2 * spread_factor, 
+            (number_obstacles_to_generate,), 
+            ids=env_ids
+        )
+
+        # # **Step 3: Scale to world coordinates**
+        cell_size = self._task_cfg.maximum_robot_distance / self._num_cells
+        x = x * cell_size / 2
+        y = y * cell_size / 2
+        
+        # sample the obstacles such that they are more closely clustered around the target
+        z = torch.zeros_like(x)
+
         xyz = torch.stack((x, y, z), dim=2)
-        xyz += self._target_positions[env_ids].unsqueeze(1)#self._env_origins[env_ids].unsqueeze(1)[..., :2]
+        xyz += self._target_positions[env_ids].unsqueeze(1)
 
-        """Move the obstacle if it is too close to target position or the robot position"""
-        # Calculate the distances between the obstacles and the target and robot positions
+        goal_z = self._target_positions[env_ids, 2]
+        z_min = goal_z - (self._task_cfg.max_obstacle_height + (1 - self._gen_actions[env_ids, 6]) * 0.5)
+        z_max = goal_z + (self._task_cfg.max_obstacle_height + (1 - self._gen_actions[env_ids, 6]) * 0.5)
+        z = self._rng.sample_uniform_torch(z_min, z_max, (number_obstacles_to_generate,), ids=env_ids)
+        xyz[:, :, 2] = z
+        # xyz[..., :2] += self._env_origins[env_ids].unsqueeze(1)[..., :2]  # Offset by env origin
+
+        # **Step 5: Compute distances from obstacles to robot and target**
         distance_obstacle_to_target = torch.norm(xyz - self._target_positions[env_ids].unsqueeze(1), dim=-1)
-        distance_obstacle_to_robot = torch.norm(
-            xyz - self._robot.root_link_pos_w[env_ids].unsqueeze(1), dim=-1
-        )
-        # Create a mask to filter out obstacles that are too close to the target or robot
-        # True where obstacles are INVALID (too close)
-        obstacles_mask = (distance_obstacle_to_target < self._task_cfg.min_obstacle_distance_from_target) | (
-            distance_obstacle_to_robot < self._task_cfg.min_obstacle_distance_from_robot
-        )
+        distance_obstacle_to_robot = torch.norm(xyz - self._robot.root_link_pos_w[env_ids].unsqueeze(1), dim=-1)
 
-        # Count the number of valid obstacles in each environment.
-        # ~obstacles_mask is True for VALID obstacles.
-        num_valid_per_env = (~obstacles_mask).sum(dim=1)
-
-        # Handle the edge case where an environment might have zero valid obstacles.
-        # We clamp to 1 to avoid errors in random sampling (e.g., division by zero).
-        # If an env has 0 valid obstacles, it will just sample from itself, which is fine as it's invalid anyway.
-        num_valid_per_env_safe = num_valid_per_env.clamp(min=1)
-
-        # 1. Sort obstacles to group valid ones first.
-        # We sort by the inverted mask (valid=True=1, invalid=False=0), descending.
-        # This puts all valid obstacles at the beginning of each row.
-        # `sorted_indices` stores the original indices of the obstacles after sorting.
-        sorted_indices = torch.argsort((~obstacles_mask).int(), dim=1, descending=True)
-        # `unsort_indices` is needed later to revert the sorting.
-        unsort_indices = torch.argsort(sorted_indices, dim=1)
-
-        # Gather the xyz positions into the new sorted order.
-        # Shape: (num_envs, num_obstacles, 3)
-        sorted_xyz = torch.gather(xyz, 1, sorted_indices.unsqueeze(-1).expand_as(xyz))
-
-        # 2. Create a pool of random valid replacements, in sorted order.
-        # For each environment, generate random indices within its valid range [0, num_valid - 1].
-        # Shape: (num_envs, num_obstacles)
-        rand_indices_into_valid_section = torch.floor(
-            torch.rand(xyz.shape[:2], device=self._device) * num_valid_per_env_safe.unsqueeze(1)
-        ).long()
-
-        # Sample from the valid section of sorted_xyz to get replacement positions.
-        # `replacement_pool_sorted` now contains randomly selected valid positions for every slot.
-        replacement_pool_sorted = torch.gather(
-            sorted_xyz, 1, rand_indices_into_valid_section.unsqueeze(-1).expand_as(xyz)
+        # **Step 6: Mask obstacles that are too close**
+        obstacles_mask = (
+            (distance_obstacle_to_target < self._task_cfg.min_obstacle_distance_from_target) |
+            (distance_obstacle_to_robot < self._task_cfg.min_obstacle_distance_from_robot)
         )
 
-        # 3. Unsort the replacements to match the original obstacle order.
-        # This maps the shuffled replacements back to their original positions.
-        replacement_xyz = torch.gather(
-            replacement_pool_sorted, 1, unsort_indices.unsqueeze(-1).expand_as(xyz)
-        )
+        # **Step 7: Extract valid and invalid obstacles**
+        valid_indices = (~obstacles_mask).nonzero(as_tuple=True)
+        valid_envs, valid_obs = valid_indices  # Separate environment and obstacle indices
+        invalid_indices = obstacles_mask.nonzero(as_tuple=True)
 
-        # 4. Apply the replacements using the original mask.
-        # Where the obstacle was invalid (mask is True), use the new replacement position.
-        # Otherwise, keep the original xyz position.
-        xyz = torch.where(obstacles_mask.unsqueeze(-1), replacement_xyz, xyz)
+        # **Step 8: Ensure valid obstacles exist for each environment**
+        valid_obstacles = torch.zeros((len(env_ids), self._task_cfg.max_num_vis_obstacles, 3), device=self._device)  
 
-        # Generate quats and concatenate with xyz
-        xyzw = self.obstacles.data.object_com_quat_w[env_ids].clone()
-        obstacles_positions = torch.cat((xyz[:, : self._task_cfg.max_num_vis_obstacles], xyzw), dim=-1)
+        for env in range(len(env_ids)):
+            env_mask = valid_envs == env
+            valid_obs_for_env = valid_obs[env_mask]
 
-        # Create visible obstacles
+            if valid_obs_for_env.numel() > 0:
+                num_valid = min(valid_obs_for_env.numel(), self._task_cfg.max_num_vis_obstacles)
+                valid_obstacles[env, :num_valid] = xyz[env, valid_obs_for_env[:num_valid]]
+
+                # **Handle missing values by repeating valid ones**
+                if num_valid < self._task_cfg.max_num_vis_obstacles:
+                    extra_indices = torch.randint(0, num_valid, (self._task_cfg.max_num_vis_obstacles - num_valid,), device=self._device)
+                    valid_obstacles[env, num_valid:] = valid_obstacles[env, extra_indices]
+
+        # **Step 9: Replace invalid obstacles using proper indexing**
+        for env in range(len(env_ids)):
+            env_invalid_mask = invalid_indices[0] == env
+            env_invalid_obs = invalid_indices[1][env_invalid_mask]
+
+            if env_invalid_obs.numel() > 0:
+                num_invalid = env_invalid_obs.numel()
+                valid_obs_count = valid_obstacles.shape[1]
+
+                # Ensure we don't exceed available valid obstacles
+                sampled_indices = torch.randint(0, valid_obs_count, (num_invalid,), device=self._device)
+
+                # Replace invalid obstacles with valid ones from the same environment
+                xyz[env, env_invalid_obs] = valid_obstacles[env, sampled_indices]
+
+        # **Step 10: Generate random orientations for 3D obstacles**
+        yaw_offset = self._rng.sample_uniform_torch(-math.pi, math.pi, (number_obstacles_to_generate,), ids=env_ids)
+        pitch_offset = self._rng.sample_uniform_torch(-math.pi / 4, math.pi / 4, (number_obstacles_to_generate,), ids=env_ids)
+        roll_offset = self._rng.sample_uniform_torch(-math.pi / 4, math.pi / 4, (number_obstacles_to_generate,), ids=env_ids)
+
+        xyzw = math_utils.quat_from_euler_xyz(roll_offset, pitch_offset, yaw_offset)
+
+        
+        # **Step 11: Combine position and orientation**
+        obstacles_positions = torch.cat((
+            xyz[:, :self._task_cfg.max_num_vis_obstacles], 
+            xyzw[:, :self._task_cfg.max_num_vis_obstacles]  # Fix: Match slicing
+        ), dim=-1)
+
+        # **Step 12: Randomly decide how many obstacles to show**
         num_visible_obstacles_per_env = self._rng.sample_integer_torch(
             low=1, high=self._task_cfg.max_num_vis_obstacles, shape=(1,), ids=env_ids
         )
-        mask = torch.arange(self._task_cfg.max_num_vis_obstacles, device=self._device).unsqueeze(
-            0
-        ) < num_visible_obstacles_per_env.unsqueeze(1)
-
-
+        mask = torch.arange(self._task_cfg.max_num_vis_obstacles, device=self._device).unsqueeze(0) < num_visible_obstacles_per_env.unsqueeze(1)
+        
         return obstacles_positions, mask
 
 

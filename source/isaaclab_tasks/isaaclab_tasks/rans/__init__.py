@@ -50,6 +50,7 @@ from .tasks_cfg import (  # noqa: F401, F403
     RaceGatesCfg,
     RendezvousCfg,
     Stabilization3DCfg,
+    DockInStationWithObstaclesCfg,
     TASK_CFG_FACTORY,
 )
 
@@ -72,6 +73,7 @@ from .tasks import (  # noqa: F401, F403
     RaceGatesTask,
     RendezvousTask,
     Stabilization3DTask,
+    DockInStationWithObstaclesTask,
     TASK_FACTORY,
 )
 
