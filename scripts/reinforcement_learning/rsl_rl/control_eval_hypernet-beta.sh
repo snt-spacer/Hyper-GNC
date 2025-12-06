@@ -17,12 +17,21 @@ runs_per_env=4
 # IntBall2 Hypernet beta
 ########################################################################################################################
 # Hypernet Beta
+# MODEL_PATHS=(
+# /workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta/2025-12-01_22-04-46_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/model_3999.pt
+# /workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta/2025-12-02_00-16-14_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/model_3999.pt
+# /workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta/2025-12-02_02-25-20_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/model_3999.pt
+# /workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta/2025-12-02_04-35-47_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/model_3999.pt
+# /workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta/2025-12-02_06-46-37_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/model_3999.pt
+# )
+
+# Hypernet Beta 2
 MODEL_PATHS=(
-/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta/2025-12-01_22-04-46_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/model_3999.pt
-/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta/2025-12-02_00-16-14_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/model_3999.pt
-/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta/2025-12-02_02-25-20_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/model_3999.pt
-/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta/2025-12-02_04-35-47_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/model_3999.pt
-/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta/2025-12-02_06-46-37_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/model_3999.pt
+/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta/2025-12-05_08-45-34_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/model_3999.pt
+/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta/2025-12-05_12-29-34_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/model_3280.pt
+/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta/2025-12-05_16-04-34_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/model_3999.pt
+/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta/2025-12-05_19-39-19_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/model_3999.pt
+/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta/2025-12-05_23-12-53_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/model_3999.pt
 )
 
 # Check if model paths are provided
