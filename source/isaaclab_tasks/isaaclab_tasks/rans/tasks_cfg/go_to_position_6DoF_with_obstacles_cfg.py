@@ -54,6 +54,10 @@ class GoToPosition3DWithObstaclesCfg(GoToPosition3DCfg):
     collision_penalty_weight: float = 1.0
     """Weight for the collision penalty. Defaults to 1.0."""
 
+    # ISS box
+    iss_box_storage_height_pos: float = -500.0
+    """Height where to store the ISS box walls. Defaults to -500.0 m."""
+
     # Spaces
     observation_space: int = 25  # pos err xyz + orientn err rpy + root lin vel + root ang vel + collision signal + 3 x closest obstacle dists xyz, TODO hight, radius
 
