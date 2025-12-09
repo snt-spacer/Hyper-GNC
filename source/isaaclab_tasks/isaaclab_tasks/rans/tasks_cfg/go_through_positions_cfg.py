@@ -9,11 +9,11 @@ from isaaclab.utils import configclass
 
 from isaaclab_tasks.rans.domain_randomization import NoisyObservationsCfg
 
-from .task_core_cfg import TaskCoreCfg
+from .go_to_pose_6DoF_cfg import GoToPose3DCfg
 
 
 @configclass
-class GoThroughPositionsCfg(TaskCoreCfg):
+class GoThroughPositionsCfg(GoToPose3DCfg):
     """Configuration for the GoThroughPosition task."""
 
     # Initial conditions

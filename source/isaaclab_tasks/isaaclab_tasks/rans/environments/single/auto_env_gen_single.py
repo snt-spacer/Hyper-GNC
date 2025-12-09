@@ -32,7 +32,7 @@ class SingleEnvCfg(DirectRLEnvCfg):
     task_name = "GoToPose3D"
 
     # scene
-    scene: InteractiveSceneCfg = InteractiveSceneCfg(num_envs=4096, env_spacing=0.0, replicate_physics=True)
+    scene: InteractiveSceneCfg = InteractiveSceneCfg(num_envs=4096, env_spacing=10.0, replicate_physics=True)
 
     # simulation
     sim: SimulationCfg = SimulationCfg(dt=1.0 / 60.0, render_interval=decimation)
@@ -183,8 +183,6 @@ class SingleEnv(DirectRLEnv):
         self.robot_api.process_actions(actions)
 
     def _apply_action(self) -> None:
-        # print(self.robot_api.root_link_pos_w[:, :2])
-        # breakpoint()
         self.robot_api.apply_actions()
 
     def _get_observations(self) -> dict:
@@ -202,6 +200,7 @@ class SingleEnv(DirectRLEnv):
         general_obs_cat, task_id_one_hot_cat, semantic_emb_cat = self.task_api.get_observations()
         pad_width = 41 - general_obs_cat.shape[1]
         general_obs_cat_padded = F.pad(general_obs_cat, (0, pad_width))
+        # breakpoint()
         result = {
             "general_obs": general_obs_cat_padded,
             "task_id_one_hot": task_id_one_hot_cat,

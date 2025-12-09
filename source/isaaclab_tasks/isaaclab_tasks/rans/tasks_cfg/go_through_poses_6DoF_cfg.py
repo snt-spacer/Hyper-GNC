@@ -97,7 +97,7 @@ class GoThroughPoses3DCfg(TaskCoreCfg):
     angular_velocity_max_value: float = 20.0
     boundary_exponential_reward_coeff: float = 1.0
     linear_velocity_weight: float = -0.005
-    angular_velocity_weight: float = -0.05
+    angular_velocity_weight: float = -0.005
     boundary_weight: float = -10.0
     time_penalty: float = -0.0
     reached_bonus: float = 10.0

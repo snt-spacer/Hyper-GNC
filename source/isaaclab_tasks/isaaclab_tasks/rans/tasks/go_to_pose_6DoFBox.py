@@ -5,16 +5,15 @@
 
 import math
 import torch
-
 import isaacsim.core.utils.prims as prim_utils
 
 import isaaclab.sim as sim_utils
 from isaaclab.assets import RigidObjectCfg, RigidObjectCollection, RigidObjectCollectionCfg
-from isaaclab.markers import SPHERE_CFG, VisualizationMarkers, VisualizationMarkersCfg
+from isaaclab.markers import POSE_MARKER_3D_CFG, VisualizationMarkers, VisualizationMarkersCfg
 from isaaclab.scene import InteractiveScene
 from isaaclab.utils import math as math_utils
 
-from isaaclab_tasks.rans import GoToPosition3DWithObstaclesCfg
+from isaaclab_tasks.rans import GoToPose3DBoxCfg
 from isaaclab_tasks.rans.utils import ObjectStorage
 
 from .task_core import TaskCore
@@ -23,15 +22,15 @@ import torch.nn.functional as F
 EPS = 1e-6  # small constant to avoid divisions by 0 and log(0)
 
 
-class GoToPosition3DWithObstaclesTask(TaskCore):
+class GoToPose3DBoxTask(TaskCore):
     """
-    Implements the GoToPosition task in 3D space. The robot has to reach a target position and keep it.
+    Implements the GoToPose task in 3D space. The robot has to reach a target position and keep it.
     """
 
     def __init__(
         self,
         scene: InteractiveScene | None = None,
-        task_cfg: GoToPosition3DWithObstaclesCfg = GoToPosition3DWithObstaclesCfg(),
+        task_cfg: GoToPose3DBoxCfg = GoToPose3DBoxCfg(),
         task_uid: int = 0,
         num_envs: int = 1,
         device: str = "cuda",
@@ -39,7 +38,7 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
         num_tasks: int = 1,
     ) -> None:
         """
-        Initializes the 3D GoToPosition task.
+        Initializes the 3D GoToPose task.
 
         Args:
             scene: Interactive scene containing sim entities for the task.
@@ -52,6 +51,7 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
 
         super().__init__(scene=scene, task_uid=task_uid, num_envs=num_envs, device=device, env_ids=env_ids, num_tasks=num_tasks)
 
+        # Task and reward parameters
         self._task_cfg = task_cfg
 
         # Defines the observation and action space sizes for this task
@@ -85,6 +85,7 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
 
         self._num_cells = int(1.0 / (self._task_cfg.minimum_point_distance * 2))
 
+
         self.design_scene()
 
     @property
@@ -96,24 +97,26 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
             list[str]: The keys of the data used for evaluation.
         """
         return [
-            "position_distance",
-            "orientation_error",
-            "target_positions",
             "position_error",
-            "local_pos_error",
+            "orientation_error",
+            "position_dist",
+            "target_positions",
             "target_orientations",
+            "local_pos_error",
+            "collision_signal",
         ]
     
     @property
     def eval_data_specs(self)->dict[str, list[str]]:
 
         return {
-            "position_distance": ["(N,)"],
-            "orientation_error": ["(N,)"],
-            "target_positions": ["(N, 3)"],
             "position_error": ["(N, 3)"],
-            "local_pos_error": ["(N, 3)"],
+            "orientation_error": ["(N,)"],
+            "position_dist": ["(N,)"],
+            "target_positions": ["(N, 3)"],
             "target_orientations": ["(N, 4)"],
+            "local_pos_error": ["(N, 3)"],
+            "collision_signal": ["(N, 1)"],
         }
     
     @property
@@ -125,12 +128,13 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
             dict: The data used for evaluation.
         """
         return {
-            "position_distance": self._position_dist,
-            "orientation_error": self._orientation_error,
-            "target_positions": self._target_positions,
             "position_error": self._position_error,
-            "local_pos_error": self._local_pos_error,
+            "orientation_error": self._orientation_error,
+            "position_dist": self._position_dist,
+            "target_positions": self._target_positions,
             "target_orientations": self._target_orientations,
+            "local_pos_error": self._local_pos_error,
+            "collision_signal": self.collided_signal,
         }
 
     def initialize_buffers(self, env_ids: torch.Tensor | None = None) -> None:
@@ -144,23 +148,26 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
         super().initialize_buffers(env_ids)
         self._position_error = torch.zeros((self._num_envs, 3), device=self._device, dtype=torch.float32)  # (x, y, z)
         self._position_dist = torch.zeros((self._num_envs,), device=self._device, dtype=torch.float32)
+        self._previous_position_dist = torch.zeros((self._num_envs,), device=self._device, dtype=torch.float32)
         self._target_positions = torch.zeros((self._num_envs, 3), device=self._device, dtype=torch.float32)
         self._local_pos_error = torch.zeros((self._num_envs, 3), device=self._device, dtype=torch.float32)
-        # Orientation tracking (Quaternion instead of heading angle)
+        # Orientation tracking (quaternion)
         self._target_orientations = torch.zeros(
             (self._num_envs, 4), device=self._device, dtype=torch.float32
         )  # (qw, qx, qy, qz)
+        self._target_orientations[:, 0] = 1.0  # Initialize to no rotation
         self._orientation_error = torch.zeros(
             (self._num_envs,), device=self._device, dtype=torch.float32
         )  # Orientation error metric
         self._markers_pos = torch.zeros((self._num_envs, 3), device=self._device, dtype=torch.float32)
+        self._markers_rot = torch.zeros((self._num_envs, 4), device=self._device, dtype=torch.float32)
+
+    def register_robot(self, robot) -> None:
+        self._robot = robot
 
     def run_setup(self, robot, envs_origin):
         super().run_setup(robot, envs_origin)
         self.obstacles_generator.create_storage_buffer(env_origin=self._env_origins)
-
-    def register_robot(self, robot) -> None:
-        self._robot = robot
 
     def register_sensors(self) -> None:
         # Obstacles
@@ -178,23 +185,29 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
 
         super().create_logs()
 
-        self.scalar_logger.add_log("task_state", "GoToPosition6DoFWithObstacles/AVG/normed_linear_velocity", "mean")
-        self.scalar_logger.add_log("task_state", "GoToPosition6DoFWithObstacles/AVG/absolute_angular_velocity", "mean")
-        self.scalar_logger.add_log("task_state", "GoToPosition6DoFWithObstacles/EMA/position_distance", "ema")
-        #self.scalar_logger.add_log("task_state", "GoToPosition6DoFWithObstacles/EMA/boundary_distance", "ema")
+        self.scalar_logger.add_log("task_state", "GoToPose6DoF/AVG/normed_linear_velocity", "mean")
+        self.scalar_logger.add_log("task_state", "GoToPose6DoF/AVG/absolute_angular_velocity", "mean")
+        self.scalar_logger.add_log("task_state", "GoToPose6DoF/EMA/position_distance", "ema")
+        self.scalar_logger.add_log("task_state", "GoToPose6DoF/EMA/orientation_error", "ema")
+        self.scalar_logger.add_log("task_state", "GoToPose6DoF/EMA/boundary_distance", "ema")
+        # self.scalar_logger.add_log("task_state", "GoToPose6DoF/AVG/collision_signal", "mean")
 
-        self.scalar_logger.add_log("task_reward", "GoToPosition6DoFWithObstacles/AVG/position", "mean")
-        self.scalar_logger.add_log("task_reward", "GoToPosition6DoFWithObstacles/AVG/linear_velocity", "mean")
-        self.scalar_logger.add_log("task_reward", "GoToPosition6DoFWithObstacles/AVG/angular_velocity", "mean")
-        self.scalar_logger.add_log("task_reward", "GoToPosition6DoFWithObstacles/AVG/boundary", "mean")
-        self.scalar_logger.add_log("task_reward", "GoToPosition6DoFWithObstacles/AVG/collision_penalty", "mean")
+        self.scalar_logger.add_log("task_reward", "GoToPose6DoF/AVG/position", "mean")
+        self.scalar_logger.add_log("task_reward", "GoToPose6DoF/AVG/orientation", "mean")
+        self.scalar_logger.add_log("task_reward", "GoToPose6DoF/AVG/linear_velocity", "mean")
+        self.scalar_logger.add_log("task_reward", "GoToPose6DoF/AVG/angular_velocity", "mean")
+        self.scalar_logger.add_log("task_reward", "GoToPose6DoF/AVG/boundary", "mean")
+        self.scalar_logger.add_log("task_reward", "GoToPose6DoF/AVG/progress", "mean")
+        self.scalar_logger.add_log("task_reward", "GoToPose6DoF/AVG/collision_penalty", "mean")
 
-        self.scalar_logger.add_log("task_reward", "GoToPosition6DoFWithObstacles/AVG/total_reward", "mean")
-        self.scalar_logger.add_log("task_reward", "GoToPosition6DoFWithObstacles/AVG/wheighted_position_reward", "mean")
-        self.scalar_logger.add_log("task_reward", "GoToPosition6DoFWithObstacles/AVG/wheighted_linear_velocity_reward", "mean")
-        self.scalar_logger.add_log("task_reward", "GoToPosition6DoFWithObstacles/AVG/wheighted_angular_velocity_reward", "mean")
-        #self.scalar_logger.add_log("task_reward", "GoToPosition6DoFWithObstacles/AVG/wheighted_boundary_reward", "mean")
-        self.scalar_logger.add_log("task_reward", "GoToPosition6DoFWithObstacles/AVG/wheighted_collision_penalty", "mean")
+        self.scalar_logger.add_log("task_reward", "GoToPose6DoF/AVG/total_reward", "mean")
+        self.scalar_logger.add_log("task_reward", "GoToPose6DoF/AVG/weighted_position_orientation_reward", "mean")
+        self.scalar_logger.add_log("task_reward", "GoToPose6DoF/AVG/weighted_linear_velocity_reward", "mean")
+        self.scalar_logger.add_log("task_reward", "GoToPose6DoF/AVG/weighted_angular_velocity_reward", "mean")
+        self.scalar_logger.add_log("task_reward", "GoToPose6DoF/AVG/weighted_boundary_reward", "mean")
+        self.scalar_logger.add_log("task_reward", "GoToPose6DoF/AVG/weighted_progress_reward", "mean")
+        self.scalar_logger.add_log("task_reward", "GoToPose6DoF/AVG/weighted_collision_penalty", "mean")
+
 
         self.scalar_logger.set_ema_coeff(self._task_cfg.ema_coeff)
 
@@ -322,6 +335,30 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
         obstacles_cfg = RigidObjectCollectionCfg(rigid_objects=rigid_objects)
 
         self.obstacles = RigidObjectCollection(obstacles_cfg)
+        # ###########
+        # # ISS JEM #
+        # ###########
+        # from isaaclab.utils.assets import REPO_ROOT_PATH
+        # from isaaclab.sim.spawners import UsdFileCfg
+        # from isaaclab.assets import RigidObject
+        # iss_jem_cfg = RigidObjectCfg(
+        #     prim_path="/World/JEM",
+        #     init_state=RigidObjectCfg.InitialStateCfg(
+        #         pos=(0.0, 0.0, 0.0),
+        #         rot=(1.0, 0.0, 0.0, 0.0),  # wxyz format
+        #         lin_vel=(0.0, 0.0, 0.0),
+        #         ang_vel=(0.0, 0.0, 0.0),
+        #     ),
+        #     spawn=UsdFileCfg(
+        #         usd_path=f"{REPO_ROOT_PATH}/assets/environments/KibouIsaac/Asset_KIBOU3.usd",
+        #         scale=(0.01, 0.01, 0.01),
+        #     ),
+        #     #collision_group=-1,  # Shared global collision group
+        #     debug_vis=False,
+        # )
+        # self.iss_jem = RigidObject(iss_jem_cfg)
+
+        
 
     def get_observations(self) -> torch.Tensor:
         """
@@ -336,11 +373,13 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
         self._position_error = self._target_positions - self._robot.root_link_pos_w[self._env_ids]
         # rotate into robot's local frame via inverse of current orientation
         current_quat_w = self._robot.root_link_quat_w[self._env_ids]
+        current_quat_w[current_quat_w.sum(dim=-1) == 0.0] = torch.tensor([1.0, 0.0, 0.0, 0.0], device=self._device)
+
         self._local_pos_error = math_utils.quat_rotate_inverse(current_quat_w, self._position_error)
 
         # log the global distance for debugging
         self._position_dist = self._position_error.norm(dim=-1)  # shape [N]
-        self.scalar_logger.log("task_state", "GoToPosition6DoFWithObstacles/EMA/position_distance", self._position_dist)
+        self.scalar_logger.log("task_state", "GoToPose6DoF/EMA/position_distance", self._position_dist)
 
         # robot orientation
         # Compute a relative quaternion from robot -> target
@@ -349,9 +388,6 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
         rel_quat = math_utils.quat_mul(
             math_utils.quat_conjugate(current_quat_w), target_quat_w
         )  # rotation from robot's orientation to target's orientation in robot local frame
-        # Relative quaternion to Euler angles (roll, pitch, yaw) in local frame
-        roll, pitch, yaw = math_utils.euler_xyz_from_quat(rel_quat)  # each is shape [N]
-        self._orientation_error_euler = torch.stack([roll, pitch, yaw], dim=-1)  # [N, 3]
 
         # Rotation matrix magic:
         rel_mat = math_utils.matrix_from_quat(rel_quat)
@@ -365,7 +401,6 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
         col1 = torch.nn.functional.normalize(col1, dim=-1)
         # Stack to get 6D representation
         rel_mat_6 = torch.cat([col0, col1], dim=-1)  # shape [N, 6]
-
 
         # Collision check
         collisions = torch.squeeze(
@@ -418,32 +453,30 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
         obstacles_observation = closest_obstacles_error_local.flatten(start_dim=1)
 
 
-
         # Store in buffer [position_dist, rotation error, linear_vel_xyz, angular_vel_xyz]
-        self._task_data[:, :3] = self._local_pos_error
-        # It seems better to provide the relative rotation matrix as input to the
-        # policy even for this task, since otherwise the robot seems to struggle
-        # to reach target position as fast as it would with this additional info.
+        self._task_data[:, 0:3] = self._local_pos_error
         self._task_data[:, 3:9] = rel_mat_6
         self._task_data[:, 9:12] = self._robot.root_com_lin_vel_b[self._env_ids]
         self._task_data[:, 12:15] = self._robot.root_com_ang_vel_b[self._env_ids]
+        self._task_data[:, 15:23] = self._robot.get_observations(env_ids=self._env_ids)
+        self._task_data[:, 23:24] = self.collided_signal
+        self._task_data[:, 24:34] = obstacles_observation
 
-        # Append obstacles info
-        self._task_data[:, 15:16] = self.collided_signal
-        self._task_data[:, 16:26] = obstacles_observation
+       
 
         # Make sure that the orientation error magnitude is also updated
         current_quat = self._robot.root_quat_w[self._env_ids]  # (w, x, y, z)
         target_quat = self._target_orientations  # (w, x, y, z)
         self._orientation_error = math_utils.quat_error_magnitude(target_quat, current_quat)
-        
+
         task_id_one_hot = F.one_hot(torch.tensor([self._task_uid], device=self._device), num_classes=self._num_tasks).squeeze(0).repeat(self._num_envs, 1)
-        semantic_emb = torch.tensor([[1.0, 0.0, 0.0, 0.0, 1.0]], device=self._device).repeat(self._num_envs, 1)
+        semantic_emb = torch.tensor([[1.0, 1.0, 0.0, 1.0, 0.0]], device=self._device).repeat(self._num_envs, 1)
         noise = self._rng.sample_uniform_torch(low=-0.1, high=0.1, shape=semantic_emb.shape[-1], ids=self._env_ids)
         semantic_emb += noise
-        
+
         # Concatenate task observations with robot's internal observations
-        return torch.concat((self._task_data, self._robot.get_observations(env_ids=self._env_ids)), dim=-1), task_id_one_hot, semantic_emb
+        return self._task_data, task_id_one_hot, semantic_emb
+
     def compute_rewards(self) -> torch.Tensor:
         """
         Computes the reward for the current state of the robot.
@@ -461,6 +494,9 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
 
         # Position reward (exponential decay based on distance)
         position_rew = torch.exp(-self._position_dist / self._task_cfg.position_exponential_reward_coeff)
+
+        # Quaternion-based orientation reward (smallest rotation angle to target orientation)
+        orientation_rew = torch.exp(-self._orientation_error / self._task_cfg.orientation_exponential_reward_coeff)
 
         # Linear velocity reward
         linear_velocity_rew = linear_velocity - self._task_cfg.linear_velocity_min_value
@@ -480,8 +516,14 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
         # boundary reward
         boundary_rew = torch.exp(-boundary_dist / self._task_cfg.boundary_exponential_reward_coeff)
 
+        # progress reward
+        progress = self._previous_position_dist - self._position_dist
+        progress_rew = progress * (self._task_cfg.maximum_robot_distance - self._position_dist)
+
         # Check if goal is reached
-        goal_is_reached = (self._position_dist < self._task_cfg.position_tolerance).int()
+        position_goal_reached = (self._position_dist < self._task_cfg.position_tolerance).int()
+        orientation_goal_reached = (self._orientation_error < self._task_cfg.orientation_tolerance).int()
+        goal_is_reached = position_goal_reached * orientation_goal_reached
         self._goal_reached *= goal_is_reached  # If not reached, reset count
         self._goal_reached += goal_is_reached  # If reached, count steps in goal state
 
@@ -494,35 +536,54 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
         collision_penalty_rew = (self.collided_signal * self._task_cfg.collision_penalty).squeeze()
 
         # Logging
-        self.scalar_logger.log("task_state", "GoToPosition6DoFWithObstacles/EMA/position_distance", self._position_dist)
-        #self.scalar_logger.log("task_state", "GoToPosition6DoFWithObstacles/EMA/boundary_distance", boundary_dist)
-        self.scalar_logger.log("task_state", "GoToPosition6DoFWithObstacles/AVG/normed_linear_velocity", linear_velocity)
-        self.scalar_logger.log("task_state", "GoToPosition6DoFWithObstacles/AVG/absolute_angular_velocity", angular_velocity)
-
+        self.scalar_logger.log("task_state", "GoToPose6DoF/EMA/position_distance", self._position_dist)
+        self.scalar_logger.log("task_state", "GoToPose6DoF/EMA/orientation_error", self._orientation_error)
+        self.scalar_logger.log("task_state", "GoToPose6DoF/EMA/boundary_distance", boundary_dist)
+        self.scalar_logger.log("task_state", "GoToPose6DoF/AVG/normed_linear_velocity", linear_velocity)
+        self.scalar_logger.log("task_state", "GoToPose6DoF/AVG/absolute_angular_velocity", angular_velocity)
+        # self.scalar_logger.log("task_state", "GoToPose6DoF/AVG/collision_signal", self.collided_signal)
         # Logging rewards
-        self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles/AVG/position", position_rew)
-        self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles/AVG/linear_velocity", linear_velocity_rew)
-        self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles/AVG/angular_velocity", angular_velocity_rew)
-        #self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles/AVG/boundary", boundary_rew)
-        self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles/AVG/collision_penalty", collision_penalty_rew)
-
-        # NOTE: Check if we need a progress reward here.
+        self.scalar_logger.log("task_reward", "GoToPose6DoF/AVG/position", position_rew)
+        self.scalar_logger.log("task_reward", "GoToPose6DoF/AVG/orientation", orientation_rew)
+        self.scalar_logger.log("task_reward", "GoToPose6DoF/AVG/linear_velocity", linear_velocity_rew)
+        self.scalar_logger.log("task_reward", "GoToPose6DoF/AVG/angular_velocity", angular_velocity_rew)
+        self.scalar_logger.log("task_reward", "GoToPose6DoF/AVG/boundary", boundary_rew)
+        self.scalar_logger.log("task_reward", "GoToPose6DoF/AVG/progress", progress_rew)
+        self.scalar_logger.log("task_reward", "GoToPose6DoF/AVG/collision_penalty", collision_penalty_rew)
 
         # Compute final reward
         total_reward = (
-            position_rew * self._task_cfg.position_weight
+            (position_rew * orientation_rew) * self._task_cfg.pose_weight
             + linear_velocity_rew * self._task_cfg.linear_velocity_weight
             + angular_velocity_rew * self._task_cfg.angular_velocity_weight
-            #+ boundary_rew * self._task_cfg.boundary_weight
+            + boundary_rew * self._task_cfg.boundary_weight
+            + progress_rew * self._task_cfg.progress_weight
             + collision_penalty_rew * self._task_cfg.collision_penalty_weight
         ) + self._robot.compute_rewards(env_ids=self._env_ids)
 
-        self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles/AVG/total_reward", total_reward)
-        self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles/AVG/wheighted_position_reward", position_rew * self._task_cfg.position_weight)
-        self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles/AVG/wheighted_linear_velocity_reward", linear_velocity_rew * self._task_cfg.linear_velocity_weight)
-        self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles/AVG/wheighted_angular_velocity_reward", angular_velocity_rew * self._task_cfg.angular_velocity_weight)
-        #self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles/AVG/wheighted_boundary_reward", boundary_rew * self._task_cfg.boundary_weight)
-        self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles/AVG/wheighted_collision_penalty", collision_penalty_rew * self._task_cfg.collision_penalty_weight)
+
+        # Logging rewards w/ weights
+        self.scalar_logger.log(
+            "task_reward", "GoToPose6DoF/AVG/total_reward", total_reward
+        )
+        self.scalar_logger.log(
+            "task_reward", "GoToPose6DoF/AVG/weighted_position_orientation_reward", (position_rew * orientation_rew) * self._task_cfg.pose_weight
+        )
+        self.scalar_logger.log(
+            "task_reward", "GoToPose6DoF/AVG/weighted_linear_velocity_reward", linear_velocity_rew * self._task_cfg.linear_velocity_weight
+        )
+        self.scalar_logger.log(
+            "task_reward", "GoToPose6DoF/AVG/weighted_angular_velocity_reward", angular_velocity_rew * self._task_cfg.angular_velocity_weight
+        )
+        self.scalar_logger.log(
+            "task_reward", "GoToPose6DoF/AVG/weighted_boundary_reward", boundary_rew * self._task_cfg.boundary_weight
+        )
+        self.scalar_logger.log(
+            "task_reward", "GoToPose6DoF/AVG/weighted_progress_reward", progress_rew * self._task_cfg.progress_weight
+        )
+        self.scalar_logger.log(
+            "task_reward", "GoToPose6DoF/AVG/weighted_collision_penalty", collision_penalty_rew * self._task_cfg.collision_penalty_weight
+        )
 
         return total_reward
 
@@ -530,28 +591,21 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
         self, env_ids: torch.Tensor, gen_actions: torch.Tensor | None = None, env_seeds: torch.Tensor | None = None
     ) -> None:
         """
-        Resets the task to its initial state.
-
         If gen_actions is None, then the environment is generated at random. This is the default mode.
         If env_seeds is None, then the seed is generated at random. This is the default mode.
 
-        The environment generation actions (gen_actions) control the difficulty of the task.
-        Each action belongs to the [0,1] range and scales the corresponding parameter as follows:
-
+        The environment actions for this task are the following, all belonging to the [0,1] range:
         - gen_actions[0]: The value used to sample the distance between the spawn position and the goal.
-        - gen_actions[1 to 3]: Controls the randomness of the initial orientation of the robot.
-          A value of 0 results in an identity quaternion, while a value of 1 leads to a fully randomized orientation.
-            - gen-actions[1]: Controls the randomness of yaw offset.
-            - gen_actions[2]: Controls the randomness of pitch offset.
-            - gen_actions[3]: Controls the randomness of roll offset.
+        - gen_actions[1]: The value used to sample the yaw offset of the robot at spawn.
+        - gen_actions[2]: The value used to sample the pitch offset of the robot at spawn.
+        - gen_actions[3]: The value used to sample the roll offset of the robot at spawn.
         - gen_actions[4]: The value used to sample the linear velocity of the robot at spawn.
         - gen_actions[5]: The value used to sample the angular velocity of the robot at spawn.
 
         Args:
-            env_ids (torch.Tensor): The IDs of the environments to reset.
-            gen_actions (torch.Tensor | None): The task-specific generation actions for sampling initial conditions.
-                If None, defaults to uniform random sampling.
-            env_seeds (torch.Tensor | None): The seeds for the environments to ensure reproducibility. Defaults to None.
+            env_ids (torch.Tensor): The ids of the environments.
+            gen_actions (torch.Tensor | None): The actions for the task. Defaults to None.
+            env_seeds (torch.Tensor | None): The seeds for the environments. Defaults to None.
         """
         super().reset(env_ids, gen_actions=gen_actions, env_seeds=env_seeds)
 
@@ -564,19 +618,27 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
             self._target_positions[env_ids] - self._robot.root_link_pos_w[self._env_ids][env_ids]
         )
         self._position_dist[env_ids] = torch.linalg.norm(self._position_error[env_ids], dim=-1)
+        self._previous_position_dist[env_ids] = self._position_dist[env_ids].clone()
+        # Update also the orientation error
+        current_quat = self._robot.root_link_quat_w[self._env_ids][env_ids]  # Current robot orientation
+        target_quat = self._target_orientations[env_ids]  # Target orientation
+        self._orientation_error[env_ids] = math_utils.quat_error_magnitude(target_quat, current_quat)
 
     def get_dones(self) -> tuple[torch.Tensor, torch.Tensor]:
         """
-        Updates if the platforms should be killed or not.
+        Updates if the agents should be killed or not.
 
         Returns:
-            task_failed (torch.Tensor): Environments where the robot has exceeded max distance.
+            task_failed (torch.Tensor): Environments where the robot has exceeded max error in pose.
             task_completed (torch.Tensor): Environments where the goal has been reached for enough steps.
         """
         # Compute position error in world frame (extend to 3D)
         self._position_error = self._target_positions - self._robot.root_link_pos_w[self._env_ids]
+        self._previous_position_dist = self._position_dist.clone()
         self._position_dist = torch.linalg.norm(self._position_error, dim=-1)
-
+        current_quat = self._robot.root_quat_w[self._env_ids]  # (w, x, y, z)
+        target_quat = self._target_orientations  # (w, x, y, z)
+        self._orientation_error = math_utils.quat_error_magnitude(target_quat, current_quat)
         ones = torch.ones_like(self._goal_reached, dtype=torch.long)
         task_failed = torch.zeros_like(self._goal_reached, dtype=torch.long)
         task_failed = torch.where(
@@ -606,7 +668,8 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
         Returns:
             Tuple[torch.Tensor, torch.Tensor]: The target positions and orientations.
         """
-        # Spawn positions within defined bounding box determined from manual experiments inside the JEM
+        # Sample random goal positions in a box space
+
         x_range = (-0.7, 0.56)
         y_range = (-2.7, 2.7)
         z_range = (0.6, 1.7)
@@ -615,112 +678,153 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
         self._target_positions[env_ids, 1] = self._rng.sample_uniform_torch(*y_range, 1, ids=env_ids).squeeze(-1) + self._env_origins[env_ids, 1]
         self._target_positions[env_ids, 2] = self._rng.sample_uniform_torch(*z_range, 1, ids=env_ids).squeeze(-1)
 
-        # Provide any orientation since not relevant for this task
-        self._target_orientations[env_ids] = torch.tensor(
-            [[1.0, 0.0, 0.0, 0.0]], device=self._device, dtype=torch.float32
-        ).expand(len(env_ids), -1)
+
+        # padding = 0.25
+        # target_xyz = torch.concat((
+        #     self._rng.sample_uniform_torch(-self.wall_width / 2 + padding, self.wall_width / 2 - padding, 1, ids=env_ids),
+            
+        #     self._rng.sample_uniform_torch(-self.wall_length / 2 + padding, self.wall_length / 2 - padding, 1, ids=env_ids),
+            
+        #     self._rng.sample_uniform_torch(self.height_from_floor + padding, self.wall_height + self.height_from_floor - padding, 1, ids=env_ids)
+
+        # ), dim=-1).unsqueeze(0).reshape(-1, 3) + self._env_origins[env_ids]
+
+        # self._target_positions[env_ids] = (target_xyz)
+        
+        yaw_offset = self._rng.sample_uniform_torch(-math.pi, math.pi, 1, ids=env_ids)
+        pitch_offset = self._rng.sample_uniform_torch(
+            -math.pi / 2, math.pi / 2, 1, ids=env_ids
+        )  # Limit pitch to avoid upside-down flips
+        roll_offset = self._rng.sample_uniform_torch(-math.pi, math.pi, 1, ids=env_ids)
+
+        # Step 2: Convert these into a quaternion using Euler angles
+        self._target_orientations[env_ids] = math_utils.quat_from_euler_xyz(roll_offset, pitch_offset, yaw_offset)
 
         # Update the visual markers for goal pos
         self._markers_pos[env_ids] = self._target_positions[env_ids]
-
+        self._markers_rot[env_ids] = self._target_orientations[env_ids]
 
     def set_initial_conditions(self, env_ids: torch.Tensor) -> None:
         """
-        Generates the initial conditions for the robots. The initial conditions are randomized based on the
-        environment actions. The generation of the initial conditions is done so that if the environment actions are
-        close to 0 then the task is the easiest, if they are close to 1 then the task is hardest. The configuration of
-        the task defines the ranges within which the initial conditions are randomized.
-
-        Args:
-            env_ids (torch.Tensor): The ids of the environments.
-            step (int, optional): The current step. Defaults to 0.
-
-        Returns:
-            Tuple[torch.Tensor, torch.Tensor, torch.Tensor]: The initial position,
-            orientation and velocity of the robot.
+        Spawns robots randomly within a cuboid region relative to docking port inside the JEM.
+        Orientation is set to identity. Velocity randomized based on environment action difficulty.
         """
-
         num_resets = len(env_ids)
 
-        x_range = (-0.7, 0.56)
-        y_range = (-2.7, 2.7)
-        z_range = (0.6, 1.7)
+        # Spawn positions within defined bounding box determined from manual experiments inside the JEM
+        # In docking port local frame (always use default ranges; easy-eval only affects orientation)
+        x_range = (0.3, 6.0)
+        y_range = (-0.85, -1.55)
+        z_range = (-0.5, 0.75)
+
+        # Uniform random samples inside the box
+        local_offsets = torch.stack([
+            self._rng.sample_uniform_torch(*x_range, 1, ids=env_ids).squeeze(-1),  # x
+            self._rng.sample_uniform_torch(*y_range, 1, ids=env_ids).squeeze(-1),  # y
+            self._rng.sample_uniform_torch(*z_range, 1, ids=env_ids).squeeze(-1),  # z
+        ], dim=-1)  # shape: (num_resets, 3)
 
 
-        # Randomizes the initial pose of the flyer
-        initial_pose = torch.zeros(
-            (num_resets, 7), device=self._device, dtype=torch.float32
-        )  # (x, y, z, qw, qx, qy, qz)
+        # Rotate into world space
+        # Ensure local_offsets is always 2D
+        if local_offsets.ndim == 1:
+            local_offsets = local_offsets.unsqueeze(0)
 
-        initial_pose[:, 0] = self._rng.sample_uniform_torch(*x_range, 1, ids=env_ids).squeeze(-1) + self._env_origins[env_ids, 0]
-        initial_pose[:, 1] = self._rng.sample_uniform_torch(*y_range, 1, ids=env_ids).squeeze(-1) + self._env_origins[env_ids, 1]
-        initial_pose[:, 2] = self._rng.sample_uniform_torch(*z_range, 1, ids=env_ids).squeeze(-1)
+        # Ensure quat is always (N, 4)
+        batched_rot = self._docking_port_rot.view(1, 4).expand(local_offsets.shape[0], 4)
 
-        # Compute Direction Vector to Target
-        direction_to_target = self._target_positions[env_ids] - initial_pose[:, :3]
-        direction_to_target = torch.nn.functional.normalize(direction_to_target, dim=-1)
+        assert batched_rot.shape[0] == local_offsets.shape[0], f"Shape mismatch: {batched_rot.shape} vs {local_offsets.shape}"
 
-        # Compute rotation needed to face the target
-        # We assume robot's default forward direction is (1, 0, 0)
-        default_forward = torch.tensor([1.0, 0.0, 0.0], device=self._device).expand(num_resets, -1)
+        offset_world = math_utils.quat_rotate(batched_rot, local_offsets)
 
-        # Compute axis of rotation
-        rotation_axis = torch.cross(default_forward, direction_to_target)
-        rotation_axis = torch.nn.functional.normalize(rotation_axis + EPS, dim=-1)
+        # Final spawn position
+        # spawn_pos = self._docking_port_pos.unsqueeze(0) + offset_world
+        spawn_pos = torch.zeros_like(offset_world)
+        spawn_pos[:, :2] = self._docking_port_pos[:2] + self._env_origins[env_ids][:, :2] + offset_world[:, :2]  # x, y
+        spawn_pos[:, 2] = self._docking_port_pos[2] + offset_world[:, 2]  # z
 
-        # Compute angle
-        dot_product = torch.sum(default_forward * direction_to_target, dim=-1).clamp(-1, 1)
-        rotation_angle = torch.acos(dot_product)
+        # Initial pose
+        initial_pose = torch.zeros((num_resets, 7), device=self._device)
+        initial_pose[:, :3] = spawn_pos
+        if getattr(self._task_cfg, "easy_eval_inits", False):
+            # Align robot orientation directly with the goal orientation (upright, facing dock)
+            initial_pose[:, 3:] = self._target_orientations[env_ids]
+        else:
+            # Compute base yaw to face the target
+            delta_pos = self._target_positions[env_ids, :2] - spawn_pos[:, :2]
+            base_yaw = torch.atan2(delta_pos[:, 1], delta_pos[:, 0])
 
-        target_quat = math_utils.quat_from_angle_axis(rotation_angle, rotation_axis)
+            # Random yaw/pitch/roll offsets based on difficulty
+            yaw_offset = (
+                self._gen_actions[env_ids, 1]
+                * (self._task_cfg.spawn_max_heading_dist - self._task_cfg.spawn_min_heading_dist)
+                + self._task_cfg.spawn_min_heading_dist
+            ) * self._rng.sample_sign_torch(dtype="float", shape=1, ids=env_ids)
 
-        # Apply orientation offsets
-        yaw_offset = (
-            self._gen_actions[env_ids, 1]
-            * (self._task_cfg.spawn_max_heading_dist - self._task_cfg.spawn_min_heading_dist)
-            + self._task_cfg.spawn_min_heading_dist
-        ) * self._rng.sample_sign_torch("float", 1, ids=env_ids)
-        pitch_offset = (
-            self._gen_actions[env_ids, 2] * (self._task_cfg.spawn_max_pitch_dist - self._task_cfg.spawn_min_pitch_dist)
-            + self._task_cfg.spawn_min_pitch_dist
-        ) * self._rng.sample_sign_torch("float", 1, ids=env_ids)
-        roll_offset = (
-            self._gen_actions[env_ids, 3] * (self._task_cfg.spawn_max_roll_dist - self._task_cfg.spawn_min_roll_dist)
-            + self._task_cfg.spawn_min_roll_dist
-        ) * self._rng.sample_sign_torch("float", 1, ids=env_ids)
+            pitch_offset = (
+                self._gen_actions[env_ids, 2]
+                * (self._task_cfg.spawn_max_pitch_dist - self._task_cfg.spawn_min_pitch_dist)
+                + self._task_cfg.spawn_min_pitch_dist
+            ) * self._rng.sample_sign_torch(dtype="float", shape=1, ids=env_ids)
 
-        zero_tensor = torch.zeros_like(yaw_offset)
+            roll_offset = (
+                self._gen_actions[env_ids, 3]
+                * (self._task_cfg.spawn_max_roll_dist - self._task_cfg.spawn_min_roll_dist)
+                + self._task_cfg.spawn_min_roll_dist
+            ) * self._rng.sample_sign_torch(dtype="float", shape=1, ids=env_ids)
 
-        # Convert offsets to quaternion
-        yaw_quat = math_utils.quat_from_euler_xyz(zero_tensor, zero_tensor, yaw_offset)
-        pitch_quat = math_utils.quat_from_euler_xyz(pitch_offset, zero_tensor, zero_tensor)
-        roll_quat = math_utils.quat_from_euler_xyz(zero_tensor, roll_offset, zero_tensor)
+            # Final orientation
+            final_yaw = base_yaw + yaw_offset.squeeze(-1)
 
-        # Apply offsets to target orientation
-        adjusted_quat = math_utils.quat_mul(math_utils.quat_mul(roll_quat, pitch_quat), yaw_quat)
-        final_quat = math_utils.quat_mul(target_quat, adjusted_quat)
-        initial_pose[:, 3:] = final_quat
+            yaw_quat = math_utils.quat_from_euler_xyz(
+                torch.zeros_like(final_yaw),
+                torch.zeros_like(final_yaw),
+                final_yaw,
+            )
+            pitch_quat = math_utils.quat_from_euler_xyz(
+                pitch_offset.squeeze(-1),
+                torch.zeros_like(pitch_offset.squeeze(-1)),
+                torch.zeros_like(pitch_offset.squeeze(-1)),
+            )
+            roll_quat = math_utils.quat_from_euler_xyz(
+                torch.zeros_like(roll_offset.squeeze(-1)),
+                roll_offset.squeeze(-1),
+                torch.zeros_like(roll_offset.squeeze(-1)),
+            )
 
-        # Velocity initialization
+            # Expand if needed
+            if yaw_quat.ndim == 1:
+                yaw_quat = yaw_quat.unsqueeze(0).expand(num_resets, -1)
+            if pitch_quat.ndim == 1:
+                pitch_quat = pitch_quat.unsqueeze(0).expand(num_resets, -1)
+            if roll_quat.ndim == 1:
+                roll_quat = roll_quat.unsqueeze(0).expand(num_resets, -1)
+
+            # Compose rotations
+            adjusted_quat = math_utils.quat_mul(roll_quat, math_utils.quat_mul(pitch_quat, yaw_quat))
+            initial_pose[:, 3:] = adjusted_quat
+
+        # Initial Velocity (use default behavior regardless of easy-eval setting)
         initial_velocity = torch.zeros((num_resets, 6), device=self._device, dtype=torch.float32)
-        # Linear velocity scaled by difficulty
         velocity_norm = (
             self._gen_actions[env_ids, 4] * (self._task_cfg.spawn_max_lin_vel - self._task_cfg.spawn_min_lin_vel)
             + self._task_cfg.spawn_min_lin_vel
         )
+
         theta = torch.rand((num_resets,), device=self._device) * 2 * math.pi
         phi = torch.rand((num_resets,), device=self._device) * math.pi
-        initial_velocity[:, 0] = velocity_norm * torch.sin(phi) * torch.cos(theta)  # vx
-        initial_velocity[:, 1] = velocity_norm * torch.sin(phi) * torch.sin(theta)  # vy
-        initial_velocity[:, 2] = velocity_norm * torch.cos(phi)  # vz
-        # Angular velocity scaled by difficulty
+
+        initial_velocity[:, 0] = velocity_norm * torch.sin(phi) * torch.cos(theta)
+        initial_velocity[:, 1] = velocity_norm * torch.sin(phi) * torch.sin(theta)
+        initial_velocity[:, 2] = velocity_norm * torch.cos(phi)
+
+        # Angular velocity
         initial_velocity[:, 3:] = (
             self._gen_actions[env_ids, 5].unsqueeze(-1)
             * (self._task_cfg.spawn_max_ang_vel - self._task_cfg.spawn_min_ang_vel)
             + self._task_cfg.spawn_min_ang_vel
         ) * torch.randn((num_resets, 3), device=self._device)
 
-        # Apply to articulation
         self._robot.set_pose(initial_pose, self._env_ids[env_ids])
         self._robot.set_velocity(initial_velocity, self._env_ids[env_ids])
 
@@ -729,9 +833,7 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
         self._pos_obstacles_in_env = self.obstacles_generator.get_positions_with_storage(obstacles_positions, mask, env_ids)
         self._pos_obstacles_in_env[:, :, 3:] = self.obstacles.data.object_com_quat_w[env_ids]
         self.obstacles.write_object_link_pose_to_sim(self._pos_obstacles_in_env, env_ids=env_ids)
-
-
-
+    
     def randomize_obstacles_positions(self, env_ids: torch.tensor) -> tuple:
         """
         Randomizes the positions of obstacles in a 3D space, ensuring they are not placed too close to the target or robot.
@@ -751,7 +853,7 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
         )
 
         # **Step 2: Sample positions within the box dimensions**
-        padding = 0.4  # Margin from walls to account for obstacle size
+        padding = 0.2  # Margin from walls to account for obstacle size
 
         # X range
         x_min = self.x_shift - self.wall_width / 2 + padding
@@ -848,16 +950,15 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
 
         There are two markers: one for the goal and one for the robot.
 
-        - The goal marker is a sphere.
-        - The robot also has a sphere at it's centre just as a placeholder and not used for visualization.
+        - The goal marker is a pose marker.
+        - The robot is represented by another smaller pose marker, and upon task completion, the robot and the goal markers must align together.
         """
 
         # Define visual markers: sphere for the goal and pose marker for the robot
-        goal_marker_cfg = SPHERE_CFG.copy()
-        goal_marker_cfg.markers["sphere"].radius = 0.05
-        goal_marker_cfg.markers["sphere"].visual_material = sim_utils.PreviewSurfaceCfg(diffuse_color=(0.0, 1.0, 0.0))
-        robot_marker_cfg = SPHERE_CFG.copy()
-        robot_marker_cfg.markers["sphere"].radius = 0.01
+        goal_marker_cfg = POSE_MARKER_3D_CFG.copy()
+        robot_marker_cfg = POSE_MARKER_3D_CFG.copy()
+        robot_marker_cfg.markers["pose_marker_3d"].arrow_body_length = 0.2
+        robot_marker_cfg.markers["pose_marker_3d"].arrow_body_radius = 0.01
 
         # Update prim paths to match task ID
         goal_marker_cfg.prim_path = f"/Visuals/Command/task_{self._task_uid}/goal_pose"
@@ -882,12 +983,12 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
     def update_task_visualization(self) -> None:
         """Updates the visual marker to the scene."""
 
-        self.goal_pos_visualizer.visualize(self._markers_pos)
+        self.goal_pos_visualizer.visualize(self._markers_pos, self._markers_rot)
 
         self._robot_marker_pos = self._robot.root_link_pos_w[self._env_ids, :3]
         self.robot_pos_visualizer.visualize(self._robot_marker_pos, self._robot.root_link_quat_w[self._env_ids])
 
-         # Obstacles lines
+        # Obstacles lines
         # Get robot position
         robot_pos = self._robot.root_link_pos_w[self._env_ids] # (N, 3)
 

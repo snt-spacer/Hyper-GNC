@@ -66,7 +66,7 @@ class GoToPose3DCfg(TaskCoreCfg):
     boundary_exponential_reward_coeff: float = 1.0
     pose_weight: float = 2.0
     linear_velocity_weight: float = -0.08
-    angular_velocity_weight: float = -0.05
+    angular_velocity_weight: float = -0.08
     boundary_weight: float = -10.0
     progress_weight: float = 1.5
 

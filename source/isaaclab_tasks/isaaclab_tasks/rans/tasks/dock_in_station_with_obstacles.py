@@ -110,7 +110,7 @@ class DockInStationWithObstaclesTask(TaskCore):
                 usd_path=f"{REPO_ROOT_PATH}/assets/environments/KibouIsaac/Asset_KIBOU3.usd",
                 scale=(0.01, 0.01, 0.01),
             ),
-            collision_group=-1,  # Shared global collision group
+            #collision_group=-1,  # Shared global collision group
             debug_vis=False,
         )
         self.iss_jem = RigidObject(iss_jem_cfg)
@@ -718,7 +718,7 @@ class DockInStationWithObstaclesTask(TaskCore):
 
         # Add obstacles to the scene
         obstacles_positions, mask = self.randomize_obstacles_positions(env_ids)
-        self._pos_obstacles_in_env = self.obstacles_generator.get_positions_on_storage(obstacles_positions, mask, env_ids)
+        self._pos_obstacles_in_env = self.obstacles_generator.get_positions_with_storage(obstacles_positions, mask, env_ids)
         self.obstacles.write_object_link_pose_to_sim(self._pos_obstacles_in_env, env_ids=env_ids)
 
     def randomize_obstacles_positions(self, env_ids: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:

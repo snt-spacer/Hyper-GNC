@@ -51,6 +51,8 @@ from .tasks_cfg import (  # noqa: F401, F403
     RendezvousCfg,
     Stabilization3DCfg,
     DockInStationWithObstaclesCfg,
+    GoToPose3DWithObstaclesCfg,
+    GoToPose3DBoxCfg,
     TASK_CFG_FACTORY,
 )
 
@@ -74,6 +76,8 @@ from .tasks import (  # noqa: F401, F403
     RendezvousTask,
     Stabilization3DTask,
     DockInStationWithObstaclesTask,
+    GoToPose3DWithObstaclesTask,
+    GoToPose3DBoxTask,
     TASK_FACTORY,
 )
 
