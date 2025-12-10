@@ -16,13 +16,22 @@ runs_per_env=4
 ########################################################################################################################
 # IntBall2 Multi-critic
 ########################################################################################################################
-# Multi-critic Hot-id
+# Multi-critic 
+# MODEL_PATHS=(
+# /workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic/2025-12-01_20-51-17_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/model_3999.pt
+# /workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic/2025-12-02_08-27-36_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/model_3999.pt
+# /workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic/2025-12-02_13-56-40_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/model_3999.pt
+# /workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic/2025-12-02_16-07-00_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/model_3999.pt
+# /workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic/2025-12-02_18-16-56_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/model_3999.pt
+# )
+
+# Multi-critic obstacles
 MODEL_PATHS=(
-/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic/2025-12-01_20-51-17_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/model_3999.pt
-/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic/2025-12-02_08-27-36_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/model_3999.pt
-/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic/2025-12-02_13-56-40_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/model_3999.pt
-/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic/2025-12-02_16-07-00_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/model_3999.pt
-/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic/2025-12-02_18-16-56_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/model_3999.pt
+/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic/2025-12-09_19-12-58_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/model_2000.pt
+/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic/2025-12-09_21-25-55_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/model_2000.pt
+/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic/2025-12-09_22-43-03_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/model_2000.pt
+/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic/2025-12-10_00-00-36_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/model_2000.pt
+/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic/2025-12-10_01-18-07_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/model_2000.pt
 )
 
 # Check if model paths are provided

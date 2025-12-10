@@ -84,6 +84,9 @@ class GoToPose3DBoxTask(TaskCore):
         )
 
         self._num_cells = int(1.0 / (self._task_cfg.minimum_point_distance * 2))
+        
+        # ISS box
+        self.first_reset = True
 
 
         self.design_scene()
@@ -189,14 +192,14 @@ class GoToPose3DBoxTask(TaskCore):
         self.scalar_logger.add_log("task_state", "GoToPose6DoF/AVG/absolute_angular_velocity", "mean")
         self.scalar_logger.add_log("task_state", "GoToPose6DoF/EMA/position_distance", "ema")
         self.scalar_logger.add_log("task_state", "GoToPose6DoF/EMA/orientation_error", "ema")
-        self.scalar_logger.add_log("task_state", "GoToPose6DoF/EMA/boundary_distance", "ema")
+        # self.scalar_logger.add_log("task_state", "GoToPose6DoF/EMA/boundary_distance", "ema")
         # self.scalar_logger.add_log("task_state", "GoToPose6DoF/AVG/collision_signal", "mean")
 
         self.scalar_logger.add_log("task_reward", "GoToPose6DoF/AVG/position", "mean")
         self.scalar_logger.add_log("task_reward", "GoToPose6DoF/AVG/orientation", "mean")
         self.scalar_logger.add_log("task_reward", "GoToPose6DoF/AVG/linear_velocity", "mean")
         self.scalar_logger.add_log("task_reward", "GoToPose6DoF/AVG/angular_velocity", "mean")
-        self.scalar_logger.add_log("task_reward", "GoToPose6DoF/AVG/boundary", "mean")
+        # self.scalar_logger.add_log("task_reward", "GoToPose6DoF/AVG/boundary", "mean")
         self.scalar_logger.add_log("task_reward", "GoToPose6DoF/AVG/progress", "mean")
         self.scalar_logger.add_log("task_reward", "GoToPose6DoF/AVG/collision_penalty", "mean")
 
@@ -204,7 +207,7 @@ class GoToPose3DBoxTask(TaskCore):
         self.scalar_logger.add_log("task_reward", "GoToPose6DoF/AVG/weighted_position_orientation_reward", "mean")
         self.scalar_logger.add_log("task_reward", "GoToPose6DoF/AVG/weighted_linear_velocity_reward", "mean")
         self.scalar_logger.add_log("task_reward", "GoToPose6DoF/AVG/weighted_angular_velocity_reward", "mean")
-        self.scalar_logger.add_log("task_reward", "GoToPose6DoF/AVG/weighted_boundary_reward", "mean")
+        # self.scalar_logger.add_log("task_reward", "GoToPose6DoF/AVG/weighted_boundary_reward", "mean")
         self.scalar_logger.add_log("task_reward", "GoToPose6DoF/AVG/weighted_progress_reward", "mean")
         self.scalar_logger.add_log("task_reward", "GoToPose6DoF/AVG/weighted_collision_penalty", "mean")
 
@@ -247,12 +250,12 @@ class GoToPose3DBoxTask(TaskCore):
             [self.wall_thickness, self.wall_length, self.wall_height]
         ]
         wall_positions = [
-            [0 + self.x_shift , 0, self.height_from_floor], 
-            [0 + self.x_shift, 0, 2.0 + self.height_from_floor], 
-            [0 + self.x_shift, -self.wall_length/2, 1.0 + self.height_from_floor], 
-            [0 + self.x_shift, self.wall_length/2, 1.0 + self.height_from_floor], 
-            [-self.wall_width/2 + self.x_shift, 0, 1.0 + self.height_from_floor], 
-            [self.wall_width/2 + self.x_shift, 0, 1.0 + self.height_from_floor]
+            [0 + self.x_shift , 0, self.height_from_floor + self._task_cfg.iss_box_storage_height_pos], 
+            [0 + self.x_shift, 0, 2.0 + self.height_from_floor + self._task_cfg.iss_box_storage_height_pos], 
+            [0 + self.x_shift, -self.wall_length/2, 1.0 + self.height_from_floor + self._task_cfg.iss_box_storage_height_pos], 
+            [0 + self.x_shift, self.wall_length/2, 1.0 + self.height_from_floor + self._task_cfg.iss_box_storage_height_pos], 
+            [-self.wall_width/2 + self.x_shift, 0, 1.0 + self.height_from_floor + self._task_cfg.iss_box_storage_height_pos], 
+            [self.wall_width/2 + self.x_shift, 0, 1.0 + self.height_from_floor + self._task_cfg.iss_box_storage_height_pos]
         ]
         walls_rigid_objects = {}
 
@@ -308,7 +311,7 @@ class GoToPose3DBoxTask(TaskCore):
         for i in range(self._task_cfg.max_num_vis_obstacles):
 
             position = low + (high - low) * torch.rand(3)
-            position[2] = self._task_cfg.obstacles_storage_height_pos 
+            position[2] = self._task_cfg.obstacles_storage_height_pos #min_z + (max_z - min_z) * torch.rand(1) 
             mass = torch.randint(int(MIN_MASS), int(MAX_MASS), (1,)).item()
             # Color depending on mass. Lighter color red for low mass, darker blue for high mass
             mass_tensor = torch.tensor([mass], dtype=torch.float32)
@@ -458,10 +461,14 @@ class GoToPose3DBoxTask(TaskCore):
         self._task_data[:, 3:9] = rel_mat_6
         self._task_data[:, 9:12] = self._robot.root_com_lin_vel_b[self._env_ids]
         self._task_data[:, 12:15] = self._robot.root_com_ang_vel_b[self._env_ids]
-        self._task_data[:, 15:23] = self._robot.get_observations(env_ids=self._env_ids)
-        self._task_data[:, 23:24] = self.collided_signal
-        self._task_data[:, 24:34] = obstacles_observation
-
+        # self._task_data[:, 15:23] = self._robot.get_observations(env_ids=self._env_ids)
+        # self._task_data[:, 23:24] = self.collided_signal
+        # self._task_data[:, 24:34] = obstacles_observation
+        
+        
+        self._task_data[:, 15:16] = self.collided_signal
+        self._task_data[:, 16:25] = obstacles_observation
+        self._task_data[:, 25:33] = self._robot.get_observations(env_ids=self._env_ids)
        
 
         # Make sure that the orientation error magnitude is also updated
@@ -470,9 +477,9 @@ class GoToPose3DBoxTask(TaskCore):
         self._orientation_error = math_utils.quat_error_magnitude(target_quat, current_quat)
 
         task_id_one_hot = F.one_hot(torch.tensor([self._task_uid], device=self._device), num_classes=self._num_tasks).squeeze(0).repeat(self._num_envs, 1)
-        semantic_emb = torch.tensor([[1.0, 1.0, 0.0, 1.0, 0.0]], device=self._device).repeat(self._num_envs, 1)
-        noise = self._rng.sample_uniform_torch(low=-0.1, high=0.1, shape=semantic_emb.shape[-1], ids=self._env_ids)
-        semantic_emb += noise
+        semantic_emb = torch.tensor([[1.0, 1.0, 0.0, 1.0, 0.5]], device=self._device).repeat(self._num_envs, 1)
+        # noise = self._rng.sample_uniform_torch(low=-0.1, high=0.1, shape=semantic_emb.shape[-1], ids=self._env_ids)
+        # semantic_emb += noise
 
         # Concatenate task observations with robot's internal observations
         return self._task_data, task_id_one_hot, semantic_emb
@@ -538,7 +545,7 @@ class GoToPose3DBoxTask(TaskCore):
         # Logging
         self.scalar_logger.log("task_state", "GoToPose6DoF/EMA/position_distance", self._position_dist)
         self.scalar_logger.log("task_state", "GoToPose6DoF/EMA/orientation_error", self._orientation_error)
-        self.scalar_logger.log("task_state", "GoToPose6DoF/EMA/boundary_distance", boundary_dist)
+        # self.scalar_logger.log("task_state", "GoToPose6DoF/EMA/boundary_distance", boundary_dist)
         self.scalar_logger.log("task_state", "GoToPose6DoF/AVG/normed_linear_velocity", linear_velocity)
         self.scalar_logger.log("task_state", "GoToPose6DoF/AVG/absolute_angular_velocity", angular_velocity)
         # self.scalar_logger.log("task_state", "GoToPose6DoF/AVG/collision_signal", self.collided_signal)
@@ -547,7 +554,7 @@ class GoToPose3DBoxTask(TaskCore):
         self.scalar_logger.log("task_reward", "GoToPose6DoF/AVG/orientation", orientation_rew)
         self.scalar_logger.log("task_reward", "GoToPose6DoF/AVG/linear_velocity", linear_velocity_rew)
         self.scalar_logger.log("task_reward", "GoToPose6DoF/AVG/angular_velocity", angular_velocity_rew)
-        self.scalar_logger.log("task_reward", "GoToPose6DoF/AVG/boundary", boundary_rew)
+        # self.scalar_logger.log("task_reward", "GoToPose6DoF/AVG/boundary", boundary_rew)
         self.scalar_logger.log("task_reward", "GoToPose6DoF/AVG/progress", progress_rew)
         self.scalar_logger.log("task_reward", "GoToPose6DoF/AVG/collision_penalty", collision_penalty_rew)
 
@@ -556,7 +563,7 @@ class GoToPose3DBoxTask(TaskCore):
             (position_rew * orientation_rew) * self._task_cfg.pose_weight
             + linear_velocity_rew * self._task_cfg.linear_velocity_weight
             + angular_velocity_rew * self._task_cfg.angular_velocity_weight
-            + boundary_rew * self._task_cfg.boundary_weight
+            # + boundary_rew * self._task_cfg.boundary_weight
             + progress_rew * self._task_cfg.progress_weight
             + collision_penalty_rew * self._task_cfg.collision_penalty_weight
         ) + self._robot.compute_rewards(env_ids=self._env_ids)
@@ -575,9 +582,9 @@ class GoToPose3DBoxTask(TaskCore):
         self.scalar_logger.log(
             "task_reward", "GoToPose6DoF/AVG/weighted_angular_velocity_reward", angular_velocity_rew * self._task_cfg.angular_velocity_weight
         )
-        self.scalar_logger.log(
-            "task_reward", "GoToPose6DoF/AVG/weighted_boundary_reward", boundary_rew * self._task_cfg.boundary_weight
-        )
+        # self.scalar_logger.log(
+        #     "task_reward", "GoToPose6DoF/AVG/weighted_boundary_reward", boundary_rew * self._task_cfg.boundary_weight
+        # )
         self.scalar_logger.log(
             "task_reward", "GoToPose6DoF/AVG/weighted_progress_reward", progress_rew * self._task_cfg.progress_weight
         )
@@ -827,17 +834,32 @@ class GoToPose3DBoxTask(TaskCore):
 
         self._robot.set_pose(initial_pose, self._env_ids[env_ids])
         self._robot.set_velocity(initial_velocity, self._env_ids[env_ids])
+        
+        # Randomize obstacles positions
+        obstacles_positions, mask = self.randomize_obstacles_positions(env_ids)
+        # set the hight of the obstacles in the mask that are false to storage height
+        for i in range(obstacles_positions.shape[0]):
+            obstacles_positions[i, ~mask[i], 2] -= self._task_cfg.obstacles_storage_height_pos
+        self.obstacles.write_object_link_pose_to_sim(obstacles_positions, env_ids=self._env_ids[env_ids])
+
+        # Remove ISS box walls from current task environments from the storage locaiton
+        # Only done once at reset
+        if self.first_reset:
+            env_ids = torch.arange(0, self._num_envs, device=self._device)
+            task_iss_box_position = self.iss_box.data.object_state_w[self._env_ids[env_ids], :, :7].clone()
+            task_iss_box_position[:, :, 2] -= self._task_cfg.iss_box_storage_height_pos
+            self.iss_box.write_object_link_pose_to_sim(task_iss_box_position, env_ids=self._env_ids[env_ids])
+            self.first_reset = False
 
         # Add obstacles to the scene
-        obstacles_positions, mask = self.randomize_obstacles_positions(env_ids)
-        self._pos_obstacles_in_env = self.obstacles_generator.get_positions_with_storage(obstacles_positions, mask, env_ids)
-        self._pos_obstacles_in_env[:, :, 3:] = self.obstacles.data.object_com_quat_w[env_ids]
-        self.obstacles.write_object_link_pose_to_sim(self._pos_obstacles_in_env, env_ids=env_ids)
+        # obstacles_positions, mask = self.randomize_obstacles_positions(env_ids)
+        # self._pos_obstacles_in_env = self.obstacles_generator.get_positions_with_storage(obstacles_positions, mask, env_ids)
+        # self._pos_obstacles_in_env[:, :, 3:] = self.obstacles.data.object_com_quat_w[env_ids]
+        # self.obstacles.write_object_link_pose_to_sim(self._pos_obstacles_in_env, env_ids=env_ids)
     
     def randomize_obstacles_positions(self, env_ids: torch.tensor) -> tuple:
         """
-        Randomizes the positions of obstacles in a 3D space, ensuring they are not placed too close to the target or robot.
-        It also generates random orientations and creates a mask indicating which obstacles are visible.
+        This function randomizes the positions of obstacles within a specified environment in a grid-based layout, ensuring that they are not placed too close to the target or robot. It also generates random orientations for the obstacles and creates a mask indicating which obstacles are visible.
 
         Args:
             env_ids (torch.tensor): The ids of the environments to randomize the obstacles in.
@@ -846,34 +868,30 @@ class GoToPose3DBoxTask(TaskCore):
             tuple: A tuple containing the positions of the obstacles and a mask indicating which obstacles are visible.
         """
 
-        # **Step 1: Generate obstacle positions**
+        # Randomize obstacles positions
         number_obstacles_to_generate = self._task_cfg.max_num_vis_obstacles * 4
         indices_of_obstacles_to_activate = self._rng.sample_unique_integers_torch(
             min=0, max=self._task_cfg.max_num_vis_obstacles**2, num=number_obstacles_to_generate, ids=env_ids
         )
 
-        # **Step 2: Sample positions within the box dimensions**
-        padding = 0.2  # Margin from walls to account for obstacle size
+        # x = (indices_of_obstacles_to_activate % self._num_cells) - self._num_cells / 2
+        # y = (indices_of_obstacles_to_activate // self._num_cells) - self._num_cells / 2
+        # # Scale to world coordinates
+        # cell_size = self._task_cfg.maximum_robot_distance / self._num_cells  # Calculate the size of a grid cell
+        # x = self._rng.sample_sign_torch("int", (number_obstacles_to_generate), ids=env_ids) * x * cell_size / 2
+        # y = self._rng.sample_sign_torch("int", (number_obstacles_to_generate), ids=env_ids) * y * cell_size / 2
+        # z = torch.ones_like(x) * 6.0
 
-        # X range
-        x_min = self.x_shift - self.wall_width / 2 + padding
-        x_max = self.x_shift + self.wall_width / 2 - padding
-        
-        # Y range
-        y_min = -self.wall_length / 2 + padding
-        y_max = self.wall_length / 2 - padding
-        
-        # Z range
-        z_min = self.height_from_floor + padding
-        z_max = self.height_from_floor + self.wall_height - padding
+        x_range = (-0.7, 0.56)
+        y_range = (-2.7, 2.7)
+        z_range = (0.6, 1.7)
 
-        x = self._rng.sample_uniform_torch(x_min, x_max, (number_obstacles_to_generate,), ids=env_ids)
-        y = self._rng.sample_uniform_torch(y_min, y_max, (number_obstacles_to_generate,), ids=env_ids)
-        z = self._rng.sample_uniform_torch(z_min, z_max, (number_obstacles_to_generate,), ids=env_ids)
+        x = self._rng.sample_uniform_torch(*x_range, (number_obstacles_to_generate,), ids=env_ids)
+        y = self._rng.sample_uniform_torch(*y_range, (number_obstacles_to_generate,), ids=env_ids)
+        z = self._rng.sample_uniform_torch(*z_range, (number_obstacles_to_generate,), ids=env_ids)
 
-        # **Step 3: Combine to world coordinates**
         xyz = torch.stack((x, y, z), dim=2)
-        xyz += self._env_origins[env_ids].unsqueeze(1)
+        xyz[..., :2] += self._env_origins[env_ids].unsqueeze(1)[..., :2]
 
         # **Step 5: Compute distances from obstacles to robot and target**
         distance_obstacle_to_target = torch.norm(xyz - self._target_positions[env_ids].unsqueeze(1), dim=-1)
@@ -921,27 +939,23 @@ class GoToPose3DBoxTask(TaskCore):
                 # Replace invalid obstacles with valid ones from the same environment
                 xyz[env, env_invalid_obs] = valid_obstacles[env, sampled_indices]
 
-        # **Step 10: Generate random orientations for 3D obstacles**
-        yaw_offset = self._rng.sample_uniform_torch(-math.pi, math.pi, (number_obstacles_to_generate,), ids=env_ids)
-        pitch_offset = self._rng.sample_uniform_torch(-math.pi / 4, math.pi / 4, (number_obstacles_to_generate,), ids=env_ids)
-        roll_offset = self._rng.sample_uniform_torch(-math.pi / 4, math.pi / 4, (number_obstacles_to_generate,), ids=env_ids)
 
-        xyzw = math_utils.quat_from_euler_xyz(roll_offset, pitch_offset, yaw_offset)
+        # Generate quats and concatenate with xyz
+        xyzw = self.obstacles.data.object_com_quat_w[env_ids].clone()
+        obstacles_positions = torch.cat((xyz[:, : self._task_cfg.max_num_vis_obstacles], xyzw), dim=-1)
 
-        
-        # **Step 11: Combine position and orientation**
-        obstacles_positions = torch.cat((
-            xyz[:, :self._task_cfg.max_num_vis_obstacles], 
-            xyzw[:, :self._task_cfg.max_num_vis_obstacles]  # Fix: Match slicing
-        ), dim=-1)
+        # Create visible obstacles
+        # num_visible_obstacles_per_env = self._rng.sample_integer_torch(
+        #     low=1, high=self._task_cfg.max_num_vis_obstacles, shape=(1,), ids=env_ids
+        # )
+        num_visible_obstacles_per_env = self._gen_actions[env_ids, 7] * (self._task_cfg.max_num_vis_obstacles - self._task_cfg.min_num_obstacles) + self._task_cfg.min_num_obstacles
 
-        # **Step 12: Randomly decide how many obstacles to show**
-        num_visible_obstacles_per_env = self._rng.sample_integer_torch(
-            low=self._task_cfg.min_num_obstacles, high=self._task_cfg.max_num_vis_obstacles, shape=(1,), ids=env_ids
-        )
-        mask = torch.arange(self._task_cfg.max_num_vis_obstacles, device=self._device).unsqueeze(0) < num_visible_obstacles_per_env.unsqueeze(1)
-        
+        mask = torch.arange(self._task_cfg.max_num_vis_obstacles, device=self._device).unsqueeze(
+            0
+        ) < num_visible_obstacles_per_env.unsqueeze(1)
+
         return obstacles_positions, mask
+
 
 
     def create_task_visualization(self) -> None:

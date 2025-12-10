@@ -25,8 +25,8 @@ import torch.nn.functional as F
 @configclass
 class SingleEnvCfg(DirectRLEnvCfg):
     # env
-    decimation = 6
-    episode_length_s = 40.0
+    decimation = 12
+    episode_length_s = 60.0
 
     robot_name = "IntBall2"
     task_name = "GoToPose3D"

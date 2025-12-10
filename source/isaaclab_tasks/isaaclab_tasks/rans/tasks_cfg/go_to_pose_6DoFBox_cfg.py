@@ -76,16 +76,21 @@ class GoToPose3DBoxCfg(TaskCoreCfg):
     """Maximal distance between the target and the obstacles. Defaults to 10 m."""
     min_num_obstacles: int = 3
     """Minimal number of obstacles in the environment. Defaults to 3."""
-    min_obstacle_distance_from_target: float = 0.4
-    """Minimal distance between the target and the obstacles. Defaults to 0.3 m."""
+    min_obstacle_distance_from_target: float = 0.3
+    """Minimal distance between the target and the obstacles. Defaults to 1 m."""
     min_obstacle_distance_from_robot: float = 0.5
-    """Minimal distance between the robot and the obstacles. Defaults to 0.5 m."""
+    """Minimal distance between the robot and the obstacles. Defaults to 1 m."""
     min_distance_between_obstacle: float = 1.5
     """Minimal distance between the obstacles. Defaults to 0.5 m."""
-    collision_penalty: float = -50.0
+    collision_penalty: float = -30.0
     """Penalty for colliding with an obstacle. Defaults to -10.0."""
     collision_penalty_weight: float = 1.0
     """Weight for the collision penalty. Defaults to 1.0."""
+
+    # ISS box
+    iss_box_storage_height_pos: float = -500.0
+    """Height where to store the ISS box walls. Defaults to -500.0 m."""
+
     
     # Reward
     position_exponential_reward_coeff: float = 1.0
