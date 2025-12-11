@@ -92,8 +92,16 @@ class EvalMetrics:
             filename = f"{name}_metrics.csv"
             save_path = os.path.join(self.save_path, "metrics", filename)
         else:
-            name = self.save_path.split("/")[-1]
-            save_path = os.path.join(self.save_path, "metrics", f"{name}_metrics.csv")
+            if self.task_name == "GoToPose3DBox" or self.task_name == "VeloStabilization3D":
+                base_model_name = os.path.basename(self.save_path)
+                base_model_list = base_model_name.split("_")
+                base_model_list[4] = self.task_name
+                name = "_".join(base_model_list)
+                filename = f"{name}_metrics.csv"
+                save_path = os.path.join(self.save_path, "metrics", filename)
+            else:
+                name = self.save_path.split("/")[-1]
+                save_path = os.path.join(self.save_path, "metrics", f"{name}_metrics.csv")
         
         # Ensure the metrics directory exists
         os.makedirs(os.path.dirname(save_path), exist_ok=True)

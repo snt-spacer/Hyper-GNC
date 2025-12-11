@@ -28,6 +28,7 @@ from .stabilization_6DoF_cfg import Stabilization3DCfg  # noqa: F401, F403
 from .dock_to_station_cfg import DockInStationWithObstaclesCfg  # noqa: F401, F403
 from .go_to_pose_6DoF_with_obstacles_cfg import GoToPose3DWithObstaclesCfg  # noqa: F401, F403
 from .go_to_pose_6DoFBox_cfg import GoToPose3DBoxCfg  # noqa: F401, F403
+from .velo_stabilization_6DoF_cfg import VeloStabilization3DCfg  # noqa: F401, F403
 
 TASK_CFG_FACTORY = factory()
 TASK_CFG_FACTORY.register("GoThroughPoses", GoThroughPosesCfg)
@@ -48,3 +49,4 @@ TASK_CFG_FACTORY.register("Stabilization3D", Stabilization3DCfg)
 TASK_CFG_FACTORY.register("DockInStationWithObstacles", DockInStationWithObstaclesCfg)
 TASK_CFG_FACTORY.register("GoToPose3DWithObstacles", GoToPose3DWithObstaclesCfg)
 TASK_CFG_FACTORY.register("GoToPose3DBox", GoToPose3DBoxCfg)
+TASK_CFG_FACTORY.register("VeloStabilization3D", VeloStabilization3DCfg)

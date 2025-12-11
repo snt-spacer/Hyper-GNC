@@ -184,6 +184,14 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
     env = RslRlVecEnvWrapper(env)
 
     # Handle multitask vs single task environments
+    
+    metrics_dir = os.path.join(log_dir, "metrics")
+    if not os.path.exists(metrics_dir):
+        os.makedirs(metrics_dir)
+    plots_dir = os.path.join(log_dir, "plots")
+    if not os.path.exists(plots_dir):
+        os.makedirs(plots_dir)
+        
     if "MultiTask" in args_cli.task:
         robot_name = env.env.get_wrapper_attr('robot_api')._robot_cfg.robot_name
         tasks_apis = env.env.get_wrapper_attr('tasks_apis')
@@ -215,14 +223,7 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
     else:
         robot_name = env.env.get_wrapper_attr('robot_api')._robot_cfg.robot_name
         task_name = env.env.get_wrapper_attr('task_api').__class__.__name__[:-4] # remove "Task" suffix
-        
-        metrics_dir = os.path.join(log_dir, "metrics")
-        if not os.path.exists(metrics_dir):
-            os.makedirs(metrics_dir)
-        plots_dir = os.path.join(log_dir, "plots")
-        if not os.path.exists(plots_dir):
-            os.makedirs(plots_dir)
-
+            
         eval_metrics = EvalMetrics(
             env=env, 
             robot_name=robot_name, 
@@ -376,15 +377,10 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
         # Calculate metrics for each task
         for i, (task_name, eval_metrics) in enumerate(zip(task_names, eval_metrics_list)):
             # print(f"[INFO] Calculating metrics for task {i}: {task_name}")
-            task_data_processed = {k: torch.stack(v, dim=0) for k, v in tasks_data[i].items()}
-            # Intball remove the first reset data
-            torch.sum(task_data_processed["dones"], dim=0)
-            
+            task_data_processed = {k: torch.stack(v, dim=0) for k, v in tasks_data[i].items()}  
             eval_metrics.calculate_metrics(data=task_data_processed)
             # Save extracted trajectories
-            eval_metrics.save_extracted_trajectories_to_csv()
-
-           
+            eval_metrics.save_extracted_trajectories_to_csv()   
     else:
         # Single task metrics calculation
         data = {k: torch.stack(v, dim=0) for k, v in data.items()}

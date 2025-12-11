@@ -475,7 +475,7 @@ class GoToPose3DBoxTask(TaskCore):
         current_quat = self._robot.root_quat_w[self._env_ids]  # (w, x, y, z)
         target_quat = self._target_orientations  # (w, x, y, z)
         self._orientation_error = math_utils.quat_error_magnitude(target_quat, current_quat)
-
+        
         task_id_one_hot = F.one_hot(torch.tensor([self._task_uid], device=self._device), num_classes=self._num_tasks).squeeze(0).repeat(self._num_envs, 1)
         semantic_emb = torch.tensor([[1.0, 1.0, 0.0, 1.0, 0.5]], device=self._device).repeat(self._num_envs, 1)
         # noise = self._rng.sample_uniform_torch(low=-0.1, high=0.1, shape=semantic_emb.shape[-1], ids=self._env_ids)
