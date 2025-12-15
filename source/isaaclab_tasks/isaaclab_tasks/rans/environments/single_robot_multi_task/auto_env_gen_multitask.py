@@ -127,9 +127,10 @@ class MultiTaskEnv(DirectRLEnv):
 
         self.set_debug_vis(self.cfg.debug_vis)
 
-        task_combined_obs = 51 + self.cfg.action_space
+        task_combined_obs = 54 + self.cfg.action_space
         self.observation_buffer = torch.zeros((self.num_envs, task_combined_obs), device=self.device, dtype=torch.float32)
-        self.semantic_embedding = torch.zeros((self.num_envs, 4), device=self.device, dtype=torch.float32)
+        self.semantic_embedding = torch.zeros((self.num_envs, 5), device=self.device, dtype=torch.float32)
+        self.one_hot_task_ids = torch.zeros((self.num_envs, self.num_tasks), device=self.device, dtype=torch.int64)
 
     @property
     def eval_data_keys(self) -> list[str]:
@@ -290,90 +291,71 @@ class MultiTaskEnv(DirectRLEnv):
         }
         return {"policy": result}
 
-        """
-        Create tensors for the correct observation shapes. This assumes there's only 5 tasks (Stabilization3D, GoToPose3D, 
-        TrackVelocities3D, GoThroughPoses3D, GoToPosition3DWithObstacles)
-        The tensor will always contain:
-        general_obs_cat[:, :3] -> Robot Normalized Linear Velocity
-        general_obs_cat[:, 3:6] -> Robot Normalized Angular Velocity
-        general_obs_cat[:, 6:9] -> Robot Normalized Position (x - min_x) / (max_x - min_x)
-        general_obs_cat[:, 9:15] -> Robot Normalized 6D Rotation Matrix (GoToPose3D, GoToPosition3DWithObstacles)
-        general_obs_cat[:, 15:18] -> Local Pose error (GoToPose3D, GoToPosition3DWithObstacles)
-        general_obs_cat[:, 18:24] -> Velocities errors (TrackVelocities3D), linear, lateral, vertical, yaw, pithch, roll
-        general_obs_cat[:, 24: 24 + 9*N] -> N: num next target local Pose error and 6D Rotation Matrix (GoThroughPoses3D)
-
-        general_obs_cat[:, 32:35] -> Task 4 (GoThroughPoses3D) Subsequent Local Pose error
-        general_obs_cat[:, 35:38] -> Task 4 (GoThroughPoses3D) Subsequent Rotation matrix
-        general_obs_cat[:, 41:44] -> Task 5 (GoToPosition3DWithObstacles) N closest obstacles relative positions
-        """
+        # """
+        # Create tensors for the correct observation shapes. This assumes there's only 5 tasks (Stabilization3D, GoToPose3D, 
+        # TrackVelocities3D, GoThroughPoses3D, GoToPosition3DWithObstacles)
+        # The tensor will always contain:
+        # general_obs_cat[:, :3] -> Local Pos Error
+        # general_obs_cat[:, 3:9] -> Real Mat
+        # general_obs_cat[:, 9:12] -> Robot lin vel
+        # general_obs_cat[:, 12:15] -> Robot ang vel
+        # general_obs_cat[:, 15:18] -> Lin vel error (lin, lat, vert)
+        # general_obs_cat[:, 18:21] -> Ang vel error (roll, pitch, yaw)
+        # general_obs_cat[:, 21:24] -> Go Through Poses target pos 1 
+        # general_obs_cat[:, 24:30] -> Go Through Poses target rel mat 1
+        # general_obs_cat[:, 30:33] -> Go Through Poses target pos 2 
+        # general_obs_cat[:, 33:39] -> Go Through Poses target rel mat 2
+        # general_obs_cat[:, 39:40] -> Collision Signal
+        # general_obs_cat[:, 40:49] -> 3 Closest obstacles
+        # general_obs_cat[:, 49:N_o] -> Robot observation
+        # general_obs_cat[:, N_o:N_o + sem_emb] -> Semantic Embedding
+        # """
         
         # for task_api in self.tasks_apis:
-        #     general_obs, task_obs = task_api.get_observations()
+        #     general_obs, task_id_one_hot, semantic_emb = task_api.get_observations()
         #     env_ids = task_api._env_ids
+            
         #     if task_api.__class__.__name__[:-4] == "GoToPose3D":
-        #         normalized_linear_vel = self.robot_api.root_com_lin_vel_b[env_ids] / (torch.linalg.norm(self.robot_api.root_com_lin_vel_w[env_ids], dim=-1) + 1e-8).unsqueeze(-1)
-        #         normalized_angular_vel = self.robot_api.root_com_ang_vel_b[env_ids] / (torch.linalg.norm(self.robot_api.root_com_ang_vel_w[env_ids], dim=-1) + 1e-8).unsqueeze(-1)
-        #         normalized_position = -1 + 2 * ((self.robot_api.root_link_pos_w[env_ids] - (task_api._env_origins - task_api._task_cfg.maximum_robot_distance)) / (2 * task_api._task_cfg.maximum_robot_distance))
-        #         normalized_position.fill_(0.0)
-
-        #         self.observation_buffer[env_ids, :3] = self.robot_api.root_com_lin_vel_w[env_ids]
-        #         self.observation_buffer[env_ids, 3:6] = self.robot_api.root_com_ang_vel_w[env_ids]
-        #         self.observation_buffer[env_ids, 6:9] = normalized_position
-        #         self.observation_buffer[env_ids, 9:15] = general_obs[:, 3:9]
-        #         self.observation_buffer[env_ids, 15:18] = general_obs[:, :3]
-        #         self.observation_buffer[env_ids, -self.cfg.action_space:] = general_obs[:, -self.cfg.action_space:]
-        #         self.semantic_embedding[env_ids] = task_obs
+        #         self.observation_buffer[env_ids, :15] = general_obs[:, :15]
+        #         self.observation_buffer[env_ids, 49: 49 + self.cfg.action_space] = general_obs[:, 15:]        
             
         #     elif task_api.__class__.__name__[:-4] == "TrackVelocities3D":
-        #         normalized_linear_vel = self.robot_api.root_com_lin_vel_b[env_ids] / (torch.linalg.norm(self.robot_api.root_com_lin_vel_w[env_ids], dim=-1) + 1e-8).unsqueeze(-1)
-        #         normalized_angular_vel = self.robot_api.root_com_ang_vel_b[env_ids] / (torch.linalg.norm(self.robot_api.root_com_ang_vel_w[env_ids], dim=-1) + 1e-8).unsqueeze(-1)
-        #         normalized_position = -1 + 2 * ((self.robot_api.root_link_pos_w[env_ids] - (task_api._env_origins - task_api._task_cfg.maximum_robot_distance)) / (2 * task_api._task_cfg.maximum_robot_distance))
-        #         normalized_position.fill_(0.0)
-
-        #         self.observation_buffer[env_ids, :3] = self.robot_api.root_com_lin_vel_w[env_ids]
-        #         self.observation_buffer[env_ids, 3:6] = self.robot_api.root_com_ang_vel_w[env_ids]
-        #         self.observation_buffer[env_ids, 6:9] = normalized_position
-        #         self.observation_buffer[env_ids, 18:24] = general_obs[:, :6]
-        #         self.observation_buffer[env_ids, -self.cfg.action_space:] = general_obs[:, -self.cfg.action_space:]
-        #         self.semantic_embedding[env_ids] = task_obs
-
-
+        #         self.observation_buffer[env_ids, 15:21] = general_obs[:, :6]
+        #         self.observation_buffer[env_ids, 9:15] = general_obs[:, 6:12]
+        #         self.observation_buffer[env_ids, 49: 49 + self.cfg.action_space] = general_obs[:, 12:]
+                
         #     elif task_api.__class__.__name__[:-4] == "GoThroughPoses3D":
-        #         normalized_linear_vel = self.robot_api.root_com_lin_vel_b[env_ids] / (torch.linalg.norm(self.robot_api.root_com_lin_vel_w[env_ids], dim=-1) + 1e-8).unsqueeze(-1)
-        #         normalized_angular_vel = self.robot_api.root_com_ang_vel_b[env_ids] / (torch.linalg.norm(self.robot_api.root_com_ang_vel_w[env_ids], dim=-1) + 1e-8).unsqueeze(-1)
-        #         normalized_position = -1 + 2 * ((self.robot_api.root_link_pos_w[env_ids] - (task_api._env_origins - task_api._task_cfg.maximum_robot_distance)) / (2 * task_api._task_cfg.maximum_robot_distance))
-        #         normalized_position.fill_(0.0)
-
-        #         self.observation_buffer[env_ids, :3] = self.robot_api.root_com_lin_vel_w[env_ids]
-        #         self.observation_buffer[env_ids, 3:6] = self.robot_api.root_com_ang_vel_w[env_ids]
-        #         self.observation_buffer[env_ids, 6:9] = normalized_position
-        #         self.observation_buffer[env_ids, 9:15] = general_obs[:, 3:9]
-        #         self.observation_buffer[env_ids, 15:18] = general_obs[:, :3]
-        #         dim_for_subsequent_poses = 9 * task_api._task_cfg.num_subsequent_goals # Robot action space, 9 for the first pose error and rotation mtx
-        #         self.upper_idx = 24 + dim_for_subsequent_poses
-        #         self.observation_buffer[env_ids, 24: self.upper_idx] = general_obs[:, 9: 9 + dim_for_subsequent_poses]
-        #         self.observation_buffer[env_ids, -self.cfg.action_space:] = general_obs[:, -self.cfg.action_space:]
-        #         self.semantic_embedding[env_ids] = task_obs
+        #         self.observation_buffer[env_ids, :15] = general_obs[:, :15]
+        #         self.observation_buffer[env_ids, 21:39] = general_obs[:, 15:33]
+        #         self.observation_buffer[env_ids, 49: 49 + self.cfg.action_space] = general_obs[:, 33:]
+                
 
         #     elif task_api.__class__.__name__[:-4] == "GoToPosition3DWithObstacles":
-        #         normalized_linear_vel = self.robot_api.root_com_lin_vel_b[env_ids] / (torch.linalg.norm(self.robot_api.root_com_lin_vel_w[env_ids], dim=-1) + 1e-8).unsqueeze(-1)
-        #         normalized_angular_vel = self.robot_api.root_com_ang_vel_b[env_ids] / (torch.linalg.norm(self.robot_api.root_com_ang_vel_w[env_ids], dim=-1) + 1e-8).unsqueeze(-1)
-        #         normalized_position = -1 + 2 * ((self.robot_api.root_link_pos_w[env_ids] - (task_api._env_origins - task_api._task_cfg.maximum_robot_distance)) / (2 * task_api._task_cfg.maximum_robot_distance))  
-        #         normalized_position.fill_(0.0)
-
-        #         self.observation_buffer[env_ids, :3] = self.robot_api.root_com_lin_vel_w[env_ids]
-        #         self.observation_buffer[env_ids, 3:6] = self.robot_api.root_com_ang_vel_w[env_ids]
-        #         self.observation_buffer[env_ids, 6:9] = normalized_position
-        #         self.observation_buffer[env_ids, 9:15] = general_obs[:, 3:9]
-        #         self.observation_buffer[env_ids, 15:18] = general_obs[:, :3]
-        #         self.observation_buffer[env_ids, self.upper_idx:-self.cfg.action_space] = general_obs[:, 9:18]
-        #         self.observation_buffer[env_ids, -self.cfg.action_space:] = general_obs[:, -self.cfg.action_space:]
-        #         self.semantic_embedding[env_ids] = task_obs
-
+        #         self.observation_buffer[env_ids, :15] = general_obs[:, :15]
+        #         self.observation_buffer[env_ids, 39:40] = general_obs[:, 15:16]
+        #         self.observation_buffer[env_ids, 40:49] = general_obs[:, 16:25]
+        #         self.observation_buffer[env_ids, 49: 49 + self.cfg.action_space] = general_obs[:, 25:]
+                
+        #     elif task_api.__class__.__name__[:-4] == "GoToPose3DBox":
+        #         self.observation_buffer[env_ids, :15] = general_obs[:, :15]
+        #         self.observation_buffer[env_ids, 33:34] = general_obs[:, 15:16]
+        #         self.observation_buffer[env_ids, 34:43] = general_obs[:, 16:25]
+        #         self.observation_buffer[env_ids, 49: 49 + self.cfg.action_space] = general_obs[:, 25:]
+        #         breakpoint()
+                
+        #     elif task_api.__class__.__name__[:-4] == "VeloStabilization3D":
+        #         self.observation_buffer[env_ids, 15:21] = general_obs[:, :6]
+        #         self.observation_buffer[env_ids, 9:15] = general_obs[:, 6:12]
+        #         self.observation_buffer[env_ids, 49: 49 + self.cfg.action_space] = general_obs[:, 12:]
+        #         breakpoint()
+            
+        #     self.observation_buffer[env_ids, 49 + self.cfg.action_space:] = semantic_emb
+        #     self.one_hot_task_ids[env_ids, :] = task_id_one_hot
 
         # result = {
         #     "general_obs": self.observation_buffer,
-        #     "track_obs": self.semantic_embedding,
+        #     "task_id_one_hot": self.one_hot_task_ids,
+        #     "semantic_emb": self.observation_buffer[:, -5:]
         # }
         # return {"policy": result}
 

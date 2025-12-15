@@ -28,7 +28,7 @@ class SingleRobotMultiTaskPPORunnerCfg(RslRlOnPolicyRunnerCfg):
         activation="tanh",
         clip_actions=False,
         clip_actions_range=[-1, 1],
-        use_embeddings=True,
+        use_embeddings=False,
         embeddings_size=5,
         generator_size=(64, 64),
         num_memory_obs=5, # task specific dimension

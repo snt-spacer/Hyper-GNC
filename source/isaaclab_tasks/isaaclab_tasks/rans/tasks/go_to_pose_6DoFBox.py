@@ -461,15 +461,9 @@ class GoToPose3DBoxTask(TaskCore):
         self._task_data[:, 3:9] = rel_mat_6
         self._task_data[:, 9:12] = self._robot.root_com_lin_vel_b[self._env_ids]
         self._task_data[:, 12:15] = self._robot.root_com_ang_vel_b[self._env_ids]
-        # self._task_data[:, 15:23] = self._robot.get_observations(env_ids=self._env_ids)
-        # self._task_data[:, 23:24] = self.collided_signal
-        # self._task_data[:, 24:34] = obstacles_observation
-        
         
         self._task_data[:, 15:16] = self.collided_signal
         self._task_data[:, 16:25] = obstacles_observation
-        self._task_data[:, 25:33] = self._robot.get_observations(env_ids=self._env_ids)
-       
 
         # Make sure that the orientation error magnitude is also updated
         current_quat = self._robot.root_quat_w[self._env_ids]  # (w, x, y, z)
@@ -477,12 +471,14 @@ class GoToPose3DBoxTask(TaskCore):
         self._orientation_error = math_utils.quat_error_magnitude(target_quat, current_quat)
         
         task_id_one_hot = F.one_hot(torch.tensor([self._task_uid], device=self._device), num_classes=self._num_tasks).squeeze(0).repeat(self._num_envs, 1)
-        semantic_emb = torch.tensor([[1.0, 1.0, 0.0, 1.0, 0.5]], device=self._device).repeat(self._num_envs, 1)
-        # noise = self._rng.sample_uniform_torch(low=-0.1, high=0.1, shape=semantic_emb.shape[-1], ids=self._env_ids)
-        # semantic_emb += noise
+        semantic_emb = torch.zeros((self._num_envs, 5), device=self._device)
+        semantic_emb[:, 0] = self._rng.sample_uniform_torch(low=0.8, high=1.0, shape=1, ids=self._env_ids)
+        semantic_emb[:, 1] = self._rng.sample_uniform_torch(low=0.8, high=1.0, shape=1, ids=self._env_ids)
+        semantic_emb[:, 3] = self._rng.sample_uniform_torch(low=0.8, high=1.0, shape=1, ids=self._env_ids)
+        semantic_emb[:, 4] = self._rng.sample_uniform_torch(low=0.8, high=1.0, shape=1, ids=self._env_ids)
 
         # Concatenate task observations with robot's internal observations
-        return self._task_data, task_id_one_hot, semantic_emb
+        return torch.concat((self._robot.get_observations(env_ids=self._env_ids), self._task_data), dim=-1), task_id_one_hot, semantic_emb
 
     def compute_rewards(self) -> torch.Tensor:
         """

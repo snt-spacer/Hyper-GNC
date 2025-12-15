@@ -169,7 +169,7 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
         # Obstacles
         filters = [f"/World/envs/env_.*/Obstacles/cylinder_{i}" for i in range(self._task_cfg.max_num_vis_obstacles)]
         # Walls
-        filters += [f"/World/envs/env_.*/ISSBox/wall_{name}" for name in self.wall_box_names]
+        # filters += [f"/World/envs/env_.*/ISSBox/wall_{name}" for name in self.wall_box_names]
         self._robot.activateSensors("contacts", filters)
         self._robot.register_sensors()
 
@@ -184,7 +184,7 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
         self.scalar_logger.add_log("task_state", "GoToPosition6DoFWithObstacles/AVG/normed_linear_velocity", "mean")
         self.scalar_logger.add_log("task_state", "GoToPosition6DoFWithObstacles/AVG/absolute_angular_velocity", "mean")
         self.scalar_logger.add_log("task_state", "GoToPosition6DoFWithObstacles/EMA/position_distance", "ema")
-        #self.scalar_logger.add_log("task_state", "GoToPosition6DoFWithObstacles/EMA/boundary_distance", "ema")
+        self.scalar_logger.add_log("task_state", "GoToPosition6DoFWithObstacles/EMA/boundary_distance", "ema")
 
         self.scalar_logger.add_log("task_reward", "GoToPosition6DoFWithObstacles/AVG/position", "mean")
         self.scalar_logger.add_log("task_reward", "GoToPosition6DoFWithObstacles/AVG/linear_velocity", "mean")
@@ -196,7 +196,7 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
         self.scalar_logger.add_log("task_reward", "GoToPosition6DoFWithObstacles/AVG/wheighted_position_reward", "mean")
         self.scalar_logger.add_log("task_reward", "GoToPosition6DoFWithObstacles/AVG/wheighted_linear_velocity_reward", "mean")
         self.scalar_logger.add_log("task_reward", "GoToPosition6DoFWithObstacles/AVG/wheighted_angular_velocity_reward", "mean")
-        #self.scalar_logger.add_log("task_reward", "GoToPosition6DoFWithObstacles/AVG/wheighted_boundary_reward", "mean")
+        self.scalar_logger.add_log("task_reward", "GoToPosition6DoFWithObstacles/AVG/wheighted_boundary_reward", "mean")
         self.scalar_logger.add_log("task_reward", "GoToPosition6DoFWithObstacles/AVG/wheighted_collision_penalty", "mean")
 
         self.scalar_logger.set_ema_coeff(self._task_cfg.ema_coeff)
@@ -228,57 +228,57 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
         self.wall_length = 6.4
         self.x_shift = -0.05
         self.height_from_floor = 0.3
-        wall_sizes = [
-            [self.wall_width, self.wall_length, self.wall_thickness], 
-            [self.wall_width, self.wall_length, self.wall_thickness], 
-            [self.wall_width, self.wall_thickness, self.wall_height], 
-            [self.wall_width, self.wall_thickness, self.wall_height], 
-            [self.wall_thickness, self.wall_length, self.wall_height], 
-            [self.wall_thickness, self.wall_length, self.wall_height]
-        ]
-        wall_positions = [
-            [0 + self.x_shift , 0, self.height_from_floor + self._task_cfg.iss_box_storage_height_pos], 
-            [0 + self.x_shift, 0, 2.0 + self.height_from_floor + self._task_cfg.iss_box_storage_height_pos], 
-            [0 + self.x_shift, -self.wall_length/2, 1.0 + self.height_from_floor + self._task_cfg.iss_box_storage_height_pos], 
-            [0 + self.x_shift, self.wall_length/2, 1.0 + self.height_from_floor + self._task_cfg.iss_box_storage_height_pos], 
-            [-self.wall_width/2 + self.x_shift, 0, 1.0 + self.height_from_floor + self._task_cfg.iss_box_storage_height_pos], 
-            [self.wall_width/2 + self.x_shift, 0, 1.0 + self.height_from_floor + self._task_cfg.iss_box_storage_height_pos]
-        ]
-        walls_rigid_objects = {}
+        # wall_sizes = [
+        #     [self.wall_width, self.wall_length, self.wall_thickness], 
+        #     [self.wall_width, self.wall_length, self.wall_thickness], 
+        #     [self.wall_width, self.wall_thickness, self.wall_height], 
+        #     [self.wall_width, self.wall_thickness, self.wall_height], 
+        #     [self.wall_thickness, self.wall_length, self.wall_height], 
+        #     [self.wall_thickness, self.wall_length, self.wall_height]
+        # ]
+        # wall_positions = [
+        #     [0 + self.x_shift , 0, self.height_from_floor + self._task_cfg.iss_box_storage_height_pos], 
+        #     [0 + self.x_shift, 0, 2.0 + self.height_from_floor + self._task_cfg.iss_box_storage_height_pos], 
+        #     [0 + self.x_shift, -self.wall_length/2, 1.0 + self.height_from_floor + self._task_cfg.iss_box_storage_height_pos], 
+        #     [0 + self.x_shift, self.wall_length/2, 1.0 + self.height_from_floor + self._task_cfg.iss_box_storage_height_pos], 
+        #     [-self.wall_width/2 + self.x_shift, 0, 1.0 + self.height_from_floor + self._task_cfg.iss_box_storage_height_pos], 
+        #     [self.wall_width/2 + self.x_shift, 0, 1.0 + self.height_from_floor + self._task_cfg.iss_box_storage_height_pos]
+        # ]
+        # walls_rigid_objects = {}
 
-        for name in self.wall_box_names:
-            walls_rigid_objects[name] = RigidObjectCfg(
-                prim_path=f"/World/envs/env_.*/ISSBox/wall_{name}",
-                spawn=sim_utils.CuboidCfg(
-                    size=wall_sizes[self.wall_box_names.index(name)],
-                    rigid_props=sim_utils.RigidBodyPropertiesCfg(kinematic_enabled=True),
-                    mass_props=sim_utils.MassPropertiesCfg(mass=10000.0),
-                    collision_props=sim_utils.CollisionPropertiesCfg(),
-                    visual_material=sim_utils.PreviewSurfaceCfg(
-                        diffuse_color=(torch.rand(1).item(), 0.1, 1), 
-                        emissive_color=(0.1, 0.1, 1),
-                        opacity=opacity
-                    ),
-                ),
-                init_state=RigidObjectCfg.InitialStateCfg(
-                    pos=wall_positions[self.wall_box_names.index(name)],
-                )
-            )
+        # for name in self.wall_box_names:
+        #     walls_rigid_objects[name] = RigidObjectCfg(
+        #         prim_path=f"/World/envs/env_.*/ISSBox/wall_{name}",
+        #         spawn=sim_utils.CuboidCfg(
+        #             size=wall_sizes[self.wall_box_names.index(name)],
+        #             rigid_props=sim_utils.RigidBodyPropertiesCfg(kinematic_enabled=True),
+        #             mass_props=sim_utils.MassPropertiesCfg(mass=10000.0),
+        #             collision_props=sim_utils.CollisionPropertiesCfg(),
+        #             visual_material=sim_utils.PreviewSurfaceCfg(
+        #                 diffuse_color=(torch.rand(1).item(), 0.1, 1), 
+        #                 emissive_color=(0.1, 0.1, 1),
+        #                 opacity=opacity
+        #             ),
+        #         ),
+        #         init_state=RigidObjectCfg.InitialStateCfg(
+        #             pos=wall_positions[self.wall_box_names.index(name)],
+        #         )
+        #     )
 
 
-        iss_box_cfg = RigidObjectCollectionCfg(rigid_objects=walls_rigid_objects)
-        self.iss_box = RigidObjectCollection(iss_box_cfg)
+        # iss_box_cfg = RigidObjectCollectionCfg(rigid_objects=walls_rigid_objects)
+        # self.iss_box = RigidObjectCollection(iss_box_cfg)
 
         # visual material
-        visual_material_cfg = sim_utils.GlassMdlCfg(
-            glass_color=(0.1, 0.1, 1.0), 
-            glass_ior=1.0,
-            frosting_roughness=0.3,
-        )
-        visual_material_cfg.func("/World/Looks/glassMaterial", visual_material_cfg)
-        for name in self.wall_box_names:
-            if name == "ceiling" or name == "front":
-                sim_utils.bind_visual_material(f"/World/envs/env_0/ISSBox/wall_{name}", "/World/Looks/glassMaterial")
+        # visual_material_cfg = sim_utils.GlassMdlCfg(
+        #     glass_color=(0.1, 0.1, 1.0), 
+        #     glass_ior=1.0,
+        #     frosting_roughness=0.3,
+        # )
+        # visual_material_cfg.func("/World/Looks/glassMaterial", visual_material_cfg)
+        # for name in self.wall_box_names:
+        #     if name == "ceiling" or name == "front":
+        #         sim_utils.bind_visual_material(f"/World/envs/env_0/ISSBox/wall_{name}", "/World/Looks/glassMaterial")
 
         
         #############
@@ -441,12 +441,13 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
         self._orientation_error = math_utils.quat_error_magnitude(target_quat, current_quat)
         
         task_id_one_hot = F.one_hot(torch.tensor([self._task_uid], device=self._device), num_classes=self._num_tasks).squeeze(0).repeat(self._num_envs, 1)
-        semantic_emb = torch.tensor([[1.0, 0.0, 0.0, 0.0, 1.0]], device=self._device).repeat(self._num_envs, 1)
-        noise = self._rng.sample_uniform_torch(low=-0.1, high=0.1, shape=semantic_emb.shape[-1], ids=self._env_ids)
-        semantic_emb += noise
+        semantic_emb = torch.zeros((self._num_envs, 5), device=self._device)
+        semantic_emb[:, 0] = self._rng.sample_uniform_torch(low=0.8, high=1.0, shape=1, ids=self._env_ids)
+        semantic_emb[:, 3] = self._rng.sample_uniform_torch(low=0.8, high=1.0, shape=1, ids=self._env_ids)
+        semantic_emb[:, 4] = self._rng.sample_uniform_torch(low=0.8, high=1.0, shape=1, ids=self._env_ids)
         
         # Concatenate task observations with robot's internal observations
-        return torch.concat((self._task_data, self._robot.get_observations(env_ids=self._env_ids)), dim=-1), task_id_one_hot, semantic_emb
+        return torch.concat((self._robot.get_observations(env_ids=self._env_ids), self._task_data), dim=-1), task_id_one_hot, semantic_emb
     def compute_rewards(self) -> torch.Tensor:
         """
         Computes the reward for the current state of the robot.
@@ -498,7 +499,7 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
 
         # Logging
         self.scalar_logger.log("task_state", "GoToPosition6DoFWithObstacles/EMA/position_distance", self._position_dist)
-        #self.scalar_logger.log("task_state", "GoToPosition6DoFWithObstacles/EMA/boundary_distance", boundary_dist)
+        self.scalar_logger.log("task_state", "GoToPosition6DoFWithObstacles/EMA/boundary_distance", boundary_dist)
         self.scalar_logger.log("task_state", "GoToPosition6DoFWithObstacles/AVG/normed_linear_velocity", linear_velocity)
         self.scalar_logger.log("task_state", "GoToPosition6DoFWithObstacles/AVG/absolute_angular_velocity", angular_velocity)
 
@@ -506,7 +507,7 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
         self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles/AVG/position", position_rew)
         self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles/AVG/linear_velocity", linear_velocity_rew)
         self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles/AVG/angular_velocity", angular_velocity_rew)
-        #self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles/AVG/boundary", boundary_rew)
+        self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles/AVG/boundary", boundary_rew)
         self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles/AVG/collision_penalty", collision_penalty_rew)
 
         # NOTE: Check if we need a progress reward here.
@@ -516,7 +517,7 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
             position_rew * self._task_cfg.position_weight
             + linear_velocity_rew * self._task_cfg.linear_velocity_weight
             + angular_velocity_rew * self._task_cfg.angular_velocity_weight
-            #+ boundary_rew * self._task_cfg.boundary_weight
+            + boundary_rew * self._task_cfg.boundary_weight
             + collision_penalty_rew * self._task_cfg.collision_penalty_weight
         ) + self._robot.compute_rewards(env_ids=self._env_ids)
 
@@ -524,7 +525,7 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
         self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles/AVG/wheighted_position_reward", position_rew * self._task_cfg.position_weight)
         self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles/AVG/wheighted_linear_velocity_reward", linear_velocity_rew * self._task_cfg.linear_velocity_weight)
         self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles/AVG/wheighted_angular_velocity_reward", angular_velocity_rew * self._task_cfg.angular_velocity_weight)
-        #self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles/AVG/wheighted_boundary_reward", boundary_rew * self._task_cfg.boundary_weight)
+        self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles/AVG/wheighted_boundary_reward", boundary_rew * self._task_cfg.boundary_weight)
         self.scalar_logger.log("task_reward", "GoToPosition6DoFWithObstacles/AVG/wheighted_collision_penalty", collision_penalty_rew * self._task_cfg.collision_penalty_weight)
 
         return total_reward
@@ -736,12 +737,12 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
 
         # Remove ISS box walls from current task environments from the storage locaiton
         # Only done once at reset
-        if self.first_reset:
-            env_ids = torch.arange(0, self._num_envs, device=self._device)
-            task_iss_box_position = self.iss_box.data.object_state_w[self._env_ids[env_ids], :, :7].clone()
-            task_iss_box_position[:, :, 2] -= self._task_cfg.iss_box_storage_height_pos
-            self.iss_box.write_object_link_pose_to_sim(task_iss_box_position, env_ids=self._env_ids[env_ids])
-            self.first_reset = False
+        # if self.first_reset:
+        #     env_ids = torch.arange(0, self._num_envs, device=self._device)
+        #     task_iss_box_position = self.iss_box.data.object_state_w[self._env_ids[env_ids], :, :7].clone()
+        #     task_iss_box_position[:, :, 2] -= self._task_cfg.iss_box_storage_height_pos
+        #     self.iss_box.write_object_link_pose_to_sim(task_iss_box_position, env_ids=self._env_ids[env_ids])
+        #     self.first_reset = False
         
         
     def randomize_obstacles_positions(self, env_ids: torch.tensor) -> tuple:

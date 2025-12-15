@@ -89,8 +89,8 @@ class GoThroughPoses3DCfg(TaskCoreCfg):
     """Maximal distance between the robot and the target position. Defaults to 10 m."""
 
     # Reward Would be good to have a config for each reward type
-    position_exponential_reward_coeff: float = 0.5
-    orientation_exponential_reward_coeff: float = 0.5
+    position_exponential_reward_coeff: float = 1.0
+    orientation_exponential_reward_coeff: float = 1.0
     linear_velocity_min_value: float = 0.5
     linear_velocity_max_value: float = 2.0
     angular_velocity_min_value: float = 0.5

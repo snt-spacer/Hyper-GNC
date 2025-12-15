@@ -149,6 +149,7 @@ class GoThroughPoses3DTask(TaskCore):
         self.scalar_logger.add_log("task_state", "GoThroughPoses6DoF/EMA/position_distance", "ema")
         self.scalar_logger.add_log("task_state", "GoThroughPoses6DoF/EMA/orientation_error", "ema")
         self.scalar_logger.add_log("task_state", "GoThroughPoses6DoF/EMA/boundary_distance", "ema")
+        self.scalar_logger.add_log("task_state", "GoThroughPoses6DoF/EMA/velocity_error", "ema")
 
         self.scalar_logger.add_log("task_reward", "GoThroughPoses6DoF/AVG/position", "mean")
         self.scalar_logger.add_log("task_reward", "GoThroughPoses6DoF/AVG/orientation", "mean")
@@ -166,6 +167,8 @@ class GoThroughPoses3DTask(TaskCore):
         self.scalar_logger.add_log("task_reward", "GoThroughPoses6DoF/AVG/wheighted_boundary_reward", "mean")
         # self.scalar_logger.add_log("task_reward", "GoThroughPoses6DoF/AVG/time_penalty", "mean")
         self.scalar_logger.add_log("task_reward", "GoThroughPoses6DoF/AVG/wheighted_reached_bonus_reward", "mean")
+        # self.scalar_logger.add_log("task_reward", "GoThroughPoses6DoF/AVG/wheighted_position_reward", "mean")
+        # self.scalar_logger.add_log("task_reward", "GoThroughPoses6DoF/AVG/wheighted_orientation_reward", "mean")
 
 
         self.scalar_logger.set_ema_coeff(self._task_cfg.ema_coeff)
@@ -180,6 +183,7 @@ class GoThroughPoses3DTask(TaskCore):
         - The orientation error between the robot and the target in the robot's local frame (RPY).
         - The linear velocity of the robot in the robot's local frame.
         - The angular velocity of the robot in the robot's local frame.
+        - The velocity error between the robot and the target velocity in the robot's local frame.
         - Depending on the task configuration, a number of subsequent poses are added to the observation. For each of
             them, the following elements are added:
             - The position error between the nth and n+1th goal in the robot's local frame is computed.
@@ -203,6 +207,22 @@ class GoThroughPoses3DTask(TaskCore):
         # log the global distance for debugging
         self._position_dist = self._position_error.norm(dim=-1)  # shape [N]
         self.scalar_logger.log("task_state", "GoThroughPoses6DoF/EMA/position_distance", self._position_dist)
+        
+        # # Target Velocity Vector
+        # # Direction = Normalized Position Error vector
+        # target_dir = torch.nn.functional.normalize(self._position_error, dim=-1)
+        
+        # # Target Velocity = Direction * Target Speed (from config)
+        # # Assuming you have self._task_cfg.target_speed defined in config
+        # target_vel_w = target_dir * self._task_cfg.target_speed
+        
+        # # Compute Velocity Error in World Frame
+        # current_vel_w = self._robot.root_com_lin_vel_w[self._env_ids]
+        # vel_error_w = target_vel_w - current_vel_w
+        
+        # # Rotate error into Robot Frame (so the policy sees it locally)
+        # self._local_vel_error = math_utils.quat_rotate_inverse(current_quat_w, vel_error_w)
+        # self.scalar_logger.log("task_state", "GoThroughPoses6DoF/EMA/velocity_error", self._local_vel_error.mean(dim=-1))
 
         # robot orientation
         # Compute a relative quaternion from robot -> target
@@ -230,6 +250,7 @@ class GoThroughPoses3DTask(TaskCore):
         self._task_data[:, 3:9] = rel_mat_6
         self._task_data[:, 9:12] = self._robot.root_com_lin_vel_b[self._env_ids]
         self._task_data[:, 12:15] = self._robot.root_com_ang_vel_b[self._env_ids]
+        # self._task_data[:, 15:18] = self._local_vel_error
 
         # Update also the orientation error magnitude
         target_quat_w = torch.nn.functional.normalize(target_quat_w, dim=-1, eps=EPS)
@@ -279,12 +300,14 @@ class GoThroughPoses3DTask(TaskCore):
             self._task_data[:, start_idx + 3 : start_idx + 9] = goal_rel_mat_6  # rotation to next goal
         
         task_id_one_hot = F.one_hot(torch.tensor([self._task_uid], device=self._device), num_classes=self._num_tasks).squeeze(0).repeat(self._num_envs, 1)
-        semantic_emb = torch.tensor([[0.5, 1.0, 0.0, 0.0, 0.0]], device=self._device).repeat(self._num_envs, 1)
-        noise = self._rng.sample_uniform_torch(low=-0.1, high=0.1, shape=semantic_emb.shape[-1], ids=self._env_ids)
-        semantic_emb += noise
+        semantic_emb = torch.zeros((self._num_envs, 5), device=self._device)
+        semantic_emb[:, 0] = self._rng.sample_uniform_torch(low=0.7, high=1.0, shape=1, ids=self._env_ids)
+        semantic_emb[:, 1] = self._rng.sample_uniform_torch(low=0.8, high=1.0, shape=1, ids=self._env_ids)
+        semantic_emb[:, 2] = self._rng.sample_uniform_torch(low=0.6, high=1.0, shape=1, ids=self._env_ids)
+        
 
         # Concatenate task observations with robot's internal observations
-        return torch.concat((self._task_data, self._robot.get_observations(env_ids=self._env_ids)), dim=-1), task_id_one_hot, semantic_emb
+        return torch.concat((self._robot.get_observations(env_ids=self._env_ids), self._task_data), dim=-1), task_id_one_hot, semantic_emb
 
     def compute_rewards(self) -> torch.Tensor:
         """
@@ -300,6 +323,17 @@ class GoThroughPoses3DTask(TaskCore):
         linear_velocity = torch.norm(self._robot.root_com_vel_w[self._env_ids], dim=-1)
         # normed angular velocity
         angular_velocity = torch.norm(self._robot.root_com_ang_vel_w[self._env_ids], dim=-1)
+        
+        # We reward minimizing the error between current velocity and target velocity        
+        # Re-computing strictly for reward clarity:
+        # target_dir = torch.nn.functional.normalize(self._position_error, dim=-1)
+        # target_vel_w = target_dir * self._task_cfg.target_speed
+        # current_vel_w = self._robot.root_com_lin_vel_w[self._env_ids]
+        
+        # velocity_error = torch.norm(target_vel_w - current_vel_w, dim=-1)
+        
+        # # reward for matching velocity
+        # linear_velocity_rew = torch.exp(-velocity_error / self._task_cfg.velocity_exponential_reward_coeff)
 
         # Linear velocity reward
         linear_velocity_rew = linear_velocity - self._task_cfg.linear_velocity_min_value
@@ -353,12 +387,12 @@ class GoThroughPoses3DTask(TaskCore):
         self.scalar_logger.log("task_reward", "GoThroughPoses6DoF/AVG/orientation", orientation_rew)
         self.scalar_logger.log("task_reward", "GoThroughPoses6DoF/AVG/progress", progress_rew)
         self.scalar_logger.log("task_reward", "GoThroughPoses6DoF/AVG/num_goals", goal_reached)
+        # self.scalar_logger.log("task_reward", "GoThroughPoses6DoF/AVG/position", position_rew)
 
         # Compute final reward
         total_reward = (
             progress_rew * self._task_cfg.progress_weight
             + (position_rew * orientation_rew) * self._task_cfg.pose_weight
-            # + orientation_rew * self._task_cfg.pose_weight
             + linear_velocity_rew * self._task_cfg.linear_velocity_weight
             + angular_velocity_rew * self._task_cfg.angular_velocity_weight
             + boundary_rew * self._task_cfg.boundary_weight
@@ -369,6 +403,8 @@ class GoThroughPoses3DTask(TaskCore):
         self.scalar_logger.log("task_reward", "GoThroughPoses6DoF/AVG/total_reward", total_reward)
         self.scalar_logger.log("task_reward", "GoThroughPoses6DoF/AVG/wheighted_progress_reward", progress_rew * self._task_cfg.progress_weight)
         self.scalar_logger.log("task_reward", "GoThroughPoses6DoF/AVG/wheighted_pose_reward", (position_rew * orientation_rew) * self._task_cfg.pose_weight)
+        # self.scalar_logger.log("task_reward", "GoThroughPoses6DoF/AVG/wheighted_position_reward", position_rew * self._task_cfg.position_weight)
+        # self.scalar_logger.log("task_reward", "GoThroughPoses6DoF/AVG/wheighted_orientation_reward", orientation_rew * self._task_cfg.orientation_weight)
         self.scalar_logger.log("task_reward", "GoThroughPoses6DoF/AVG/wheighted_linear_velocity_reward", linear_velocity_rew * self._task_cfg.linear_velocity_weight)
         self.scalar_logger.log("task_reward", "GoThroughPoses6DoF/AVG/wheighted_angular_velocity_reward", angular_velocity_rew * self._task_cfg.angular_velocity_weight)
         self.scalar_logger.log("task_reward", "GoThroughPoses6DoF/AVG/wheighted_boundary_reward", boundary_rew * self._task_cfg.boundary_weight)
