@@ -17,11 +17,11 @@ class VeloStabilization3DCfg(TaskCoreCfg):
     # Initial conditions
     spawn_min_lin_vel: float = 0.0
     """Minimal linear velocity at spawn pose in m/s. Defaults to 0.0 m/s."""
-    spawn_max_lin_vel: float = 5.0
+    spawn_max_lin_vel: float = 0.5
     """Maximal linear velocity at spawn pose in m/s. Defaults to 5.0 m/s."""
     spawn_min_ang_vel: float = 0.0
     """Minimal angular velocity at spawn in rad/s. Defaults to 0.0 rad/s."""
-    spawn_max_ang_vel: float = 3.0
+    spawn_max_ang_vel: float = 1.0
     """Maximal angular velocity at spawn in rad/s. Defaults to 3.0 rad/s."""
     spawn_initial_height: float = 1.0
     """Initial height of the robot in meters. Defaults to 1.0 m."""
@@ -35,15 +35,15 @@ class VeloStabilization3DCfg(TaskCoreCfg):
     """Enable vertical velocity goal. Defaults to True."""
     goal_min_lin_vel: float = 0.0
     """Minimal linear velocity goal in m/s. Defaults to 0.0 m/s. (a random sign is added)"""
-    goal_max_lin_vel: float = 0.0
+    goal_max_lin_vel: float = 0.001
     """Maximal linear velocity goal in m/s. Defaults to 0.0 m/s. (a random sign is added)"""
     goal_min_lat_vel: float = 0.0
     """Minimal lateral velocity goal in m/s. Defaults to 0.0 m/s. (a random sign is added)"""
-    goal_max_lat_vel: float = 0.0
+    goal_max_lat_vel: float = 0.001
     """Maximal lateral velocity goal in m/s. Defaults to 0.0 m/s. (a random sign is added)"""
     goal_min_ver_vel: float = 0.0
     """Minimal vertical velocity goal in m/s. Defaults to 0.0 m/s. (a random sign is added)"""
-    goal_max_ver_vel: float = 0.0
+    goal_max_ver_vel: float = 0.001
     """Maximal vertical velocity goal in m/s. Defaults to 0.0 m/s. (a random sign is added)"""
     enable_yaw_velocity: bool = True
     """Enable angular velocity goal. Defaults to True."""
@@ -53,15 +53,15 @@ class VeloStabilization3DCfg(TaskCoreCfg):
     """Enable angular velocity goal. Defaults to True."""
     goal_min_yaw_vel: float = 0.0
     """Minimal angular velocity goal in rad/s. Defaults to 0.0 rad/s. (a random sign is added)"""
-    goal_max_yaw_vel: float = 0.0
+    goal_max_yaw_vel: float =  0.001
     """Maximal angular velocity goal in rad/s. Defaults to 0.0 rad/s. (a random sign is added)"""
     goal_min_roll_vel: float = 0.0
     """Minimal angular velocity goal in rad/s. Defaults to 0.0 rad/s. (a random sign is added)"""
-    goal_max_roll_vel: float = 0.0
+    goal_max_roll_vel: float = 0.001
     """Maximal angular velocity goal in rad/s. Defaults to 0.0 rad/s. (a random sign is added)"""
     goal_min_pitch_vel: float = 0.0
     """Minimal angular velocity goal in rad/s. Defaults to 0.0 rad/s. (a random sign is added)"""
-    goal_max_pitch_vel: float = 0.0
+    goal_max_pitch_vel: float = 0.001
     """Maximal angular velocity goal in rad/s. Defaults to 0.0 rad/s. (a random sign is added)"""
     # Settings
     resample_at_regular_interval: bool = True
