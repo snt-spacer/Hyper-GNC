@@ -33,7 +33,7 @@ class GoToPosition3DWithObstaclesCfg(GoToPosition3DCfg):
     """Maximal height of the obstacles. Defaults to 0.0 m."""
     minimum_point_distance = 0.05
     """The minimum distance between the points sampled to create the obstacles grid. Should be between 0 and 1. Smaller values can create more complex env."""
-    max_num_vis_obstacles: int = 10
+    max_num_vis_obstacles: int = 5
     """Max number of obstacles visible in the environment. Defaults to 8."""
     obstacle_radius: float = 0.2
     """Radius of the obstacles. Defaults to 0.2 m."""
@@ -41,8 +41,8 @@ class GoToPosition3DWithObstaclesCfg(GoToPosition3DCfg):
     """Height where to store the obstacles. Defaults to -2.0 m."""
     max_obstacle_distance_from_target: float = 10
     """Maximal distance between the target and the obstacles. Defaults to 10 m."""
-    min_num_obstacles: int = 3
-    """Minimal number of obstacles in the environment. Defaults to 3."""
+    min_num_obstacles: int = 0
+    """Minimal number of obstacles in the environment. Defaults to 1."""
     min_obstacle_distance_from_target: float = 0.3
     """Minimal distance between the target and the obstacles. Defaults to 1 m."""
     min_obstacle_distance_from_robot: float = 0.5
@@ -59,6 +59,6 @@ class GoToPosition3DWithObstaclesCfg(GoToPosition3DCfg):
     """Height where to store the ISS box walls. Defaults to -500.0 m."""
 
     # Spaces
-    observation_space: int = 25  # pos err xyz + orientn err rpy + root lin vel + root ang vel + collision signal + 3 x closest obstacle dists xyz, TODO hight, radius
+    observation_space: int = 31  # pos err xyz + orientn err rpy + root lin vel + root ang vel + collision signal + 3 x (xyz distance and magnitude [4]), TODO height, radius
 
     gen_space: int = 8

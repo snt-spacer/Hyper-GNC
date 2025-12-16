@@ -419,14 +419,19 @@ class MultiTaskEnv(DirectRLEnv):
         super()._reset_idx(env_ids)
         self.robot_api.reset(env_ids)
         for i, task_api in enumerate(self.tasks_apis):
-
-            # Curriculum
-            # if self.common_step_counter < 10 * 500:
-            #     scale = self.common_step_counter / (10 * 500 )
-            #     gen_actions = torch.zeros((len(env_ids) // self.num_tasks, self.tasks_cfgs[i].gen_space), device=self.device) * scale
-            # else:
-            #     gen_actions = None
-            gen_actions = None
+            if task_api.__class__.__name__ == "GoToPosition3DWithObstaclesTask":
+                gen_actions = torch.rand((len(shifted_tasks_env_ids[i]), task_api.num_gen_actions), device=task_api._device)
+                # Curriculum for obstacle count (gen_action[7])
+                # 4000 rsl_rl epochs * 16 steps/env per epoch = 64000 environment steps
+                total_steps = 64000
+                progress = min(1.0, self.common_step_counter / total_steps) # linear progress from 0 to 1 over total_steps
+                # Sigmoid curve: 1 / (1 + e^(-7(x-0.5)))
+                curriculum_level = 1.0 / (1.0 + torch.exp(torch.tensor(-7.0 * (progress - 0.5))))
+                curriculum_level = curriculum_level.item()
+                gen_actions[:, 7] = curriculum_level
+            
+            else:
+                gen_actions = None
 
             if len(shifted_tasks_env_ids[i]) > 0:
                 task_api.reset(env_ids=shifted_tasks_env_ids[i], gen_actions=gen_actions)

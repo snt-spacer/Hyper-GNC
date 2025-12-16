@@ -185,6 +185,8 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
         self.scalar_logger.add_log("task_state", "GoToPosition6DoFWithObstacles/AVG/absolute_angular_velocity", "mean")
         self.scalar_logger.add_log("task_state", "GoToPosition6DoFWithObstacles/EMA/position_distance", "ema")
         self.scalar_logger.add_log("task_state", "GoToPosition6DoFWithObstacles/EMA/boundary_distance", "ema")
+        self.scalar_logger.add_log("task_state", "GoToPosition6DoFWithObstacles/AVG/curriculum_level", "mean")
+        self.scalar_logger.add_log("task_state", "GoToPosition6DoFWithObstacles/AVG/num_visible_obstacles", "mean")
 
         self.scalar_logger.add_log("task_reward", "GoToPosition6DoFWithObstacles/AVG/position", "mean")
         self.scalar_logger.add_log("task_reward", "GoToPosition6DoFWithObstacles/AVG/linear_velocity", "mean")
@@ -345,6 +347,9 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
         self._position_dist = self._position_error.norm(dim=-1)  # shape [N]
         self.scalar_logger.log("task_state", "GoToPosition6DoFWithObstacles/EMA/position_distance", self._position_dist)
 
+        self.scalar_logger.log("task_state", "GoToPosition6DoFWithObstacles/AVG/curriculum_level", self._gen_actions[0, 7].unsqueeze(0).repeat(len(self._env_ids), 1).squeeze())
+
+
         # robot orientation
         # Compute a relative quaternion from robot -> target
         target_quat_w = self._target_orientations
@@ -383,6 +388,8 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
 
         mask = obstacles_positions[:, :, 2] < self._task_cfg.obstacles_storage_height_pos # Big negative value for obstacles in storage 
         filtered_obstacles[mask] = 100.0
+        
+        self.scalar_logger.log("task_state", "GoToPosition6DoFWithObstacles/AVG/num_visible_obstacles", torch.sum(filtered_obstacles[:, :, 2] < abs(self._task_cfg.obstacles_storage_height_pos), dim=-1))
 
         # Calculate distances and angles for the filtered obstacles
         obstacles_error_w = filtered_obstacles - self._robot.root_link_pos_w[self._env_ids].unsqueeze(1)
@@ -413,14 +420,28 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
         # Reshape back to [N, 3, 3]
         closest_obstacles_error_local = closest_obstacles_error_local_flat.reshape(-1, 3, 3)
 
-        # Normalize distances by wall dimensions
-        closest_obstacles_error_local[:, :, 0] = closest_obstacles_error_local[:, :, 0] / self.wall_width
-        closest_obstacles_error_local[:, :, 1] = closest_obstacles_error_local[:, :, 1] / self.wall_length
-        closest_obstacles_error_local[:, :, 2] = closest_obstacles_error_local[:, :, 2] / self.wall_height
+        #Direction (Unit Vector) and Magnitude (Distance)
+        # [dir_x, dir_y, dir_z, normalized_dist]
+        # 1. Calculate actual distance (Magnitude)
+        # [N, 3, 1]
+        dist = torch.norm(closest_obstacles_error_local, dim=-1, keepdim=True) 
 
-        obstacles_observation = closest_obstacles_error_local.flatten(start_dim=1)
+        # 2. Calculate Direction (Unit Vector)
+        # Add small epsilon to avoid division by zero
+        # [N, 3, 3]
+        direction_vector = closest_obstacles_error_local / (dist + 1e-8)
 
+        # 3. Normalize Distance for the Network
+        # Map [0, max_range] to [0, 1]
+        max_sensor_dist = 10.0
+        normalized_dist = torch.clamp(dist, max=max_sensor_dist) / max_sensor_dist
 
+        # 4. Concatenate them
+        # Result shape: [N, 3, 4] -> Each obstacle has 4 features: [dir_x, dir_y, dir_z, dist_score]
+        obstacles_features = torch.cat([direction_vector, normalized_dist], dim=-1)
+
+        # Flatten
+        obstacles_observation = obstacles_features.flatten(start_dim=1)
 
         # Store in buffer [position_dist, rotation error, linear_vel_xyz, angular_vel_xyz]
         self._task_data[:, :3] = self._local_pos_error
@@ -433,7 +454,7 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
 
         # Append obstacles info
         self._task_data[:, 15:16] = self.collided_signal
-        self._task_data[:, 16:26] = obstacles_observation
+        self._task_data[:, 16:28] = obstacles_observation
 
         # Make sure that the orientation error magnitude is also updated
         current_quat = self._robot.root_quat_w[self._env_ids]  # (w, x, y, z)
@@ -836,12 +857,12 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
         # num_visible_obstacles_per_env = self._rng.sample_integer_torch(
         #     low=1, high=self._task_cfg.max_num_vis_obstacles, shape=(1,), ids=env_ids
         # )
-        num_visible_obstacles_per_env = self._gen_actions[env_ids, 7] * (self._task_cfg.max_num_vis_obstacles - self._task_cfg.min_num_obstacles) + self._task_cfg.min_num_obstacles
+        num_visible_obstacles_per_env = torch.round(self._gen_actions[env_ids, 7] * (self._task_cfg.max_num_vis_obstacles - self._task_cfg.min_num_obstacles) + self._task_cfg.min_num_obstacles)
 
         mask = torch.arange(self._task_cfg.max_num_vis_obstacles, device=self._device).unsqueeze(
             0
         ) < num_visible_obstacles_per_env.unsqueeze(1)
-
+        
         return obstacles_positions, mask
 
 
