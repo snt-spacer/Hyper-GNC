@@ -50,7 +50,7 @@ class GoToPose3DWithObstaclesCfg(GoToPose3DCfg):
     """Height where to store the obstacles. Defaults to -2.0 m."""
     max_obstacle_distance_from_target: float = 10
     """Maximal distance between the target and the obstacles. Defaults to 10 m."""
-    min_obstacle_distance_from_target: float = 0.01
+    min_obstacle_distance_from_target: float = 0.3
     """Minimal distance between the target and the obstacles. Defaults to 1 m."""
     min_obstacle_distance_from_robot: float = 1
     """Minimal distance between the robot and the obstacles. Defaults to 1 m."""

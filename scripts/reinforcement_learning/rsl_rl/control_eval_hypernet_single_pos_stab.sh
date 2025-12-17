@@ -8,7 +8,7 @@ NUM_ENVS=32
 runs_per_env=4
 BASE_LOG_DIR="logs/rsl_rl/multitask_memory_control_beta"
 robot="IntBall2"
-task_name="VeloStabilization3D"
+task_name="GoToPosition3D"
 algorithm="ppo-beta-memory" #ppo, ppo-memory, ppo-beta, ppo-beta-memory
 
 # Common arguments that apply to all evaluations
@@ -23,7 +23,7 @@ COMMON_ARGS="--task=${TASK} --headless --num_envs=${NUM_ENVS} --runs_per_env=${r
 # "2025-12-10_02-49-39_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/model_2000.pt"
 # )
 
-# Hypernet Beta PCGrad RSS
+# # Hypernet Beta PCGrad RSS
 # CHECKPOINTS=(
 # "2025-12-15_21-29-48_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/model_3999.pt"
 # "2025-12-15_23-54-26_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/model_3999.pt"
@@ -32,14 +32,26 @@ COMMON_ARGS="--task=${TASK} --headless --num_envs=${NUM_ENVS} --runs_per_env=${r
 # "2025-12-16_07-06-13_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/model_3999.pt"
 # )
 
-# Hypernet Beta RSS
+
+# # Hypernet Beta RSS
+# CHECKPOINTS=(
+# 2025-12-15_12-49-21_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/model_3999.pt
+# 2025-12-15_14-18-45_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/model_3999.pt
+# 2025-12-15_15-47-39_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/model_3999.pt
+# 2025-12-15_17-16-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/model_3999.pt
+# 2025-12-15_18-45-22_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/model_3999.pt
+# )
+
+# Hypernet curriculum 14,2 RSS
+# CHECKPOINTS=(
+# 2025-12-16_16-34-46_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/model_3999.pt
+# )
+
+# Hypernet curriculum 7,0 RSS
 CHECKPOINTS=(
-2025-12-15_12-49-21_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/model_3999.pt
-2025-12-15_14-18-45_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/model_3999.pt
-2025-12-15_15-47-39_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/model_3999.pt
-2025-12-15_17-16-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/model_3999.pt
-2025-12-15_18-45-22_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/model_3999.pt
+2025-12-16_21-48-51_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/model_3999.pt
 )
+
 
 # Function to run evaluation for a single checkpoint
 run_evaluation() {
