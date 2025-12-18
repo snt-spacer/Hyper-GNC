@@ -18,6 +18,32 @@ class GoToPosition3DPlots(BaseTaskPlots, Registerable):
                     key for key in df.columns if key.startswith("final_position_distance")
                 )
                 
+                keys_set.update(
+                    key for key in df.columns if key.startswith("final_linear_velocity")
+                )
+                keys_set.update(
+                    key for key in df.columns if key.startswith("final_lateral_velocity")
+                )
+                keys_set.update(
+                    key for key in df.columns if key.startswith("final_vertical_velocity")
+                )
+                keys_set.update(
+                    key for key in df.columns if key.startswith("final_roll_velocity")
+                )
+                keys_set.update(
+                    key for key in df.columns if key.startswith("final_pitch_velocity")
+                )
+                keys_set.update(
+                    key for key in df.columns if key.startswith("final_yaw_velocity")
+                )
+                keys_set.update(
+                    key for key in df.columns if key.startswith("final_magnitude_velocity")
+                )
+                keys_set.update(
+                    key for key in df.columns if key.startswith("final_magnitude_angular_velocity")
+                )
+                
+                
 
         self.labels_to_plot = list(keys_set)
 

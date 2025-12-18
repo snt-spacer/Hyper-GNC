@@ -8,7 +8,7 @@ NUM_ENVS=32
 runs_per_env=4
 BASE_LOG_DIR="logs/rsl_rl/mtrl_intball2_multi_critic"
 robot="IntBall2"
-task_name="GoToPose3DBox"
+task_name="GoToPosition3D"
 algorithm="ppo-multi-critic" #ppo, ppo-memory, ppo-beta, ppo-beta-memory ppo-multi-critic
 
 # Common arguments that apply to all evaluations
