@@ -31,3 +31,31 @@ class GoToPosition3DMetrics(BaseTaskMetrics, Registerable):
         masked_distances = self.trajectories['position_distance'] * self.trajectories_masks
         final_position_delta = masked_distances[torch.arange(0, masked_distances.shape[0], device=masked_distances.device), self.last_true_index]
         self.metrics["final_position_distance.m"] = final_position_delta
+        
+    @BaseTaskMetrics.register
+    def final_velocity_magnitude(self):
+        """ Final linear velocity magnitude of the robot. """
+        print("[INFO][METRICS][TASK] Final linear velocity magnitude")
+        masked_linear_velocities = self.trajectories['linear_velocity'] * self.trajectories_masks
+        
+        breakpoint()
+        
+        final_linear_velocity = masked_linear_velocities[torch.arange(0, masked_linear_velocities.shape[0], device=masked_linear_velocities.device), self.last_true_index][0]
+        final_lateral_velocity = masked_linear_velocities[torch.arange(0, masked_linear_velocities.shape[0], device=masked_linear_velocities.device), self.last_true_index][1]
+        final_vertical_velocity = masked_linear_velocities[torch.arange(0, masked_linear_velocities.shape[0], device=masked_linear_velocities.device), self.last_true_index][2]
+
+        masked_angular_velocities = self.trajectories['angular_velocity'] * self.trajectories_masks
+        final_roll_velocity = masked_angular_velocities[torch.arange(0, masked_angular_velocities.shape[0], device=masked_angular_velocities.device), self.last_true_index][0]
+        final_pitch_velocity = masked_angular_velocities[torch.arange(0, masked_angular_velocities.shape[0], device=masked_angular_velocities.device), self.last_true_index][1]
+        final_yaw_velocity = masked_angular_velocities[torch.arange(0, masked_angular_velocities.shape[0], device=masked_angular_velocities.device), self.last_true_index][2]
+        
+        
+        self.metrics["final_linear_velocity.m/s"] = final_linear_velocity
+        self.metrics["final_lateral_velocity.m/s"] = final_lateral_velocity
+        self.metrics["final_vertical_velocity.m/s"] = final_vertical_velocity
+        self.metrics["final_roll_velocity.rad/s"] = final_roll_velocity
+        self.metrics["final_pitch_velocity.rad/s"] = final_pitch_velocity
+        self.metrics["final_yaw_velocity.rad/s"] = final_yaw_velocity
+        
+        self.metrics["final_avg_velocity.m/s"] = torch.sqrt(final_linear_velocity**2 + final_lateral_velocity**2 + final_vertical_velocity**2)
+        self.metrics["final_avg_angular_velocity.rad/s"] = torch.sqrt(final_roll_velocity**2 + final_pitch_velocity**2 + final_yaw_velocity**2)

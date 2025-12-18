@@ -74,6 +74,8 @@ class GoToPosition3DTask(TaskCore):
             "position_error",
             "local_pos_error",
             "target_orientations",
+            "linear_velocity",
+            "angular_velocity",
         ]
     
     @property
@@ -86,6 +88,8 @@ class GoToPosition3DTask(TaskCore):
             "position_error": ["(N, 3)"],
             "local_pos_error": ["(N, 3)"],
             "target_orientations": ["(N, 4)"],
+            "linear_velocity": ["(N, 3)"],
+            "angular_velocity": ["(N, 3)"],
         }
     
     @property
@@ -103,6 +107,8 @@ class GoToPosition3DTask(TaskCore):
             "position_error": self._position_error,
             "local_pos_error": self._local_pos_error,
             "target_orientations": self._target_orientations,
+            "linear_velocity": self._robot.root_com_lin_vel_w[self._env_ids],
+            "angular_velocity": self._robot.root_com_ang_vel_w[self._env_ids],
         }
 
     def initialize_buffers(self, env_ids: torch.Tensor | None = None) -> None:
