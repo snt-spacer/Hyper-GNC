@@ -58,6 +58,52 @@ class GoToPosition3DTask(TaskCore):
 
         # Buffers
         self.initialize_buffers(env_ids=env_ids)
+        
+    @property
+    def eval_data_keys(self) -> list[str]:
+        """
+        Returns the keys of the data used for evaluation.
+
+        Returns:
+            list[str]: The keys of the data used for evaluation.
+        """
+        return [
+            "position_distance",
+            "orientation_error",
+            "target_positions",
+            "position_error",
+            "local_pos_error",
+            "target_orientations",
+        ]
+    
+    @property
+    def eval_data_specs(self)->dict[str, list[str]]:
+
+        return {
+            "position_distance": ["(N,)"],
+            "orientation_error": ["(N,)"],
+            "target_positions": ["(N, 3)"],
+            "position_error": ["(N, 3)"],
+            "local_pos_error": ["(N, 3)"],
+            "target_orientations": ["(N, 4)"],
+        }
+    
+    @property
+    def eval_data(self) -> dict:
+        """
+        Returns the data used for evaluation.
+
+        Returns:
+            dict: The data used for evaluation.
+        """
+        return {
+            "position_distance": self._position_dist,
+            "orientation_error": self._orientation_error,
+            "target_positions": self._target_positions,
+            "position_error": self._position_error,
+            "local_pos_error": self._local_pos_error,
+            "target_orientations": self._target_orientations,
+        }
 
     def initialize_buffers(self, env_ids: torch.Tensor | None = None) -> None:
         """

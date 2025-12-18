@@ -63,3 +63,4 @@ from .go_through_poses_6DoF_plots import GoThroughPoses3DPlots
 from .track_velocities_6DoF_plots import TrackVelocities3DPlots
 from .go_to_pose_6DoF_with_obstacles_plots import GoToPose3DBoxPlots
 from .velo_stabilization_6DoF_plots import VeloStabilization3DPlots
+from .go_to_position_6DoF_plots import GoToPosition3DPlots

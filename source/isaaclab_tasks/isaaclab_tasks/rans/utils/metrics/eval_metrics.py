@@ -92,7 +92,7 @@ class EvalMetrics:
             filename = f"{name}_metrics.csv"
             save_path = os.path.join(self.save_path, "metrics", filename)
         else:
-            if self.task_name == "GoToPose3DBox" or self.task_name == "VeloStabilization3D":
+            if self.task_name == "GoToPose3DBox" or self.task_name == "VeloStabilization3D" or self.task_name == "GoToPosition3D":
                 base_model_name = os.path.basename(self.save_path)
                 base_model_list = base_model_name.split("_")
                 base_model_list[4] = self.task_name
