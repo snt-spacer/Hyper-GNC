@@ -41,7 +41,7 @@ class GoToPosition3DWithObstaclesCfg(GoToPosition3DCfg):
     """Height where to store the obstacles. Defaults to -2.0 m."""
     max_obstacle_distance_from_target: float = 10
     """Maximal distance between the target and the obstacles. Defaults to 10 m."""
-    min_num_obstacles: int = 3
+    min_num_obstacles: int = 0
     """Minimal number of obstacles in the environment. Defaults to 1."""
     min_obstacle_distance_from_target: float = 0.3
     """Minimal distance between the target and the obstacles. Defaults to 1 m."""

@@ -427,8 +427,8 @@ class MultiTaskEnv(DirectRLEnv):
                 # 4000 rsl_rl epochs * 16 steps/env per epoch = 64000 environment steps
                 total_steps = 64000
                 progress = min(1.0, self.common_step_counter / total_steps) # linear progress from 0 to 1 over total_steps
-                # Sigmoid curve: 1 / (1 + e^(-14(x-0.5)))
-                curriculum_level = 1.0 / (1.0 + torch.exp(torch.tensor(-14.0 * (progress - 0.5))))
+                # Sigmoid curve: 1 / (1 + e^(-7(x-0.5)))
+                curriculum_level = 1.0 / (1.0 + torch.exp(torch.tensor(-7.0 * (progress - 0.5))))
                 curriculum_level = curriculum_level.item()
                 gen_actions[:, 7] = curriculum_level
             
