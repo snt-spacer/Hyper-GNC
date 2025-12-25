@@ -13,10 +13,10 @@ class SingleRobotMultiTaskPPORunnerCfg(RslRlOnPolicyRunnerCfg):
     num_steps_per_env = 16
     max_iterations = 4000
     save_interval = 10
-    experiment_name = "mtrl_intball2_multi_critic"
+    experiment_name = "mtrl_intball2_multi_critic_taskID"
     logger = "wandb"
     wandb_kwargs = {
-        "project": "mtrl_intball2_multi_critic",
+        "project": "mtrl_intball2_multi_critic_taskID",
         "entity": "spacer-rl",
         "group": "zeroG",
     }

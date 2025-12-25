@@ -105,8 +105,13 @@ RUN git clone https://github.com/AntoineRichard/skrl.git /root/skrl && \
 # RUN git clone https://github.com/ricard-inho/rsl_rl.git /root/rsl_rl && \
 #     ${ISAACLAB_PATH}/_isaac_sim/python.sh -m pip install --editable /root/rsl_rl
 
-RUN git clone -b ricard/test_new_policy_control https://github.com/ricard-inho/rsl_rl.git /root/rsl_rl && \
+#Multi-critic branch
+RUN git clone -b ricard/test_new_policy_control_multi-critic https://github.com/ricard-inho/rsl_rl.git /root/rsl_rl && \
     ${ISAACLAB_PATH}/_isaac_sim/python.sh -m pip install --editable /root/rsl_rl
+
+# PC-Grad
+# RUN git clone -b test_new_policy_control_pcgrad https://github.com/ricard-inho/rsl_rl.git /root/rsl_rl && \
+#     ${ISAACLAB_PATH}/_isaac_sim/python.sh -m pip install --editable /root/rsl_rl
 
 # RUN git clone https://github.com/leggedrobotics/rsl_rl.git /root/rsl_rl && \
 #     git -C /root/rsl_rl reset --hard 750e84566d91877a8bbabc7971578be24429bca8 && \
