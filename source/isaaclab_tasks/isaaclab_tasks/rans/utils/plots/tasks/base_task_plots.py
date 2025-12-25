@@ -244,7 +244,8 @@ class BaseTaskPlots(AutoRegister):
                 mean_val = group_values.mean()
                 std_val = group_values.std()
                 median_val = group_values.median()
-                f.write(f"Group: {group_key} \nMean: {mean_val:.5f}, SD: {std_val:.5f}, Median: {median_val:.5f}\n")
+                print(f"Group: {group_key}, Mean: {mean_val}, SD: {std_val}, Median: {median_val}")
+                f.write(f"Group: {group_key} \nMean, SD, Median\n${mean_val:.5f} \\pm {std_val:.5f}, {median_val:.5f}$\n")
             f.write("\n")
 
     def dotplot(self, key_to_plot: str):

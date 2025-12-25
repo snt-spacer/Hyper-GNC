@@ -27,6 +27,18 @@ class TrackVelocities3DPlots(BaseTaskPlots, Registerable):
                 keys_set.update(
                     key for key in df.columns if key.startswith("avg_roll_velocity_error")
                 )
+                keys_set.update(
+                    key for key in df.columns if key.startswith("final_magnitude_linear_velocity_error")
+                )
+                keys_set.update(
+                    key for key in df.columns if key.startswith("final_magnitude_angular_velocity_error")
+                )
+                keys_set.update(
+                    key for key in df.columns if key.startswith("final_avg_linear_velocity_error")
+                )
+                keys_set.update(
+                    key for key in df.columns if key.startswith("final_avg_angular_velocity_error")
+                )
                 
 
         self.labels_to_plot = list(keys_set)

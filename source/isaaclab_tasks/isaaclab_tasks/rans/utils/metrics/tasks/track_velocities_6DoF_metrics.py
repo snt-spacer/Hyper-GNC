@@ -30,3 +30,9 @@ class TrackVelocities3DMetrics(BaseTaskMetrics, Registerable):
         self.metrics["avg_yaw_velocity_error.rad/s"] = avg_yaw_vel_error
         self.metrics["avg_pitch_velocity_error.rad/s"] = avg_pitch_vel_error
         self.metrics["avg_roll_velocity_error.rad/s"] = avg_roll_vel_error
+        
+        self.metrics["final_magnitude_linear_velocity_error.m/s"] = torch.sqrt(avg_lin_vel_error**2 + avg_lat_vel_error**2 + avg_vert_vel_error**2)
+        self.metrics["final_magnitude_angular_velocity_error.rad/s"] = torch.sqrt(avg_yaw_vel_error**2 + avg_pitch_vel_error**2 + avg_roll_vel_error**2)
+        
+        self.metrics["final_avg_linear_velocity_error.m/s"] = (avg_lin_vel_error + avg_lat_vel_error + avg_vert_vel_error) / 3
+        self.metrics["final_avg_angular_velocity_error.rad/s"] = (avg_yaw_vel_error + avg_pitch_vel_error + avg_roll_vel_error) / 3
