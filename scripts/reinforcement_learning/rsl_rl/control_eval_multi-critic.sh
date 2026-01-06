@@ -62,13 +62,24 @@ runs_per_env=4
 # )
 
 # Multi-critic TaskID RSS 7-0
+# MODEL_PATHS=(
+# /workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_taskID/2025-12-24_13-01-34_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/model_3999.pt
+# /workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_taskID/2025-12-24_14-11-33_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/model_3999.pt
+# /workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_taskID/2025-12-24_15-22-50_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/model_3999.pt
+# /workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_taskID/2025-12-24_16-33-33_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/model_3999.pt
+# /workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_taskID/2025-12-24_17-44-36_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/model_3999.pt
+# )
+
+
+# Multi-critic SemEmb RSS 7-0
 MODEL_PATHS=(
-/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_taskID/2025-12-24_13-01-34_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/model_3999.pt
-/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_taskID/2025-12-24_14-11-33_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/model_3999.pt
-/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_taskID/2025-12-24_15-22-50_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/model_3999.pt
-/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_taskID/2025-12-24_16-33-33_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/model_3999.pt
-/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_taskID/2025-12-24_17-44-36_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/model_3999.pt
+/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_semEmb/2025-12-25_13-56-21_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/model_3999.pt
+/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_semEmb/2025-12-25_15-07-31_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/model_3999.pt
+/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_semEmb/2025-12-25_16-17-43_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/model_3999.pt
+/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_semEmb/2025-12-25_17-27-36_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/model_3999.pt
+/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_semEmb/2025-12-25_18-37-59_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/model_3999.pt
 )
+
 
 
 

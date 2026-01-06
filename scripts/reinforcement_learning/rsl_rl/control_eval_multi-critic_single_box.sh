@@ -6,7 +6,7 @@ SCRIPT_PATH="./scripts/reinforcement_learning/rsl_rl/eval_control.py"
 TASK="Isaac-RANS-Single-v0"
 NUM_ENVS=32
 runs_per_env=4
-BASE_LOG_DIR="logs/rsl_rl/mtrl_intball2_multi_critic_taskID"
+BASE_LOG_DIR="logs/rsl_rl/mtrl_intball2_multi_critic_semEmb"
 robot="IntBall2"
 task_name="GoToPose3DBox"
 algorithm="ppo-multi-critic" #ppo, ppo-memory, ppo-beta, ppo-beta-memory ppo-multi-critic
@@ -50,13 +50,22 @@ COMMON_ARGS="--task=${TASK} --headless --num_envs=${NUM_ENVS} --runs_per_env=${r
 # 2025-12-19_15-17-34_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/model_3999.pt
 # )
 
-# Multi-critic TaskID RSS 7-0
+# # Multi-critic TaskID RSS 7-0
+# CHECKPOINTS=(
+# 2025-12-24_13-01-34_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/model_3999.pt
+# 2025-12-24_14-11-33_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/model_3999.pt
+# 2025-12-24_15-22-50_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/model_3999.pt
+# 2025-12-24_16-33-33_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/model_3999.pt
+# 2025-12-24_17-44-36_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/model_3999.pt
+# )
+
+# Multi-critic SemEmb RSS 7-0
 CHECKPOINTS=(
-2025-12-24_13-01-34_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/model_3999.pt
-2025-12-24_14-11-33_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/model_3999.pt
-2025-12-24_15-22-50_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/model_3999.pt
-2025-12-24_16-33-33_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/model_3999.pt
-2025-12-24_17-44-36_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/model_3999.pt
+2025-12-25_13-56-21_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/model_3999.pt
+2025-12-25_15-07-31_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/model_3999.pt
+2025-12-25_16-17-43_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/model_3999.pt
+2025-12-25_17-27-36_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/model_3999.pt
+2025-12-25_18-37-59_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/model_3999.pt
 )
 
 # Function to run evaluation for a single checkpoint
