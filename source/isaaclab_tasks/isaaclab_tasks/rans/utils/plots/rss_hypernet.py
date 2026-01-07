@@ -2516,7 +2516,7 @@ def main():
                     "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_vanilla/2026-01-06_11-40-20_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/env_info.yaml"
                 },
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_vanilla/2026-01-06_13-06-02_rsl-rl_ppo-beta-memory_GoToPosition3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/2026-01-06_13-06-02_rsl-rl_ppo-beta-memory_GoToPosition3D_IntBall2_r-0_seed-3_metrics.csv",
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_vanilla/2026-01-06_13-06-02_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/2026-01-06_13-06-02_rsl-rl_ppo-beta-memory_GoToPosition3D_IntBall2_r-0_seed-3_metrics.csv",
                     "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_vanilla/2026-01-06_13-06-02_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/extracted_trajectories_GoToPosition3D.csv",
                     "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_vanilla/2026-01-06_13-06-02_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/env_info.yaml"
                 },

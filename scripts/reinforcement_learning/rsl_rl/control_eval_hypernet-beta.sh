@@ -145,8 +145,8 @@ MODEL_PATHS=(
 )
 
 
-
-
+logs/rsl_rl/multitask_memory_control_beta_vanilla/2026-01-06_13-06-02_rsl-rl_ppo-beta-memory_GoToPosition3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/
+logs/rsl_rl/multitask_memory_control_beta_vanilla/2026-01-06_13-06-02_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/
 
 # Check if model paths are provided
 if [ ${#MODEL_PATHS[@]} -eq 0 ]; then
