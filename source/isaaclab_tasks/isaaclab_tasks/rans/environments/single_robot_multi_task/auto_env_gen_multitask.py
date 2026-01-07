@@ -291,13 +291,11 @@ class MultiTaskEnv(DirectRLEnv):
             "task_id_one_hot": task_id_one_hot_cat,
             "semantic_emb": semantic_emb_cat
         }
-        
         # result = {
         #     "general_obs": torch.concat((semantic_emb_cat, general_obs_cat), dim=-1),
         #     "task_id_one_hot": task_id_one_hot_cat,
         #     "semantic_emb": semantic_emb_cat
         # }
-        
         return {"policy": result}
 
         # """
