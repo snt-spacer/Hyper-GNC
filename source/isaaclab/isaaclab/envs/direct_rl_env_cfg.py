@@ -13,7 +13,65 @@ from isaaclab.utils.noise import NoiseModelCfg
 from .common import SpaceType, ViewerCfg
 from .ui import BaseEnvWindow
 
+import numpy as np
 
+def get_lookat_point_flexible(camera_position, camera_orientation, distance, rotation_order='zyx', forward_axis='-z'):
+    """
+    Calculates the 3D point the camera is looking at, with flexible conventions.
+
+    Args:
+        camera_position (tuple): The camera's (x, y, z) position.
+        camera_orientation (tuple): The camera's (pitch, yaw, roll) orientation in degrees.
+        distance (float): The distance from the camera to the look-at point.
+        rotation_order (str): The order of rotation axes (e.g., 'xyz', 'zyx').
+        forward_axis (str): The camera's initial forward direction ('+x', '-x', '+y', '-y', '+z', '-z').
+
+    Returns:
+        numpy.ndarray: The (x, y, z) coordinates of the look-at point.
+    """
+    pitch, yaw, roll = np.radians(camera_orientation)
+
+    # 1. Define the initial forward vector based on convention
+    if forward_axis == '-z':
+        forward_vector = np.array([0, 0, -distance])
+    elif forward_axis == '+z':
+        forward_vector = np.array([0, 0, distance])
+    elif forward_axis == '-y':
+        forward_vector = np.array([0, -distance, 0])
+    # Add other cases as needed
+
+    # 2. Create the rotation matrices
+    R_x = np.array([
+        [1, 0, 0],
+        [0, np.cos(pitch), -np.sin(pitch)],
+        [0, np.sin(pitch), np.cos(pitch)]
+    ])
+    R_y = np.array([
+        [np.cos(yaw), 0, np.sin(yaw)],
+        [0, 1, 0],
+        [-np.sin(yaw), 0, np.cos(yaw)]
+    ])
+    R_z = np.array([
+        [np.cos(roll), -np.sin(roll), 0],
+        [np.sin(roll), np.cos(roll), 0],
+        [0, 0, 1]
+    ])
+
+    # 3. Combine rotations based on the specified order
+    if rotation_order == 'zyx':
+        combined_rotation_matrix = R_z @ R_y @ R_x
+    elif rotation_order == 'xyz':
+        combined_rotation_matrix = R_x @ R_y @ R_z
+    elif rotation_order == 'yxz':
+        combined_rotation_matrix = R_y @ R_x @ R_z
+    else:
+        raise ValueError("Invalid rotation order.")
+
+    # 4. Rotate the vector and calculate the look-at point
+    rotated_forward_vector = combined_rotation_matrix @ forward_vector
+    lookat_point = np.array(camera_position) + rotated_forward_vector
+    
+    return tuple(lookat_point.tolist())
 @configclass
 class DirectRLEnvCfg:
     """Configuration for an RL environment defined with the direct workflow.
@@ -23,8 +81,14 @@ class DirectRLEnvCfg:
 
     # simulation settings
     viewer: ViewerCfg = ViewerCfg(
-      # eye=(125.26,-19.13,6.85),
-      # lookat=(125.77,-104.71,-86.84),
+      eye=(0.8,1.45,1.7),
+      lookat=get_lookat_point_flexible(
+          camera_position=(0.8, 1.45, 1.71),
+          camera_orientation=(83.9, -0.0, 159.46),
+          distance=np.linalg.norm(np.array((0.8, 1.45, 1.71))),
+          rotation_order='zyx',
+          forward_axis='-z'
+      ),
       # origin_type="asset_root",
       # asset_name="ModularFreeflyer"
     )

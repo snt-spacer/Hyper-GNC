@@ -54,6 +54,7 @@ from .tasks_cfg import (  # noqa: F401, F403
     GoToPose3DWithObstaclesCfg,
     GoToPose3DBoxCfg,
     VeloStabilization3DCfg,
+    VisualGoToPose3DCfg,
     TASK_CFG_FACTORY,
 )
 
@@ -80,6 +81,7 @@ from .tasks import (  # noqa: F401, F403
     GoToPose3DWithObstaclesTask,
     GoToPose3DBoxTask,
     VeloStabilization3DTask,
+    VisualGoToPose3DTask,
     TASK_FACTORY,
 )
 

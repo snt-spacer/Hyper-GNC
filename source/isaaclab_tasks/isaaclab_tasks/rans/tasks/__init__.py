@@ -31,6 +31,7 @@ from .dock_in_station_with_obstacles import DockInStationWithObstaclesTask  # no
 from .go_to_pose_6DoF_with_obstacles import GoToPose3DWithObstaclesTask  # noqa: F401, F403
 from .go_to_pose_6DoFBox import GoToPose3DBoxTask  # noqa: F401, F403
 from .velo_stabilization_6DoF import VeloStabilization3DTask
+from .visual_go_to_pose_6DoF import VisualGoToPose3DTask  # noqa: F401, F403
 
 TASK_FACTORY = factory()
 TASK_FACTORY.register("GoThroughPoses", GoThroughPosesTask)
@@ -53,3 +54,4 @@ TASK_FACTORY.register("DockInStationWithObstacles", DockInStationWithObstaclesTa
 TASK_FACTORY.register("GoToPose3DWithObstacles", GoToPose3DWithObstaclesTask)
 TASK_FACTORY.register("GoToPose3DBox", GoToPose3DBoxTask)
 TASK_FACTORY.register("VeloStabilization3D", VeloStabilization3DTask)
+TASK_FACTORY.register("VisualGoToPose3D", VisualGoToPose3DTask)
