@@ -12,11 +12,11 @@ from isaaclab_rl.rsl_rl import RslRlOnPolicyRunnerCfg, RslRlPpoActorCriticCfg, R
 class SingleRobotMultiTaskPPORunnerCfg(RslRlOnPolicyRunnerCfg):
     num_steps_per_env = 16
     max_iterations = 4000
-    save_interval = 10
-    experiment_name = "mtrl_intball2_pcgrad"
+    save_interval = 1000
+    experiment_name = "mtrl_intball2_pcgrad_simple"
     logger = "wandb"
     wandb_kwargs = {
-        "project": "mtrl_intball2_pcgrad",
+        "project": "mtrl_intball2_pcgrad_simple",
         "entity": "spacer-rl",
         "group": "zeroG",
     }

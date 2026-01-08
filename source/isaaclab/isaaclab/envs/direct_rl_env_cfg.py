@@ -72,20 +72,30 @@ def get_lookat_point_flexible(camera_position, camera_orientation, distance, rot
     lookat_point = np.array(camera_position) + rotated_forward_vector
     
     return tuple(lookat_point.tolist())
+  
+'''
+Go To Pose
+  camera_position=(0.8, 1.45, 1.71),
+  camera_orientation=(83.9, -0.0, 159.46),
+Go To Pose Box
+  camera_pos = (-0.39, 3.56, 1.58)
+    camera_ori = (79.39, -0.0, -172.97)
+'''
 @configclass
 class DirectRLEnvCfg:
     """Configuration for an RL environment defined with the direct workflow.
 
     Please refer to the :class:`isaaclab.envs.direct_rl_env.DirectRLEnv` class for more details.
     """
-
+    camera_pos = (-0.56, -2.45, 1.59)
+    camera_ori = (83.52, -0.0, -23.8)
     # simulation settings
     viewer: ViewerCfg = ViewerCfg(
-      eye=(0.8,1.45,1.7),
+      eye=camera_pos,
       lookat=get_lookat_point_flexible(
-          camera_position=(0.8, 1.45, 1.71),
-          camera_orientation=(83.9, -0.0, 159.46),
-          distance=np.linalg.norm(np.array((0.8, 1.45, 1.71))),
+          camera_position=camera_pos,
+          camera_orientation=camera_ori,
+          distance=np.linalg.norm(np.array(camera_pos)),
           rotation_order='zyx',
           forward_axis='-z'
       ),

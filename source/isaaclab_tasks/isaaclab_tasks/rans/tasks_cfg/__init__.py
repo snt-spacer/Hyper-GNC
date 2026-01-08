@@ -30,6 +30,9 @@ from .go_to_pose_6DoF_with_obstacles_cfg import GoToPose3DWithObstaclesCfg  # no
 from .go_to_pose_6DoFBox_cfg import GoToPose3DBoxCfg  # noqa: F401, F403
 from .velo_stabilization_6DoF_cfg import VeloStabilization3DCfg  # noqa: F401, F403
 from .visual_go_to_pose_6DoF_cfg import VisualGoToPose3DCfg  # noqa: F401, F403
+from .visual_go_to_pose_6DoFBox_cfg import VisualGoToPose3DBoxCfg  # noqa: F401, F403
+from .visual_track_velocities_6DoF_cfg import VisualTrackVelocities3DCfg  # noqa: F401, F403
+from .visual_go_through_poses_6DoF_cfg import VisualGoThroughPoses3DCfg  # noqa: F401, F403
 
 TASK_CFG_FACTORY = factory()
 TASK_CFG_FACTORY.register("GoThroughPoses", GoThroughPosesCfg)
@@ -52,3 +55,6 @@ TASK_CFG_FACTORY.register("GoToPose3DWithObstacles", GoToPose3DWithObstaclesCfg)
 TASK_CFG_FACTORY.register("GoToPose3DBox", GoToPose3DBoxCfg)
 TASK_CFG_FACTORY.register("VeloStabilization3D", VeloStabilization3DCfg)
 TASK_CFG_FACTORY.register("VisualGoToPose3D", VisualGoToPose3DCfg)
+TASK_CFG_FACTORY.register("VisualGoToPose3DBox", VisualGoToPose3DBoxCfg)
+TASK_CFG_FACTORY.register("VisualTrackVelocities3D", VisualTrackVelocities3DCfg)
+TASK_CFG_FACTORY.register("VisualGoThroughPoses3D", VisualGoThroughPoses3DCfg)
