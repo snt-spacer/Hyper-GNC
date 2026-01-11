@@ -25,6 +25,18 @@ MODEL_PATHS=(
 )
 
 
+MODEL_PATHS=(
+/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_pcgrad_simple_taskid/2026-01-09_10-18-16_rsl-rl_ppo_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/model_3999.pt
+/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_pcgrad_simple_taskid/2026-01-09_12-28-42_rsl-rl_ppo_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/model_3999.pt
+/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_pcgrad_simple_taskid/2026-01-09_14-39-51_rsl-rl_ppo_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/model_3999.pt
+/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_pcgrad_simple_taskid/2026-01-09_16-50-18_rsl-rl_ppo_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/model_3999.pt
+/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_pcgrad_simple_taskid/2026-01-09_19-00-35_rsl-rl_ppo_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/model_3999.pt
+
+)
+
+
+
+
 
 # Check if model paths are provided
 if [ ${#MODEL_PATHS[@]} -eq 0 ]; then

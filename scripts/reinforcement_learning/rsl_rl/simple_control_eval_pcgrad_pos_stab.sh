@@ -6,7 +6,7 @@ SCRIPT_PATH="./scripts/reinforcement_learning/rsl_rl/eval_control.py"
 TASK="Isaac-RANS-Single-v0"
 NUM_ENVS=126
 runs_per_env=4
-BASE_LOG_DIR="logs/rsl_rl/mtrl_intball2_pcgrad_simple"
+BASE_LOG_DIR="logs/rsl_rl/mtrl_intball2_pcgrad_simple_taskid"
 robot="IntBall2"
 task_name="GoToPosition3D"
 algorithm="ppo" #ppo, ppo-memory, ppo-beta, ppo-beta-memory
@@ -15,12 +15,21 @@ algorithm="ppo" #ppo, ppo-memory, ppo-beta, ppo-beta-memory
 COMMON_ARGS="--task=${TASK} --headless --num_envs=${NUM_ENVS} --runs_per_env=${runs_per_env} --algorithm=${algorithm} env.robot_name=${robot} env.task_name=${task_name}"
 
 # Array of checkpoint paths (relative to BASE_LOG_DIR)
+# CHECKPOINTS=(
+# 2026-01-08_17-30-08_rsl-rl_ppo_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/model_3999.pt
+# 2026-01-08_19-40-59_rsl-rl_ppo_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/model_3999.pt
+# 2026-01-08_21-51-48_rsl-rl_ppo_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/model_3999.pt
+# 2026-01-09_00-02-37_rsl-rl_ppo_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/model_3999.pt
+# 2026-01-09_02-13-32_rsl-rl_ppo_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/model_3999.pt
+
+# )
+
 CHECKPOINTS=(
-2026-01-08_17-30-08_rsl-rl_ppo_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/model_3999.pt
-2026-01-08_19-40-59_rsl-rl_ppo_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/model_3999.pt
-2026-01-08_21-51-48_rsl-rl_ppo_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/model_3999.pt
-2026-01-09_00-02-37_rsl-rl_ppo_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/model_3999.pt
-2026-01-09_02-13-32_rsl-rl_ppo_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/model_3999.pt
+2026-01-09_10-18-16_rsl-rl_ppo_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/model_3999.pt
+2026-01-09_12-28-42_rsl-rl_ppo_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/model_3999.pt
+2026-01-09_14-39-51_rsl-rl_ppo_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/model_3999.pt
+2026-01-09_16-50-18_rsl-rl_ppo_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/model_3999.pt
+2026-01-09_19-00-35_rsl-rl_ppo_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/model_3999.pt
 
 )
 
