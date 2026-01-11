@@ -25,6 +25,15 @@ MODEL_PATHS=(
 )
 
 
+# Task ID
+MODEL_PATHS=(
+/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_simple_taskid/2026-01-09_10-15-30_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/model_3999.pt
+/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_simple_taskid/2026-01-09_11-14-43_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/model_3999.pt
+/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_simple_taskid/2026-01-09_12-14-06_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/model_3999.pt
+/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_simple_taskid/2026-01-09_13-14-02_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/model_3999.pt
+/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_simple_taskid/2026-01-09_14-13-35_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/model_3999.pt
+
+)
 
 # Check if model paths are provided
 if [ ${#MODEL_PATHS[@]} -eq 0 ]; then
