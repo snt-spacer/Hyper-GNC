@@ -12,131 +12,261 @@ def main():
     # Define your CSV file groups directly, now each group can contain multiple sets of files (for different seeds)
     list_of_grouped_csv_data = [
         # Multicritic
+        # {
+        #     "group_name": "MTRL IntBall2 Multi-Critic Simple GoToPose3D",
+        #     "task_name": "GoToPose3D",
+        #     "robot_name": "IntBall2",
+        #     "runs": [
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_17-27-19_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/metrics/2026-01-08_17-27-19_rsl-rl_ppo-multi-critic_GoToPose3D_IntBall2_r-0_seed-1_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_17-27-19_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/metrics/extracted_trajectories_GoToPose3D.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_17-27-19_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/metrics/env_info.yaml"
+        #         },
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_18-21-07_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/metrics/2026-01-08_18-21-07_rsl-rl_ppo-multi-critic_GoToPose3D_IntBall2_r-0_seed-2_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_18-21-07_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/metrics/extracted_trajectories_GoToPose3D.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_18-21-07_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/metrics/env_info.yaml"
+        #         },
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_19-14-14_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/metrics/2026-01-08_19-14-14_rsl-rl_ppo-multi-critic_GoToPose3D_IntBall2_r-0_seed-3_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_19-14-14_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/metrics/extracted_trajectories_GoToPose3D.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_19-14-14_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/metrics/env_info.yaml"
+        #         },
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_20-07-59_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/metrics/2026-01-08_20-07-59_rsl-rl_ppo-multi-critic_GoToPose3D_IntBall2_r-0_seed-4_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_20-07-59_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/metrics/extracted_trajectories_GoToPose3D.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_20-07-59_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/metrics/env_info.yaml"
+        #         },
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_21-02-16_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/metrics/2026-01-08_21-02-16_rsl-rl_ppo-multi-critic_GoToPose3D_IntBall2_r-0_seed-5_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_21-02-16_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/metrics/extracted_trajectories_GoToPose3D.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_21-02-16_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/metrics/env_info.yaml"
+        #         }
+        #     ]
+        # },
+        # {
+        #     "group_name": "MTRL IntBall2 Multi-Critic Simple TrackVelocities3D",
+        #     "task_name": "TrackVelocities3D",
+        #     "robot_name": "IntBall2",
+        #     "runs": [
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_17-27-19_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/metrics/2026-01-08_17-27-19_rsl-rl_ppo-multi-critic_TrackVelocities3D_IntBall2_r-0_seed-1_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_17-27-19_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/metrics/extracted_trajectories_TrackVelocities3D.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_17-27-19_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/metrics/env_info.yaml"
+        #         },
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_18-21-07_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/metrics/2026-01-08_18-21-07_rsl-rl_ppo-multi-critic_TrackVelocities3D_IntBall2_r-0_seed-2_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_18-21-07_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/metrics/extracted_trajectories_TrackVelocities3D.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_18-21-07_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/metrics/env_info.yaml"
+        #         },
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_19-14-14_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/metrics/2026-01-08_19-14-14_rsl-rl_ppo-multi-critic_TrackVelocities3D_IntBall2_r-0_seed-3_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_19-14-14_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/metrics/extracted_trajectories_TrackVelocities3D.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_19-14-14_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/metrics/env_info.yaml"
+        #         },
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_20-07-59_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/metrics/2026-01-08_20-07-59_rsl-rl_ppo-multi-critic_TrackVelocities3D_IntBall2_r-0_seed-4_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_20-07-59_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/metrics/extracted_trajectories_TrackVelocities3D.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_20-07-59_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/metrics/env_info.yaml"
+        #         },
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_21-02-16_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/metrics/2026-01-08_21-02-16_rsl-rl_ppo-multi-critic_TrackVelocities3D_IntBall2_r-0_seed-5_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_21-02-16_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/metrics/extracted_trajectories_TrackVelocities3D.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_21-02-16_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/metrics/env_info.yaml"
+        #         }
+        #     ]
+        # },
+        # {
+        #     "group_name": "MTRL IntBall2 Multi-Critic Simple GoThroughPoses3D",
+        #     "task_name": "GoThroughPoses3D",
+        #     "robot_name": "IntBall2",
+        #     "runs": [
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_17-27-19_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/metrics/2026-01-08_17-27-19_rsl-rl_ppo-multi-critic_GoThroughPoses3D_IntBall2_r-0_seed-1_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_17-27-19_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/metrics/extracted_trajectories_GoThroughPoses3D.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_17-27-19_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/metrics/env_info.yaml"
+        #         },
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_18-21-07_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/metrics/2026-01-08_18-21-07_rsl-rl_ppo-multi-critic_GoThroughPoses3D_IntBall2_r-0_seed-2_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_18-21-07_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/metrics/extracted_trajectories_GoThroughPoses3D.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_18-21-07_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/metrics/env_info.yaml"
+        #         },
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_19-14-14_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/metrics/2026-01-08_19-14-14_rsl-rl_ppo-multi-critic_GoThroughPoses3D_IntBall2_r-0_seed-3_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_19-14-14_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/metrics/extracted_trajectories_GoThroughPoses3D.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_19-14-14_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/metrics/env_info.yaml"
+        #         },
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_20-07-59_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/metrics/2026-01-08_20-07-59_rsl-rl_ppo-multi-critic_GoThroughPoses3D_IntBall2_r-0_seed-4_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_20-07-59_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/metrics/extracted_trajectories_GoThroughPoses3D.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_20-07-59_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/metrics/env_info.yaml"
+        #         },
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_21-02-16_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/metrics/2026-01-08_21-02-16_rsl-rl_ppo-multi-critic_GoThroughPoses3D_IntBall2_r-0_seed-5_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_21-02-16_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/metrics/extracted_trajectories_GoThroughPoses3D.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_21-02-16_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/metrics/env_info.yaml"
+        #         }
+        #     ]
+        # },
+        # {
+        #     "group_name": "MTRL IntBall2 Multi-Critic Simple GoToPosition3D",
+        #     "task_name": "GoToPosition3D",
+        #     "robot_name": "IntBall2",
+        #     "runs": [
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_17-27-19_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/metrics/2026-01-08_17-27-19_rsl-rl_ppo-multi-critic_GoToPosition3D_IntBall2_r-0_seed-1_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_17-27-19_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/metrics/extracted_trajectories_GoToPosition3D.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_17-27-19_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/metrics/env_info.yaml"
+        #         },
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_18-21-07_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/metrics/2026-01-08_18-21-07_rsl-rl_ppo-multi-critic_GoToPosition3D_IntBall2_r-0_seed-2_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_18-21-07_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/metrics/extracted_trajectories_GoToPosition3D.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_18-21-07_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/metrics/env_info.yaml"
+        #         },
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_19-14-14_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/metrics/2026-01-08_19-14-14_rsl-rl_ppo-multi-critic_GoToPosition3D_IntBall2_r-0_seed-3_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_19-14-14_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/metrics/extracted_trajectories_GoToPosition3D.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_19-14-14_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/metrics/env_info.yaml"
+        #         },
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_20-07-59_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/metrics/2026-01-08_20-07-59_rsl-rl_ppo-multi-critic_GoToPosition3D_IntBall2_r-0_seed-4_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_20-07-59_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/metrics/extracted_trajectories_GoToPosition3D.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_20-07-59_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/metrics/env_info.yaml"
+        #         },
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_21-02-16_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/metrics/2026-01-08_21-02-16_rsl-rl_ppo-multi-critic_GoToPosition3D_IntBall2_r-0_seed-5_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_21-02-16_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/metrics/extracted_trajectories_GoToPosition3D.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_21-02-16_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/metrics/env_info.yaml"
+        #         }
+        #     ]
+        # }
+        
+        # Task ID
         {
-            "group_name": "MTRL IntBall2 Multi-Critic Simple GoToPose3D",
+            "group_name": "MTRL IntBall2 Multi-Critic Simple task id GoToPose3D",
             "task_name": "GoToPose3D",
             "robot_name": "IntBall2",
             "runs": [
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_17-27-19_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/metrics/2026-01-08_17-27-19_rsl-rl_ppo-multi-critic_GoToPose3D_IntBall2_r-0_seed-1_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_17-27-19_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/metrics/extracted_trajectories_GoToPose3D.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_17-27-19_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_10-17-09_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/metrics/2026-01-09_10-17-09_rsl-rl_ppo-multi-critic_GoToPose3D_IntBall2_r-0_seed-1_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_10-17-09_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/metrics/extracted_trajectories_GoToPose3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_10-17-09_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/metrics/env_info.yaml"
                 },
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_18-21-07_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/metrics/2026-01-08_18-21-07_rsl-rl_ppo-multi-critic_GoToPose3D_IntBall2_r-0_seed-2_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_18-21-07_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/metrics/extracted_trajectories_GoToPose3D.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_18-21-07_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_11-10-47_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/metrics/2026-01-09_11-10-47_rsl-rl_ppo-multi-critic_GoToPose3D_IntBall2_r-0_seed-2_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_11-10-47_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/metrics/extracted_trajectories_GoToPose3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_11-10-47_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/metrics/env_info.yaml"
                 },
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_19-14-14_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/metrics/2026-01-08_19-14-14_rsl-rl_ppo-multi-critic_GoToPose3D_IntBall2_r-0_seed-3_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_19-14-14_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/metrics/extracted_trajectories_GoToPose3D.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_19-14-14_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_12-04-24_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/metrics/2026-01-09_12-04-24_rsl-rl_ppo-multi-critic_GoToPose3D_IntBall2_r-0_seed-3_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_12-04-24_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/metrics/extracted_trajectories_GoToPose3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_12-04-24_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/metrics/env_info.yaml"
                 },
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_20-07-59_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/metrics/2026-01-08_20-07-59_rsl-rl_ppo-multi-critic_GoToPose3D_IntBall2_r-0_seed-4_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_20-07-59_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/metrics/extracted_trajectories_GoToPose3D.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_20-07-59_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_12-57-25_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/metrics/2026-01-09_12-57-25_rsl-rl_ppo-multi-critic_GoToPose3D_IntBall2_r-0_seed-4_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_12-57-25_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/metrics/extracted_trajectories_GoToPose3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_12-57-25_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/metrics/env_info.yaml"
                 },
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_21-02-16_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/metrics/2026-01-08_21-02-16_rsl-rl_ppo-multi-critic_GoToPose3D_IntBall2_r-0_seed-5_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_21-02-16_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/metrics/extracted_trajectories_GoToPose3D.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_21-02-16_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_13-51-13_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/metrics/2026-01-09_13-51-13_rsl-rl_ppo-multi-critic_GoToPose3D_IntBall2_r-0_seed-5_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_13-51-13_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/metrics/extracted_trajectories_GoToPose3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_13-51-13_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/metrics/env_info.yaml"
                 }
             ]
         },
         {
-            "group_name": "MTRL IntBall2 Multi-Critic Simple TrackVelocities3D",
+            "group_name": "MTRL IntBall2 Multi-Critic Simple task id TrackVelocities3D",
             "task_name": "TrackVelocities3D",
             "robot_name": "IntBall2",
             "runs": [
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_17-27-19_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/metrics/2026-01-08_17-27-19_rsl-rl_ppo-multi-critic_TrackVelocities3D_IntBall2_r-0_seed-1_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_17-27-19_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/metrics/extracted_trajectories_TrackVelocities3D.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_17-27-19_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_10-17-09_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/metrics/2026-01-09_10-17-09_rsl-rl_ppo-multi-critic_TrackVelocities3D_IntBall2_r-0_seed-1_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_10-17-09_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/metrics/extracted_trajectories_TrackVelocities3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_10-17-09_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/metrics/env_info.yaml"
                 },
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_18-21-07_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/metrics/2026-01-08_18-21-07_rsl-rl_ppo-multi-critic_TrackVelocities3D_IntBall2_r-0_seed-2_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_18-21-07_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/metrics/extracted_trajectories_TrackVelocities3D.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_18-21-07_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_11-10-47_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/metrics/2026-01-09_11-10-47_rsl-rl_ppo-multi-critic_TrackVelocities3D_IntBall2_r-0_seed-2_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_11-10-47_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/metrics/extracted_trajectories_TrackVelocities3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_11-10-47_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/metrics/env_info.yaml"
                 },
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_19-14-14_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/metrics/2026-01-08_19-14-14_rsl-rl_ppo-multi-critic_TrackVelocities3D_IntBall2_r-0_seed-3_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_19-14-14_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/metrics/extracted_trajectories_TrackVelocities3D.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_19-14-14_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_12-04-24_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/metrics/2026-01-09_12-04-24_rsl-rl_ppo-multi-critic_TrackVelocities3D_IntBall2_r-0_seed-3_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_12-04-24_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/metrics/extracted_trajectories_TrackVelocities3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_12-04-24_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/metrics/env_info.yaml"
                 },
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_20-07-59_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/metrics/2026-01-08_20-07-59_rsl-rl_ppo-multi-critic_TrackVelocities3D_IntBall2_r-0_seed-4_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_20-07-59_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/metrics/extracted_trajectories_TrackVelocities3D.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_20-07-59_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_12-57-25_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/metrics/2026-01-09_12-57-25_rsl-rl_ppo-multi-critic_TrackVelocities3D_IntBall2_r-0_seed-4_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_12-57-25_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/metrics/extracted_trajectories_TrackVelocities3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_12-57-25_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/metrics/env_info.yaml"
                 },
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_21-02-16_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/metrics/2026-01-08_21-02-16_rsl-rl_ppo-multi-critic_TrackVelocities3D_IntBall2_r-0_seed-5_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_21-02-16_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/metrics/extracted_trajectories_TrackVelocities3D.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_21-02-16_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_13-51-13_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/metrics/2026-01-09_13-51-13_rsl-rl_ppo-multi-critic_TrackVelocities3D_IntBall2_r-0_seed-5_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_13-51-13_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/metrics/extracted_trajectories_TrackVelocities3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_13-51-13_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/metrics/env_info.yaml"
                 }
             ]
         },
         {
-            "group_name": "MTRL IntBall2 Multi-Critic Simple GoThroughPoses3D",
+            "group_name": "MTRL IntBall2 Multi-Critic Simple task id GoThroughPoses3D",
             "task_name": "GoThroughPoses3D",
             "robot_name": "IntBall2",
             "runs": [
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_17-27-19_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/metrics/2026-01-08_17-27-19_rsl-rl_ppo-multi-critic_GoThroughPoses3D_IntBall2_r-0_seed-1_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_17-27-19_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/metrics/extracted_trajectories_GoThroughPoses3D.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_17-27-19_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_10-17-09_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/metrics/2026-01-09_10-17-09_rsl-rl_ppo-multi-critic_GoThroughPoses3D_IntBall2_r-0_seed-1_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_10-17-09_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/metrics/extracted_trajectories_GoThroughPoses3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_10-17-09_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/metrics/env_info.yaml"
                 },
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_18-21-07_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/metrics/2026-01-08_18-21-07_rsl-rl_ppo-multi-critic_GoThroughPoses3D_IntBall2_r-0_seed-2_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_18-21-07_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/metrics/extracted_trajectories_GoThroughPoses3D.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_18-21-07_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_11-10-47_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/metrics/2026-01-09_11-10-47_rsl-rl_ppo-multi-critic_GoThroughPoses3D_IntBall2_r-0_seed-2_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_11-10-47_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/metrics/extracted_trajectories_GoThroughPoses3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_11-10-47_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/metrics/env_info.yaml"
                 },
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_19-14-14_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/metrics/2026-01-08_19-14-14_rsl-rl_ppo-multi-critic_GoThroughPoses3D_IntBall2_r-0_seed-3_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_19-14-14_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/metrics/extracted_trajectories_GoThroughPoses3D.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_19-14-14_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_12-04-24_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/metrics/2026-01-09_12-04-24_rsl-rl_ppo-multi-critic_GoThroughPoses3D_IntBall2_r-0_seed-3_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_12-04-24_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/metrics/extracted_trajectories_GoThroughPoses3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_12-04-24_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/metrics/env_info.yaml"
                 },
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_20-07-59_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/metrics/2026-01-08_20-07-59_rsl-rl_ppo-multi-critic_GoThroughPoses3D_IntBall2_r-0_seed-4_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_20-07-59_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/metrics/extracted_trajectories_GoThroughPoses3D.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_20-07-59_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_12-57-25_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/metrics/2026-01-09_12-57-25_rsl-rl_ppo-multi-critic_GoThroughPoses3D_IntBall2_r-0_seed-4_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_12-57-25_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/metrics/extracted_trajectories_GoThroughPoses3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_12-57-25_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/metrics/env_info.yaml"
                 },
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_21-02-16_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/metrics/2026-01-08_21-02-16_rsl-rl_ppo-multi-critic_GoThroughPoses3D_IntBall2_r-0_seed-5_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_21-02-16_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/metrics/extracted_trajectories_GoThroughPoses3D.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_21-02-16_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_13-51-13_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/metrics/2026-01-09_13-51-13_rsl-rl_ppo-multi-critic_GoThroughPoses3D_IntBall2_r-0_seed-5_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_13-51-13_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/metrics/extracted_trajectories_GoThroughPoses3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_13-51-13_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/metrics/env_info.yaml"
                 }
             ]
         },
         {
-            "group_name": "MTRL IntBall2 Multi-Critic Simple GoToPosition3D",
+            "group_name": "MTRL IntBall2 Multi-Critic Simple task id GoToPosition3D",
             "task_name": "GoToPosition3D",
             "robot_name": "IntBall2",
             "runs": [
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_17-27-19_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/metrics/2026-01-08_17-27-19_rsl-rl_ppo-multi-critic_GoToPosition3D_IntBall2_r-0_seed-1_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_17-27-19_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/metrics/extracted_trajectories_GoToPosition3D.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_17-27-19_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_10-17-09_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/metrics/2026-01-09_10-17-09_rsl-rl_ppo-multi-critic_GoToPosition3D_IntBall2_r-0_seed-1_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_10-17-09_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/metrics/extracted_trajectories_GoToPosition3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_10-17-09_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/metrics/env_info.yaml"
                 },
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_18-21-07_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/metrics/2026-01-08_18-21-07_rsl-rl_ppo-multi-critic_GoToPosition3D_IntBall2_r-0_seed-2_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_18-21-07_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/metrics/extracted_trajectories_GoToPosition3D.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_18-21-07_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_11-10-47_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/metrics/2026-01-09_11-10-47_rsl-rl_ppo-multi-critic_GoToPosition3D_IntBall2_r-0_seed-2_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_11-10-47_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/metrics/extracted_trajectories_GoToPosition3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_11-10-47_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/metrics/env_info.yaml"
                 },
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_19-14-14_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/metrics/2026-01-08_19-14-14_rsl-rl_ppo-multi-critic_GoToPosition3D_IntBall2_r-0_seed-3_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_19-14-14_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/metrics/extracted_trajectories_GoToPosition3D.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_19-14-14_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_12-04-24_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/metrics/2026-01-09_12-04-24_rsl-rl_ppo-multi-critic_GoToPosition3D_IntBall2_r-0_seed-3_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_12-04-24_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/metrics/extracted_trajectories_GoToPosition3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_12-04-24_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/metrics/env_info.yaml"
                 },
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_20-07-59_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/metrics/2026-01-08_20-07-59_rsl-rl_ppo-multi-critic_GoToPosition3D_IntBall2_r-0_seed-4_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_20-07-59_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/metrics/extracted_trajectories_GoToPosition3D.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_20-07-59_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_12-57-25_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/metrics/2026-01-09_12-57-25_rsl-rl_ppo-multi-critic_GoToPosition3D_IntBall2_r-0_seed-4_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_12-57-25_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/metrics/extracted_trajectories_GoToPosition3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_12-57-25_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/metrics/env_info.yaml"
                 },
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_21-02-16_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/metrics/2026-01-08_21-02-16_rsl-rl_ppo-multi-critic_GoToPosition3D_IntBall2_r-0_seed-5_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_21-02-16_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/metrics/extracted_trajectories_GoToPosition3D.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple/2026-01-08_21-02-16_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_13-51-13_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/metrics/2026-01-09_13-51-13_rsl-rl_ppo-multi-critic_GoToPosition3D_IntBall2_r-0_seed-5_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_13-51-13_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/metrics/extracted_trajectories_GoToPosition3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_13-51-13_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/metrics/env_info.yaml"
                 }
             ]
         }
@@ -182,7 +312,7 @@ def main():
         "zoom_in": False,
     }
 
-    save_plots_folder_path = "/workspace/isaaclab/source/isaaclab_tasks/isaaclab_tasks/rans/utils/multiTask_scripts_plus_summaries/multicritic_simple_rss_7_0" # Specify the folder path where you want to save the plots
+    save_plots_folder_path = "/workspace/isaaclab/source/isaaclab_tasks/isaaclab_tasks/rans/utils/multiTask_scripts_plus_summaries/multicritic_simple_taskid_rss_7_0" # Specify the folder path where you want to save the plots
     if not os.path.exists(save_plots_folder_path):
         os.makedirs(save_plots_folder_path)
 
