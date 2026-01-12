@@ -35,11 +35,17 @@ MODEL_PATHS=(
 )
 
 
-/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_10-17-09_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/model_3999.pt
-/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_11-10-47_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/model_3999.pt
-/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_12-04-24_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/model_3999.pt
-/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_12-57-25_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/model_3999.pt
-/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid/2026-01-09_13-51-13_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/model_3999.pt
+# SembEmb
+MODEL_PATHS=(
+/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_semEmb/2026-01-11_21-23-45_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/model_3999.pt
+/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_semEmb/2026-01-11_22-16-56_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/model_3999.pt
+/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_semEmb/2026-01-11_23-10-58_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/model_3999.pt
+/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_semEmb/2026-01-12_00-04-34_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/model_3999.pt
+/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_simple_semEmb/2026-01-12_00-58-14_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/model_3999.pt
+)
+
+
+
 
 
 

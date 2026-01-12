@@ -6,7 +6,7 @@ SCRIPT_PATH="./scripts/reinforcement_learning/rsl_rl/eval_control.py"
 TASK="Isaac-RANS-Single-v0"
 NUM_ENVS=126
 runs_per_env=4
-BASE_LOG_DIR="logs/rsl_rl/mtrl_intball2_multi_critic_simple_taskid"
+BASE_LOG_DIR="logs/rsl_rl/mtrl_intball2_multi_critic_simple_semEmb"
 robot="IntBall2"
 task_name="GoToPosition3D"
 algorithm="ppo-multi-critic" #ppo, ppo-memory, ppo-beta, ppo-beta-memory
@@ -31,6 +31,16 @@ CHECKPOINTS=(
 2026-01-09_12-04-24_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/model_3999.pt
 2026-01-09_12-57-25_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/model_3999.pt
 2026-01-09_13-51-13_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/model_3999.pt
+)
+
+
+# SembEmb
+CHECKPOINTS=(
+2026-01-11_21-23-45_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/model_3999.pt
+2026-01-11_22-16-56_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/model_3999.pt
+2026-01-11_23-10-58_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/model_3999.pt
+2026-01-12_00-04-34_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/model_3999.pt
+2026-01-12_00-58-14_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/model_3999.pt
 )
 
 # Function to run evaluation for a single checkpoint
