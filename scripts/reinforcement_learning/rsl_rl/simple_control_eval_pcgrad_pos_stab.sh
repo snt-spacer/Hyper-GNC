@@ -6,7 +6,7 @@ SCRIPT_PATH="./scripts/reinforcement_learning/rsl_rl/eval_control.py"
 TASK="Isaac-RANS-Single-v0"
 NUM_ENVS=126
 runs_per_env=4
-BASE_LOG_DIR="logs/rsl_rl/mtrl_intball2_pcgrad_simple_taskid"
+BASE_LOG_DIR="logs/rsl_rl/mtrl_intball2_pcgrad_simple_semEmb"
 robot="IntBall2"
 task_name="GoToPosition3D"
 algorithm="ppo" #ppo, ppo-memory, ppo-beta, ppo-beta-memory
@@ -24,13 +24,24 @@ COMMON_ARGS="--task=${TASK} --headless --num_envs=${NUM_ENVS} --runs_per_env=${r
 
 # )
 
-CHECKPOINTS=(
-2026-01-09_10-18-16_rsl-rl_ppo_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/model_3999.pt
-2026-01-09_12-28-42_rsl-rl_ppo_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/model_3999.pt
-2026-01-09_14-39-51_rsl-rl_ppo_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/model_3999.pt
-2026-01-09_16-50-18_rsl-rl_ppo_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/model_3999.pt
-2026-01-09_19-00-35_rsl-rl_ppo_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/model_3999.pt
+# TaskID
+# CHECKPOINTS=(
+# 2026-01-09_10-18-16_rsl-rl_ppo_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/model_3999.pt
+# 2026-01-09_12-28-42_rsl-rl_ppo_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/model_3999.pt
+# 2026-01-09_14-39-51_rsl-rl_ppo_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/model_3999.pt
+# 2026-01-09_16-50-18_rsl-rl_ppo_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/model_3999.pt
+# 2026-01-09_19-00-35_rsl-rl_ppo_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/model_3999.pt
 
+# )
+
+
+#SemEmb
+CHECKPOINTS=(
+2026-01-11_21-24-51_rsl-rl_ppo_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/model_3999.pt
+2026-01-11_23-35-36_rsl-rl_ppo_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/model_3999.pt
+2026-01-12_01-46-25_rsl-rl_ppo_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/model_3999.pt
+2026-01-12_03-57-27_rsl-rl_ppo_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/model_3999.pt
+2026-01-12_06-08-29_rsl-rl_ppo_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/model_3999.pt
 )
 
 # Function to run evaluation for a single checkpoint

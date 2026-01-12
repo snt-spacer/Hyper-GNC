@@ -34,6 +34,13 @@ MODEL_PATHS=(
 
 )
 
+MODEL_PATHS=(
+/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_pcgrad_simple_semEmb/2026-01-11_21-24-51_rsl-rl_ppo_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/model_3999.pt
+/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_pcgrad_simple_semEmb/2026-01-11_23-35-36_rsl-rl_ppo_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/model_3999.pt
+/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_pcgrad_simple_semEmb/2026-01-12_01-46-25_rsl-rl_ppo_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/model_3999.pt
+/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_pcgrad_simple_semEmb/2026-01-12_03-57-27_rsl-rl_ppo_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/model_3999.pt
+/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_pcgrad_simple_semEmb/2026-01-12_06-08-29_rsl-rl_ppo_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/model_3999.pt
+)
 
 
 
