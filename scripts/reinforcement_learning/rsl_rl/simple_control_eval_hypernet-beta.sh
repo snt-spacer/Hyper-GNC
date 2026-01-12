@@ -35,6 +35,19 @@ MODEL_PATHS=(
 
 )
 
+# SemEmb
+MODEL_PATHS=(
+/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_simple_semEmb/2026-01-11_21-20-03_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/model_3999.pt
+/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_simple_semEmb/2026-01-11_22-19-19_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/model_3999.pt
+/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_simple_semEmb/2026-01-11_23-18-09_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/model_3999.pt
+/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_simple_semEmb/2026-01-12_00-17-52_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/model_3999.pt
+/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_simple_semEmb/2026-01-12_01-16-48_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/model_3999.pt
+
+)
+
+
+
+
 # Check if model paths are provided
 if [ ${#MODEL_PATHS[@]} -eq 0 ]; then
     echo "Error: No model paths provided. Please edit the script and add your .pth file paths to the MODEL_PATHS array."
