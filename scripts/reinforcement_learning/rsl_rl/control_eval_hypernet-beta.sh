@@ -144,9 +144,20 @@ MODEL_PATHS=(
 /workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_vanilla/2026-01-06_15-58-15_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/model_3999.pt
 )
 
+# Hypernet beta MTCR PCGrad 7-0
+MODEL_PATHS=(
+/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_MTCRPCG/2026-01-06_15-09-03_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/model_3999.pt
+/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_MTCRPCG/2026-01-07_08-31-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/model_3999.pt
+/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_MTCRPCG/2026-01-07_22-54-20_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/model_3999.pt
+/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_MTCRPCG/2026-01-08_00-52-17_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/model_3999.pt
+/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_MTCRPCG/2026-01-08_02-51-25_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/model_3999.pt
+)
+
 
 logs/rsl_rl/multitask_memory_control_beta_vanilla/2026-01-06_13-06-02_rsl-rl_ppo-beta-memory_GoToPosition3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/
 logs/rsl_rl/multitask_memory_control_beta_vanilla/2026-01-06_13-06-02_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/
+
+
 
 # Check if model paths are provided
 if [ ${#MODEL_PATHS[@]} -eq 0 ]; then
