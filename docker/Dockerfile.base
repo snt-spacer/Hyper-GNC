@@ -119,6 +119,11 @@ RUN git clone -b ricard/test_new_policy_control_hyper_mtcr https://github.com/ri
 # RUN git clone -b ricard/test_new_policy_control_multi-critic https://github.com/ricard-inho/rsl_rl.git /root/rsl_rl && \
 #     ${ISAACLAB_PATH}/_isaac_sim/python.sh -m pip install --editable /root/rsl_rl
 
+
+# # PC-Grad
+# RUN git clone -b test_new_policy_control_pcgrad https://github.com/ricard-inho/rsl_rl.git /root/rsl_rl && \
+#     ${ISAACLAB_PATH}/_isaac_sim/python.sh -m pip install --editable /root/rsl_rl
+
 # PC-Grad
 # RUN git clone -b test_new_policy_control_pcgrad https://github.com/ricard-inho/rsl_rl.git /root/rsl_rl && \
 #     ${ISAACLAB_PATH}/_isaac_sim/python.sh -m pip install --editable /root/rsl_rl
