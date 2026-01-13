@@ -140,7 +140,7 @@ class SingleEnv(DirectRLEnv):
         self.task_cfg = TASK_CFG_FACTORY(cfg.task_name)
 
         cfg.action_space = self.robot_cfg.action_space + self.task_cfg.action_space
-        cfg.observation_space = self.robot_cfg.observation_space + self.task_cfg.observation_space + 4 # 4 taskID 5 semantic embedding
+        cfg.observation_space = self.robot_cfg.observation_space + self.task_cfg.observation_space #+ 4 # 4 taskID 5 semantic embedding
         cfg.state_space = self.robot_cfg.state_space + self.task_cfg.state_space
         cfg.gen_space = self.robot_cfg.gen_space + self.task_cfg.gen_space
         return cfg
@@ -207,16 +207,16 @@ class SingleEnv(DirectRLEnv):
         if self.task_api.__class__.__name__ == "GoToPosition3DTask":
             task_id_one_hot_cat = torch.tensor([[1,0,0]], device=self.device).repeat(self.num_envs,1)
         
-        result = {
-            "general_obs": torch.concat((task_id_one_hot_cat, general_obs_cat_padded), dim=-1),
-            "task_id_one_hot": task_id_one_hot_cat,
-            "semantic_emb": semantic_emb_cat
-        }
         # result = {
-        #     "general_obs": general_obs_cat_padded,
+        #     "general_obs": torch.concat((task_id_one_hot_cat, general_obs_cat_padded), dim=-1),
         #     "task_id_one_hot": task_id_one_hot_cat,
         #     "semantic_emb": semantic_emb_cat
         # }
+        result = {
+            "general_obs": general_obs_cat_padded,
+            "task_id_one_hot": task_id_one_hot_cat,
+            "semantic_emb": semantic_emb_cat
+        }
         return {"policy": result}
     
 
