@@ -49,13 +49,13 @@ class FloatingPlatformRobotCfg(RobotCoreCfg):
         enable=False, randomization_modes=["uniform"], body_name="Cylinder", max_delta=0.05
     )
     wrench_rand_cfg = WrenchRandomizationCfg(
-        enable=True,
+        enable=False,
         randomization_modes=["constant_uniform"],
         body_name="Cylinder",
-        uniform_force=(0, 0.25),
-        uniform_torque=(0, 0.05),
-        normal_force=(0, 0.25),
-        normal_torque=(0, 0.025),
+        uniform_force=(0, 0.3),
+        uniform_torque=(0, 0.15),
+        normal_force=(0, 0.3),
+        normal_torque=(0, 0.15),
     )
     noisy_actions_cfg: NoisyActionsCfg = NoisyActionsCfg(
         enable=False,

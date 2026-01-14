@@ -98,55 +98,65 @@ COMMON_ARGS="--task=Isaac-RANS-MultiTask-v0 --headless --num_envs=${NUM_ENVS}"
 #     /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-12_16-32-07_rsl-rl_ppo_Rendezvous_ModularFreeflyer_r-0_seed-10/model_3999.pt
 # )
 
-# Expert L 
-CHECKPOINTS=(
-/workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-26_12-25-35_rsl-rl_ppo_Rendezvous_ModularFreeflyer_r-0_seed-1/model_3000.pt
-/workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-26_12-54-36_rsl-rl_ppo_Rendezvous_ModularFreeflyer_r-0_seed-2/model_3000.pt
-/workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-26_13-23-22_rsl-rl_ppo_Rendezvous_ModularFreeflyer_r-0_seed-3/model_3000.pt
-/workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-26_13-52-31_rsl-rl_ppo_Rendezvous_ModularFreeflyer_r-0_seed-4/model_3000.pt
-/workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-26_14-21-47_rsl-rl_ppo_Rendezvous_ModularFreeflyer_r-0_seed-5/model_3000.pt
-# /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-26_14-50-34_rsl-rl_ppo_GoToPosition_ModularFreeflyer_r-0_seed-1/model_3000.pt
-# /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-26_15-17-15_rsl-rl_ppo_GoToPosition_ModularFreeflyer_r-0_seed-2/model_3000.pt
-# /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-26_15-43-52_rsl-rl_ppo_GoToPosition_ModularFreeflyer_r-0_seed-3/model_3000.pt
-# /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-26_16-10-15_rsl-rl_ppo_GoToPosition_ModularFreeflyer_r-0_seed-4/model_3000.pt
-# /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-26_16-36-46_rsl-rl_ppo_GoToPosition_ModularFreeflyer_r-0_seed-5/model_3000.pt
-# /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-26_17-03-26_rsl-rl_ppo_GoToPose_ModularFreeflyer_r-0_seed-1/model_3000.pt
-# /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-26_17-30-04_rsl-rl_ppo_GoToPose_ModularFreeflyer_r-0_seed-2/model_3000.pt
-# /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-26_17-56-58_rsl-rl_ppo_GoToPose_ModularFreeflyer_r-0_seed-3/model_3000.pt
-# /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-26_18-23-36_rsl-rl_ppo_GoToPose_ModularFreeflyer_r-0_seed-4/model_3000.pt
-# /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-26_18-50-24_rsl-rl_ppo_GoToPose_ModularFreeflyer_r-0_seed-5/model_3000.pt
-# /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-26_19-17-29_rsl-rl_ppo_TrackVelocities_ModularFreeflyer_r-0_seed-1/model_3000.pt
-# /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-26_19-45-45_rsl-rl_ppo_TrackVelocities_ModularFreeflyer_r-0_seed-2/model_3000.pt
-# /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-26_20-13-52_rsl-rl_ppo_TrackVelocities_ModularFreeflyer_r-0_seed-3/model_3000.pt
-# /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-26_20-41-46_rsl-rl_ppo_TrackVelocities_ModularFreeflyer_r-0_seed-4/model_3000.pt
-# /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-26_21-09-28_rsl-rl_ppo_TrackVelocities_ModularFreeflyer_r-0_seed-5/model_3000.pt
-)
+# # Expert L 
+# CHECKPOINTS=(
+# /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-26_12-25-35_rsl-rl_ppo_Rendezvous_ModularFreeflyer_r-0_seed-1/model_3000.pt
+# /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-26_12-54-36_rsl-rl_ppo_Rendezvous_ModularFreeflyer_r-0_seed-2/model_3000.pt
+# /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-26_13-23-22_rsl-rl_ppo_Rendezvous_ModularFreeflyer_r-0_seed-3/model_3000.pt
+# /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-26_13-52-31_rsl-rl_ppo_Rendezvous_ModularFreeflyer_r-0_seed-4/model_3000.pt
+# /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-26_14-21-47_rsl-rl_ppo_Rendezvous_ModularFreeflyer_r-0_seed-5/model_3000.pt
+# # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-26_14-50-34_rsl-rl_ppo_GoToPosition_ModularFreeflyer_r-0_seed-1/model_3000.pt
+# # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-26_15-17-15_rsl-rl_ppo_GoToPosition_ModularFreeflyer_r-0_seed-2/model_3000.pt
+# # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-26_15-43-52_rsl-rl_ppo_GoToPosition_ModularFreeflyer_r-0_seed-3/model_3000.pt
+# # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-26_16-10-15_rsl-rl_ppo_GoToPosition_ModularFreeflyer_r-0_seed-4/model_3000.pt
+# # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-26_16-36-46_rsl-rl_ppo_GoToPosition_ModularFreeflyer_r-0_seed-5/model_3000.pt
+# # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-26_17-03-26_rsl-rl_ppo_GoToPose_ModularFreeflyer_r-0_seed-1/model_3000.pt
+# # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-26_17-30-04_rsl-rl_ppo_GoToPose_ModularFreeflyer_r-0_seed-2/model_3000.pt
+# # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-26_17-56-58_rsl-rl_ppo_GoToPose_ModularFreeflyer_r-0_seed-3/model_3000.pt
+# # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-26_18-23-36_rsl-rl_ppo_GoToPose_ModularFreeflyer_r-0_seed-4/model_3000.pt
+# # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-26_18-50-24_rsl-rl_ppo_GoToPose_ModularFreeflyer_r-0_seed-5/model_3000.pt
+# # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-26_19-17-29_rsl-rl_ppo_TrackVelocities_ModularFreeflyer_r-0_seed-1/model_3000.pt
+# # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-26_19-45-45_rsl-rl_ppo_TrackVelocities_ModularFreeflyer_r-0_seed-2/model_3000.pt
+# # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-26_20-13-52_rsl-rl_ppo_TrackVelocities_ModularFreeflyer_r-0_seed-3/model_3000.pt
+# # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-26_20-41-46_rsl-rl_ppo_TrackVelocities_ModularFreeflyer_r-0_seed-4/model_3000.pt
+# # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-26_21-09-28_rsl-rl_ppo_TrackVelocities_ModularFreeflyer_r-0_seed-5/model_3000.pt
+# )
+
+# ########################################################################################################################
+# # VANILLA 2.0
+# ########################################################################################################################
+# CHECKPOINTS=(
+#     # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-31_16-39-04_rsl-rl_ppo_Rendezvous_ModularFreeflyer_r-0_seed-1/model_3999.pt
+#     # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-31_17-08-03_rsl-rl_ppo_Rendezvous_ModularFreeflyer_r-0_seed-2/model_3999.pt
+#     # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-31_17-37-20_rsl-rl_ppo_Rendezvous_ModularFreeflyer_r-0_seed-3/model_3999.pt
+#     # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-31_18-06-26_rsl-rl_ppo_Rendezvous_ModularFreeflyer_r-0_seed-4/model_3999.pt
+#     # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-31_18-35-25_rsl-rl_ppo_Rendezvous_ModularFreeflyer_r-0_seed-5/model_3999.pt
+#     # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-31_19-03-53_rsl-rl_ppo_GoToPosition_ModularFreeflyer_r-0_seed-1/model_3999.pt
+#     # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-31_19-30-16_rsl-rl_ppo_GoToPosition_ModularFreeflyer_r-0_seed-2/model_3999.pt
+#     # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-31_19-56-54_rsl-rl_ppo_GoToPosition_ModularFreeflyer_r-0_seed-3/model_3999.pt
+#     # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-31_20-23-05_rsl-rl_ppo_GoToPosition_ModularFreeflyer_r-0_seed-4/model_3999.pt
+#     # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-31_20-49-18_rsl-rl_ppo_GoToPosition_ModularFreeflyer_r-0_seed-5/model_3999.pt
+#     /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-31_21-15-35_rsl-rl_ppo_GoToPose_ModularFreeflyer_r-0_seed-1/model_3750.pt
+#     /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-31_21-42-12_rsl-rl_ppo_GoToPose_ModularFreeflyer_r-0_seed-2/model_3900.pt
+#     /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-31_22-08-52_rsl-rl_ppo_GoToPose_ModularFreeflyer_r-0_seed-3/model_3850.pt
+#     /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-31_22-35-35_rsl-rl_ppo_GoToPose_ModularFreeflyer_r-0_seed-4/model_3900.pt
+#     /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-31_23-01-53_rsl-rl_ppo_GoToPose_ModularFreeflyer_r-0_seed-5/model_3999.pt
+#     # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-31_23-27-59_rsl-rl_ppo_TrackVelocities_ModularFreeflyer_r-0_seed-1/model_3999.pt
+#     # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-31_23-55-49_rsl-rl_ppo_TrackVelocities_ModularFreeflyer_r-0_seed-2/model_3999.pt
+#     # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-09-01_00-23-46_rsl-rl_ppo_TrackVelocities_ModularFreeflyer_r-0_seed-3/model_3999.pt
+#     # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-09-01_00-51-20_rsl-rl_ppo_TrackVelocities_ModularFreeflyer_r-0_seed-4/model_3999.pt
+#     # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-09-01_01-18-58_rsl-rl_ppo_TrackVelocities_ModularFreeflyer_r-0_seed-5/model_3999.pt
+# )
+
 
 ########################################################################################################################
-# VANILLA 2.0
+# RSS
 ########################################################################################################################
 CHECKPOINTS=(
-    # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-31_16-39-04_rsl-rl_ppo_Rendezvous_ModularFreeflyer_r-0_seed-1/model_3999.pt
-    # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-31_17-08-03_rsl-rl_ppo_Rendezvous_ModularFreeflyer_r-0_seed-2/model_3999.pt
-    # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-31_17-37-20_rsl-rl_ppo_Rendezvous_ModularFreeflyer_r-0_seed-3/model_3999.pt
-    # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-31_18-06-26_rsl-rl_ppo_Rendezvous_ModularFreeflyer_r-0_seed-4/model_3999.pt
-    # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-31_18-35-25_rsl-rl_ppo_Rendezvous_ModularFreeflyer_r-0_seed-5/model_3999.pt
-    # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-31_19-03-53_rsl-rl_ppo_GoToPosition_ModularFreeflyer_r-0_seed-1/model_3999.pt
-    # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-31_19-30-16_rsl-rl_ppo_GoToPosition_ModularFreeflyer_r-0_seed-2/model_3999.pt
-    # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-31_19-56-54_rsl-rl_ppo_GoToPosition_ModularFreeflyer_r-0_seed-3/model_3999.pt
-    # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-31_20-23-05_rsl-rl_ppo_GoToPosition_ModularFreeflyer_r-0_seed-4/model_3999.pt
-    # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-31_20-49-18_rsl-rl_ppo_GoToPosition_ModularFreeflyer_r-0_seed-5/model_3999.pt
-    /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-31_21-15-35_rsl-rl_ppo_GoToPose_ModularFreeflyer_r-0_seed-1/model_3750.pt
-    /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-31_21-42-12_rsl-rl_ppo_GoToPose_ModularFreeflyer_r-0_seed-2/model_3900.pt
-    /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-31_22-08-52_rsl-rl_ppo_GoToPose_ModularFreeflyer_r-0_seed-3/model_3850.pt
-    /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-31_22-35-35_rsl-rl_ppo_GoToPose_ModularFreeflyer_r-0_seed-4/model_3900.pt
-    /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-31_23-01-53_rsl-rl_ppo_GoToPose_ModularFreeflyer_r-0_seed-5/model_3999.pt
-    # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-31_23-27-59_rsl-rl_ppo_TrackVelocities_ModularFreeflyer_r-0_seed-1/model_3999.pt
-    # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-08-31_23-55-49_rsl-rl_ppo_TrackVelocities_ModularFreeflyer_r-0_seed-2/model_3999.pt
-    # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-09-01_00-23-46_rsl-rl_ppo_TrackVelocities_ModularFreeflyer_r-0_seed-3/model_3999.pt
-    # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-09-01_00-51-20_rsl-rl_ppo_TrackVelocities_ModularFreeflyer_r-0_seed-4/model_3999.pt
-    # /workspace/isaaclab/logs/rsl_rl/multitask_memory_control/2025-09-01_01-18-58_rsl-rl_ppo_TrackVelocities_ModularFreeflyer_r-0_seed-5/model_3999.pt
+
 )
+
+
 
 
 # Function to extract task from checkpoint path

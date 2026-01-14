@@ -13,10 +13,10 @@ class SingleRobotMultiTaskPPORunnerCfg(RslRlOnPolicyRunnerCfg):
     num_steps_per_env = 16
     max_iterations = 4000
     save_interval = 1000
-    experiment_name = "multitask_memory_control_beta_mtcr_pcgrad"
+    experiment_name = "multitask_memory_control_beta_simple_FloatingPlatform"
     logger = "wandb"
     wandb_kwargs = {
-        "project": "multitask_memory_control_beta_mtcr_pcgrad",
+        "project": "multitask_memory_control_beta_simple_FloatingPlatform",
         "entity": "spacer-rl",
         "group": "zeroG",
     }
@@ -27,10 +27,10 @@ class SingleRobotMultiTaskPPORunnerCfg(RslRlOnPolicyRunnerCfg):
         critic_hidden_dims=[256, 256],
         activation="tanh",
         clip_actions=False,
-        clip_actions_range=[-1, 1],
+        clip_actions_range=[0, 1],
         use_embeddings=False,
         embeddings_size=5,
-        generator_size=(64, 64),
+        generator_size=(32, 32),
         num_memory_obs=5, # task specific dimension
         network_type="hybrid", #pure, hybrid
     )
@@ -38,7 +38,7 @@ class SingleRobotMultiTaskPPORunnerCfg(RslRlOnPolicyRunnerCfg):
         value_loss_coef=1.0,
         use_clipped_value_loss=True,
         clip_param=0.2,
-        entropy_coef=0.01,
+        entropy_coef=0.005,
         num_learning_epochs=5,
         num_mini_batches=4,
         learning_rate=2.0e-3,

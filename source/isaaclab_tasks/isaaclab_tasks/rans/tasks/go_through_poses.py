@@ -326,10 +326,13 @@ class GoThroughPosesTask(TaskCore):
             randomizer.observations(observations=self._task_data)
 
         task_id_one_hot = F.one_hot(torch.tensor([self._task_uid], device=self._device), num_classes=self._num_tasks).squeeze(0).repeat(self._num_envs, 1)
-        task_obs = task_id_one_hot
-
-        # Concatenate the task observations with the robot observations
-        return torch.concat((self._task_data, self._robot.get_observations(env_ids=self._env_ids)), dim=-1), task_obs
+        semantic_emb = torch.zeros((self._num_envs, 5), device=self._device)
+        semantic_emb[:, 0] = self._rng.sample_uniform_torch(low=0.7, high=1.0, shape=1, ids=self._env_ids)
+        semantic_emb[:, 1] = self._rng.sample_uniform_torch(low=0.8, high=1.0, shape=1, ids=self._env_ids)
+        semantic_emb[:, 2] = self._rng.sample_uniform_torch(low=0.6, high=1.0, shape=1, ids=self._env_ids)
+        
+        # Concatenate task observations with robot's internal observations
+        return torch.concat((self._robot.get_observations(env_ids=self._env_ids), self._task_data), dim=-1), task_id_one_hot, semantic_emb
 
     def compute_rewards(self) -> torch.Tensor:
         """

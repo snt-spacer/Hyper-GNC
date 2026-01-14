@@ -75,6 +75,8 @@ class SingleEnvCfg(DirectRLEnvCfg):
     observation_space = 0
     state_space = 0
     gen_space = 0
+    
+    train_flag: bool = True
 
 
 class SingleEnv(DirectRLEnv):
@@ -249,7 +251,19 @@ class SingleEnv(DirectRLEnv):
         super()._reset_idx(env_ids)
 
         self.robot_api.reset(env_ids)
-        self.task_api.reset(env_ids)
+        if self.task_api.__class__.__name__ == "GoToPosition3DWithObstaclesTask" and self.cfg.train_flag:
+            gen_actions = torch.rand((len(env_ids), self.task_api.num_gen_actions), device=self.task_api._device)
+            # Curriculum for obstacle count (gen_action[7])
+            # 4000 rsl_rl epochs * 16 steps/env per epoch = 64000 environment steps
+            total_steps = 64000
+            progress = min(1.0, self.common_step_counter / total_steps) # linear progress from 0 to 1 over total_steps
+            # Sigmoid curve: 1 / (1 + e^(-7(x-0.5)))
+            curriculum_level = 1.0 / (1.0 + torch.exp(torch.tensor(-7.0 * (progress - 0.5))))
+            curriculum_level = curriculum_level.item()
+            gen_actions[:, 7] = curriculum_level
+        else:
+            gen_actions = None
+        self.task_api.reset(env_ids, gen_actions=gen_actions)
 
     def _set_debug_vis_impl(self, debug_vis: bool) -> None:
         if debug_vis:
