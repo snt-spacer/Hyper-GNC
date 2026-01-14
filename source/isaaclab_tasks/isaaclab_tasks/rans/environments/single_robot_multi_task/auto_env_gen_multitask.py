@@ -129,7 +129,7 @@ class MultiTaskEnv(DirectRLEnv):
 
         self.set_debug_vis(self.cfg.debug_vis)
 
-        task_combined_obs = 54 + self.cfg.action_space + 4 #5 semantic embedding #4 #Task ID 
+        task_combined_obs = 54 + self.cfg.action_space + 5 #5 semantic embedding #4 #Task ID 
         self.observation_buffer = torch.zeros((self.num_envs, task_combined_obs), device=self.device, dtype=torch.float32)
         self.semantic_embedding = torch.zeros((self.num_envs, 5), device=self.device, dtype=torch.float32)
         self.one_hot_task_ids = torch.zeros((self.num_envs, self.num_tasks), device=self.device, dtype=torch.int64)
@@ -293,7 +293,7 @@ class MultiTaskEnv(DirectRLEnv):
         # }
         
         result = {
-            "general_obs": torch.concat((task_id_one_hot_cat, general_obs_cat), dim=-1),
+            "general_obs": torch.concat((semantic_emb_cat, general_obs_cat), dim=-1),
             "task_id_one_hot": task_id_one_hot_cat,
             "semantic_emb": semantic_emb_cat
         }

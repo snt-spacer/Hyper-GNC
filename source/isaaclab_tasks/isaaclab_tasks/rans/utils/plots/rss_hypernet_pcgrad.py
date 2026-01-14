@@ -206,199 +206,424 @@ def main():
         # },
         
         # Task ID
+        # {
+        #     "group_name": "Hypernet beta PCGrad TaskID GoToPose3D",
+        #     "task_name": "GoToPose3D",
+        #     "robot_name": "IntBall2",
+        #     "runs": [
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPose3D_IntBall2_r-0_seed-1_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/extracted_trajectories_GoToPose3D.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/env_info.yaml"
+        #         },
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPose3D_IntBall2_r-0_seed-2_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/extracted_trajectories_GoToPose3D.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/env_info.yaml"
+        #         },
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPose3D_IntBall2_r-0_seed-3_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/extracted_trajectories_GoToPose3D.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/env_info.yaml"
+        #         },
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPose3D_IntBall2_r-0_seed-4_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/extracted_trajectories_GoToPose3D.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/env_info.yaml"
+        #         },
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPose3D_IntBall2_r-0_seed-5_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/extracted_trajectories_GoToPose3D.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/env_info.yaml"
+        #         }
+        #     ]
+        # },
+        # {
+        #     "group_name": "Hypernet beta PCGrad TaskID TrackVelocities3D",
+        #     "task_name": "TrackVelocities3D",
+        #     "robot_name": "IntBall2",
+        #     "runs": [
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_TrackVelocities3D_IntBall2_r-0_seed-1_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/extracted_trajectories_TrackVelocities3D.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/env_info.yaml"
+        #         },
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_TrackVelocities3D_IntBall2_r-0_seed-2_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/extracted_trajectories_TrackVelocities3D.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/env_info.yaml"
+        #         },
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_TrackVelocities3D_IntBall2_r-0_seed-3_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/extracted_trajectories_TrackVelocities3D.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/env_info.yaml"
+        #         },
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_TrackVelocities3D_IntBall2_r-0_seed-4_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/extracted_trajectories_TrackVelocities3D.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/env_info.yaml"
+        #         },
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_TrackVelocities3D_IntBall2_r-0_seed-5_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/extracted_trajectories_TrackVelocities3D.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/env_info.yaml"
+        #         }
+        #     ]
+        # },
+        # {
+        #     "group_name": "Hypernet beta PCGrad TaskID GoThroughPoses3D",
+        #     "task_name": "GoThroughPoses3D",
+        #     "robot_name": "IntBall2",
+        #     "runs": [
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoThroughPoses3D_IntBall2_r-0_seed-1_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/extracted_trajectories_GoThroughPoses3D.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/env_info.yaml"
+        #         },
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoThroughPoses3D_IntBall2_r-0_seed-2_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/extracted_trajectories_GoThroughPoses3D.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/env_info.yaml"
+        #         },
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoThroughPoses3D_IntBall2_r-0_seed-3_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/extracted_trajectories_GoThroughPoses3D.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/env_info.yaml"
+        #         },
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoThroughPoses3D_IntBall2_r-0_seed-4_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/extracted_trajectories_GoThroughPoses3D.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/env_info.yaml"
+        #         },
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoThroughPoses3D_IntBall2_r-0_seed-5_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/extracted_trajectories_GoThroughPoses3D.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/env_info.yaml"
+        #         }
+        #     ]
+        # },
+        # {
+        #     "group_name": "Hypernet beta PCGrad TaskID GoToPosition3DWithObstacles",
+        #     "task_name": "GoToPosition3DWithObstacles",
+        #     "robot_name": "IntBall2",
+        #     "runs": [
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPosition3DWithObstacles_IntBall2_r-0_seed-1_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/extracted_trajectories_GoToPosition3DWithObstacles.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/env_info.yaml"
+        #         },
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPosition3DWithObstacles_IntBall2_r-0_seed-2_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/extracted_trajectories_GoToPosition3DWithObstacles.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/env_info.yaml"
+        #         },
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPosition3DWithObstacles_IntBall2_r-0_seed-3_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/extracted_trajectories_GoToPosition3DWithObstacles.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/env_info.yaml"
+        #         },
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPosition3DWithObstacles_IntBall2_r-0_seed-4_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/extracted_trajectories_GoToPosition3DWithObstacles.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/env_info.yaml"
+        #         },
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPosition3DWithObstacles_IntBall2_r-0_seed-5_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/extracted_trajectories_GoToPosition3DWithObstacles.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/env_info.yaml"
+        #         }
+        #     ]
+        # },
+        # {
+        #     "group_name": "Hypernet beta PCGrad TaskID GoToPose3DBox",
+        #     "task_name": "GoToPose3DBox",
+        #     "robot_name": "IntBall2",
+        #     "runs": [
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPose3DBox_IntBall2_r-0_seed-1_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/extracted_trajectories_GoToPose3DBox.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/env_info.yaml"
+        #         },
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPose3DBox_IntBall2_r-0_seed-2_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/extracted_trajectories_GoToPose3DBox.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/env_info.yaml"
+        #         },
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPose3DBox_IntBall2_r-0_seed-3_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/extracted_trajectories_GoToPose3DBox.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/env_info.yaml"
+        #         },
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPose3DBox_IntBall2_r-0_seed-4_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/extracted_trajectories_GoToPose3DBox.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/env_info.yaml"
+        #         },
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPose3DBox_IntBall2_r-0_seed-5_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/extracted_trajectories_GoToPose3DBox.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/env_info.yaml"
+        #         }
+        #     ]
+        # },
+        # {
+        #     "group_name": "Hypernet beta PCGrad TaskID GoToPosition3D",
+        #     "task_name": "GoToPosition3D",
+        #     "robot_name": "IntBall2",
+        #     "runs": [
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPosition3D_IntBall2_r-0_seed-1_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/extracted_trajectories_GoToPosition3D.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/env_info.yaml"
+        #         },
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPosition3D_IntBall2_r-0_seed-2_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/extracted_trajectories_GoToPosition3D.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/env_info.yaml"
+        #         },
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPosition3D_IntBall2_r-0_seed-3_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/extracted_trajectories_GoToPosition3D.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/env_info.yaml"
+        #         },
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPosition3D_IntBall2_r-0_seed-4_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/extracted_trajectories_GoToPosition3D.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/env_info.yaml"
+        #         },
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPosition3D_IntBall2_r-0_seed-5_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/extracted_trajectories_GoToPosition3D.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/env_info.yaml"
+        #         }
+        #     ]
+        # }
+
+        # SemEmb
         {
-            "group_name": "Hypernet beta PCGrad TaskID GoToPose3D",
+            "group_name": "Hypernet beta PCGrad SemEmb GoToPose3D",
             "task_name": "GoToPose3D",
             "robot_name": "IntBall2",
             "runs": [
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPose3D_IntBall2_r-0_seed-1_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/extracted_trajectories_GoToPose3D.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_10-48-26_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/2026-01-13_10-48-26_rsl-rl_ppo-beta-memory_GoToPose3D_IntBall2_r-0_seed-1_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_10-48-26_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/extracted_trajectories_GoToPose3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_10-48-26_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/env_info.yaml"
                 },
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPose3D_IntBall2_r-0_seed-2_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/extracted_trajectories_GoToPose3D.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_13-47-02_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/2026-01-13_13-47-02_rsl-rl_ppo-beta-memory_GoToPose3D_IntBall2_r-0_seed-2_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_13-47-02_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/extracted_trajectories_GoToPose3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_13-47-02_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/env_info.yaml"
                 },
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPose3D_IntBall2_r-0_seed-3_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/extracted_trajectories_GoToPose3D.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_16-46-14_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/2026-01-13_16-46-14_rsl-rl_ppo-beta-memory_GoToPose3D_IntBall2_r-0_seed-3_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_16-46-14_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/extracted_trajectories_GoToPose3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_16-46-14_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/env_info.yaml"
                 },
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPose3D_IntBall2_r-0_seed-4_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/extracted_trajectories_GoToPose3D.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_19-45-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/2026-01-13_19-45-23_rsl-rl_ppo-beta-memory_GoToPose3D_IntBall2_r-0_seed-4_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_19-45-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/extracted_trajectories_GoToPose3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_19-45-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/env_info.yaml"
                 },
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPose3D_IntBall2_r-0_seed-5_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/extracted_trajectories_GoToPose3D.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_22-43-38_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/2026-01-13_22-43-38_rsl-rl_ppo-beta-memory_GoToPose3D_IntBall2_r-0_seed-5_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_22-43-38_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/extracted_trajectories_GoToPose3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_22-43-38_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/env_info.yaml"
                 }
             ]
         },
         {
-            "group_name": "Hypernet beta PCGrad TaskID TrackVelocities3D",
+            "group_name": "Hypernet beta PCGrad SemEmb GoToPose3D",
+            "task_name": "GoToPose3D",
+            "robot_name": "IntBall2",
+            "runs": [
+                {
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_10-48-26_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/2026-01-13_10-48-26_rsl-rl_ppo-beta-memory_GoToPose3D_IntBall2_r-0_seed-1_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_10-48-26_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/extracted_trajectories_GoToPose3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_10-48-26_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/env_info.yaml"
+                },
+                {
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_13-47-02_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/2026-01-13_13-47-02_rsl-rl_ppo-beta-memory_GoToPose3D_IntBall2_r-0_seed-2_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_13-47-02_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/extracted_trajectories_GoToPose3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_13-47-02_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/env_info.yaml"
+                },
+                {
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_16-46-14_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/2026-01-13_16-46-14_rsl-rl_ppo-beta-memory_GoToPose3D_IntBall2_r-0_seed-3_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_16-46-14_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/extracted_trajectories_GoToPose3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_16-46-14_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/env_info.yaml"
+                },
+                {
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_19-45-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/2026-01-13_19-45-23_rsl-rl_ppo-beta-memory_GoToPose3D_IntBall2_r-0_seed-4_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_19-45-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/extracted_trajectories_GoToPose3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_19-45-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/env_info.yaml"
+                },
+                {
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_22-43-38_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/2026-01-13_22-43-38_rsl-rl_ppo-beta-memory_GoToPose3D_IntBall2_r-0_seed-5_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_22-43-38_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/extracted_trajectories_GoToPose3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_22-43-38_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/env_info.yaml"
+                }
+            ]
+        },
+        {
+            "group_name": "Hypernet beta PCGrad SemEmb TrackVelocities3D",
             "task_name": "TrackVelocities3D",
             "robot_name": "IntBall2",
             "runs": [
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_TrackVelocities3D_IntBall2_r-0_seed-1_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/extracted_trajectories_TrackVelocities3D.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_10-48-26_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/2026-01-13_10-48-26_rsl-rl_ppo-beta-memory_TrackVelocities3D_IntBall2_r-0_seed-1_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_10-48-26_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/extracted_trajectories_TrackVelocities3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_10-48-26_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/env_info.yaml"
                 },
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_TrackVelocities3D_IntBall2_r-0_seed-2_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/extracted_trajectories_TrackVelocities3D.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_13-47-02_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/2026-01-13_13-47-02_rsl-rl_ppo-beta-memory_TrackVelocities3D_IntBall2_r-0_seed-2_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_13-47-02_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/extracted_trajectories_TrackVelocities3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_13-47-02_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/env_info.yaml"
                 },
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_TrackVelocities3D_IntBall2_r-0_seed-3_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/extracted_trajectories_TrackVelocities3D.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_16-46-14_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/2026-01-13_16-46-14_rsl-rl_ppo-beta-memory_TrackVelocities3D_IntBall2_r-0_seed-3_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_16-46-14_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/extracted_trajectories_TrackVelocities3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_16-46-14_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/env_info.yaml"
                 },
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_TrackVelocities3D_IntBall2_r-0_seed-4_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/extracted_trajectories_TrackVelocities3D.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_19-45-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/2026-01-13_19-45-23_rsl-rl_ppo-beta-memory_TrackVelocities3D_IntBall2_r-0_seed-4_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_19-45-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/extracted_trajectories_TrackVelocities3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_19-45-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/env_info.yaml"
                 },
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_TrackVelocities3D_IntBall2_r-0_seed-5_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/extracted_trajectories_TrackVelocities3D.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_22-43-38_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/2026-01-13_22-43-38_rsl-rl_ppo-beta-memory_TrackVelocities3D_IntBall2_r-0_seed-5_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_22-43-38_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/extracted_trajectories_TrackVelocities3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_22-43-38_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/env_info.yaml"
                 }
             ]
         },
         {
-            "group_name": "Hypernet beta PCGrad TaskID GoThroughPoses3D",
+            "group_name": "Hypernet beta PCGrad SemEmb GoThroughPoses3D",
             "task_name": "GoThroughPoses3D",
             "robot_name": "IntBall2",
             "runs": [
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoThroughPoses3D_IntBall2_r-0_seed-1_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/extracted_trajectories_GoThroughPoses3D.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_10-48-26_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/2026-01-13_10-48-26_rsl-rl_ppo-beta-memory_GoThroughPoses3D_IntBall2_r-0_seed-1_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_10-48-26_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/extracted_trajectories_GoThroughPoses3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_10-48-26_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/env_info.yaml"
                 },
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoThroughPoses3D_IntBall2_r-0_seed-2_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/extracted_trajectories_GoThroughPoses3D.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_13-47-02_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/2026-01-13_13-47-02_rsl-rl_ppo-beta-memory_GoThroughPoses3D_IntBall2_r-0_seed-2_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_13-47-02_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/extracted_trajectories_GoThroughPoses3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_13-47-02_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/env_info.yaml"
                 },
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoThroughPoses3D_IntBall2_r-0_seed-3_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/extracted_trajectories_GoThroughPoses3D.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_16-46-14_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/2026-01-13_16-46-14_rsl-rl_ppo-beta-memory_GoThroughPoses3D_IntBall2_r-0_seed-3_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_16-46-14_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/extracted_trajectories_GoThroughPoses3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_16-46-14_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/env_info.yaml"
                 },
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoThroughPoses3D_IntBall2_r-0_seed-4_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/extracted_trajectories_GoThroughPoses3D.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_19-45-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/2026-01-13_19-45-23_rsl-rl_ppo-beta-memory_GoThroughPoses3D_IntBall2_r-0_seed-4_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_19-45-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/extracted_trajectories_GoThroughPoses3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_19-45-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/env_info.yaml"
                 },
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoThroughPoses3D_IntBall2_r-0_seed-5_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/extracted_trajectories_GoThroughPoses3D.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_22-43-38_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/2026-01-13_22-43-38_rsl-rl_ppo-beta-memory_GoThroughPoses3D_IntBall2_r-0_seed-5_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_22-43-38_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/extracted_trajectories_GoThroughPoses3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_22-43-38_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/env_info.yaml"
                 }
             ]
         },
         {
-            "group_name": "Hypernet beta PCGrad TaskID GoToPosition3DWithObstacles",
+            "group_name": "Hypernet beta PCGrad SemEmb GoToPosition3DWithObstacles",
             "task_name": "GoToPosition3DWithObstacles",
             "robot_name": "IntBall2",
             "runs": [
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPosition3DWithObstacles_IntBall2_r-0_seed-1_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/extracted_trajectories_GoToPosition3DWithObstacles.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_10-48-26_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/2026-01-13_10-48-26_rsl-rl_ppo-beta-memory_GoToPosition3DWithObstacles_IntBall2_r-0_seed-1_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_10-48-26_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/extracted_trajectories_GoToPosition3DWithObstacles.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_10-48-26_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/env_info.yaml"
                 },
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPosition3DWithObstacles_IntBall2_r-0_seed-2_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/extracted_trajectories_GoToPosition3DWithObstacles.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_13-47-02_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/2026-01-13_13-47-02_rsl-rl_ppo-beta-memory_GoToPosition3DWithObstacles_IntBall2_r-0_seed-2_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_13-47-02_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/extracted_trajectories_GoToPosition3DWithObstacles.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_13-47-02_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/env_info.yaml"
                 },
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPosition3DWithObstacles_IntBall2_r-0_seed-3_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/extracted_trajectories_GoToPosition3DWithObstacles.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_16-46-14_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/2026-01-13_16-46-14_rsl-rl_ppo-beta-memory_GoToPosition3DWithObstacles_IntBall2_r-0_seed-3_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_16-46-14_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/extracted_trajectories_GoToPosition3DWithObstacles.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_16-46-14_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/env_info.yaml"
                 },
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPosition3DWithObstacles_IntBall2_r-0_seed-4_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/extracted_trajectories_GoToPosition3DWithObstacles.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_19-45-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/2026-01-13_19-45-23_rsl-rl_ppo-beta-memory_GoToPosition3DWithObstacles_IntBall2_r-0_seed-4_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_19-45-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/extracted_trajectories_GoToPosition3DWithObstacles.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_19-45-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/env_info.yaml"
                 },
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPosition3DWithObstacles_IntBall2_r-0_seed-5_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/extracted_trajectories_GoToPosition3DWithObstacles.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_22-43-38_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/2026-01-13_22-43-38_rsl-rl_ppo-beta-memory_GoToPosition3DWithObstacles_IntBall2_r-0_seed-5_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_22-43-38_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/extracted_trajectories_GoToPosition3DWithObstacles.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_22-43-38_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/env_info.yaml"
                 }
             ]
         },
         {
-            "group_name": "Hypernet beta PCGrad TaskID GoToPose3DBox",
+            "group_name": "Hypernet beta PCGrad SemEmb GoToPose3DBox",
             "task_name": "GoToPose3DBox",
             "robot_name": "IntBall2",
             "runs": [
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPose3DBox_IntBall2_r-0_seed-1_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/extracted_trajectories_GoToPose3DBox.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_10-48-26_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/2026-01-13_10-48-26_rsl-rl_ppo-beta-memory_GoToPose3DBox_IntBall2_r-0_seed-1_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_10-48-26_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/extracted_trajectories_GoToPose3DBox.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_10-48-26_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/env_info.yaml"
                 },
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPose3DBox_IntBall2_r-0_seed-2_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/extracted_trajectories_GoToPose3DBox.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_13-47-02_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/2026-01-13_13-47-02_rsl-rl_ppo-beta-memory_GoToPose3DBox_IntBall2_r-0_seed-2_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_13-47-02_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/extracted_trajectories_GoToPose3DBox.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_13-47-02_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/env_info.yaml"
                 },
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPose3DBox_IntBall2_r-0_seed-3_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/extracted_trajectories_GoToPose3DBox.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_16-46-14_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/2026-01-13_16-46-14_rsl-rl_ppo-beta-memory_GoToPose3DBox_IntBall2_r-0_seed-3_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_16-46-14_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/extracted_trajectories_GoToPose3DBox.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_16-46-14_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/env_info.yaml"
                 },
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPose3DBox_IntBall2_r-0_seed-4_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/extracted_trajectories_GoToPose3DBox.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_19-45-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/2026-01-13_19-45-23_rsl-rl_ppo-beta-memory_GoToPose3DBox_IntBall2_r-0_seed-4_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_19-45-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/extracted_trajectories_GoToPose3DBox.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_19-45-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/env_info.yaml"
                 },
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPose3DBox_IntBall2_r-0_seed-5_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/extracted_trajectories_GoToPose3DBox.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_22-43-38_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/2026-01-13_22-43-38_rsl-rl_ppo-beta-memory_GoToPose3DBox_IntBall2_r-0_seed-5_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_22-43-38_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/extracted_trajectories_GoToPose3DBox.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_22-43-38_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/env_info.yaml"
                 }
             ]
         },
         {
-            "group_name": "Hypernet beta PCGrad TaskID GoToPosition3D",
+            "group_name": "Hypernet beta PCGrad SemEmb GoToPosition3D",
             "task_name": "GoToPosition3D",
             "robot_name": "IntBall2",
             "runs": [
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPosition3D_IntBall2_r-0_seed-1_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/extracted_trajectories_GoToPosition3D.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_10-48-26_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/2026-01-13_10-48-26_rsl-rl_ppo-beta-memory_GoToPosition3D_IntBall2_r-0_seed-1_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_10-48-26_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/extracted_trajectories_GoToPosition3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_10-48-26_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/env_info.yaml"
                 },
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPosition3D_IntBall2_r-0_seed-2_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/extracted_trajectories_GoToPosition3D.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_13-47-02_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/2026-01-13_13-47-02_rsl-rl_ppo-beta-memory_GoToPosition3D_IntBall2_r-0_seed-2_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_13-47-02_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/extracted_trajectories_GoToPosition3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_13-47-02_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/env_info.yaml"
                 },
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPosition3D_IntBall2_r-0_seed-3_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/extracted_trajectories_GoToPosition3D.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_16-46-14_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/2026-01-13_16-46-14_rsl-rl_ppo-beta-memory_GoToPosition3D_IntBall2_r-0_seed-3_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_16-46-14_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/extracted_trajectories_GoToPosition3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_16-46-14_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/env_info.yaml"
                 },
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPosition3D_IntBall2_r-0_seed-4_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/extracted_trajectories_GoToPosition3D.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_19-45-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/2026-01-13_19-45-23_rsl-rl_ppo-beta-memory_GoToPosition3D_IntBall2_r-0_seed-4_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_19-45-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/extracted_trajectories_GoToPosition3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_19-45-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/env_info.yaml"
                 },
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPosition3D_IntBall2_r-0_seed-5_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/extracted_trajectories_GoToPosition3D.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID/2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_22-43-38_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/2026-01-13_22-43-38_rsl-rl_ppo-beta-memory_GoToPosition3D_IntBall2_r-0_seed-5_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_22-43-38_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/extracted_trajectories_GoToPosition3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb/2026-01-13_22-43-38_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/env_info.yaml"
                 }
             ]
         }
-        
         
         
         
@@ -443,7 +668,7 @@ def main():
         "zoom_in": False,
     }
 
-    save_plots_folder_path = "/workspace/isaaclab/source/isaaclab_tasks/isaaclab_tasks/rans/utils/multiTask_scripts_plus_summaries/hypernet_pcgrad_taskID_rss_7_0" # Specify the folder path where you want to save the plots
+    save_plots_folder_path = "/workspace/isaaclab/source/isaaclab_tasks/isaaclab_tasks/rans/utils/multiTask_scripts_plus_summaries/hypernet_pcgrad_semEmb_rss_7_0" # Specify the folder path where you want to save the plots
     if not os.path.exists(save_plots_folder_path):
         os.makedirs(save_plots_folder_path)
 
