@@ -37,8 +37,13 @@ MODEL_PATHS=(
 
 
 # #SembEmb
-# MODEL_PATHS=(
-# )
+MODEL_PATHS=(
+/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb_simple/2026-01-13_10-10-52_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/model_3999.pt
+/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb_simple/2026-01-13_12-41-40_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/model_3999.pt
+/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb_simple/2026-01-13_12-42-28_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/model_3999.pt
+/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb_simple/2026-01-13_15-13-39_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/model_3999.pt
+/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_pcgrad_semEmb_simple/2026-01-13_17-43-24_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/model_3999.pt
+)
 
 
 
