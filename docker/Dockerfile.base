@@ -115,7 +115,11 @@ RUN git clone https://github.com/AntoineRichard/skrl.git /root/skrl && \
 #     ${ISAACLAB_PATH}/_isaac_sim/python.sh -m pip install --editable /root/rsl_rl
 
 # Hypernet PCGrad BRANCH
-RUN git clone -b ricard/test_new_policy_control_hyper_pcg https://github.com/ricard-inho/rsl_rl.git /root/rsl_rl && \
+# RUN git clone -b ricard/test_new_policy_control_hyper_pcg https://github.com/ricard-inho/rsl_rl.git /root/rsl_rl && \
+#     ${ISAACLAB_PATH}/_isaac_sim/python.sh -m pip install --editable /root/rsl_rl
+
+# Hypernet MultiCrit PCGrad BRANCH
+RUN git clone -b ricard/test_new_policy_control_hyper_mtcr_pcg https://github.com/ricard-inho/rsl_rl.git /root/rsl_rl && \
     ${ISAACLAB_PATH}/_isaac_sim/python.sh -m pip install --editable /root/rsl_rl
 
 #Multi-critic branch
