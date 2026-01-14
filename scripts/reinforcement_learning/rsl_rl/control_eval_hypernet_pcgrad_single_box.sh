@@ -6,7 +6,7 @@ SCRIPT_PATH="./scripts/reinforcement_learning/rsl_rl/eval_control.py"
 TASK="Isaac-RANS-Single-v0"
 NUM_ENVS=32
 runs_per_env=4
-BASE_LOG_DIR="logs/rsl_rl/multitask_memory_control_beta_pcgrad"
+BASE_LOG_DIR="logs/rsl_rl/multitask_memory_control_beta_pcgrad_taskID"
 robot="IntBall2"
 task_name="GoToPose3DBox"
 algorithm="ppo-beta-memory" #ppo, ppo-memory, ppo-beta, ppo-beta-memory
@@ -26,7 +26,14 @@ CHECKPOINTS=(
 )
 
 # # Hypernet Beta PCGrad Task ID
-# CHECKPOINTS=()
+CHECKPOINTS=(
+2026-01-13_10-43-03_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/model_3999.pt
+2026-01-13_13-41-23_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/model_3999.pt
+2026-01-13_16-39-48_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/model_3999.pt
+2026-01-13_19-38-59_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/model_3999.pt
+2026-01-13_22-36-41_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/model_3999.pt
+
+)
 
 # Hypernet Beta PCGrad SemEmb
 # CHECKPOINTS=(
