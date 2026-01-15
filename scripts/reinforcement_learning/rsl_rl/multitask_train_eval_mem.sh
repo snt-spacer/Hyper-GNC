@@ -2,7 +2,7 @@
 
 # --- Configuration ---
 OUTPUT_DIR_NAME="multitask_memory_normW"
-BASE_OUTPUT_DIR="/workspace/isaaclab/source/${OUTPUT_DIR_NAME}"
+BASE_OUTPUT_DIR="/workspace/isaaclab/source/isaaclab_tasks/isaaclab_tasks/rans/utils/${OUTPUT_DIR_NAME}"
 mkdir -p "$BASE_OUTPUT_DIR"
 MODEL_TRACKER_FILE="${BASE_OUTPUT_DIR}/trained_models_tracker.log"
 

@@ -205,9 +205,9 @@ class SingleEnv(DirectRLEnv):
         # breakpoint()
         
         if self.task_api.__class__.__name__ == "GoToPose3DBoxTask":
-            task_id_one_hot_cat = torch.tensor([[1,0,0,0]], device=self.device).repeat(self.num_envs,1)
+            task_id_one_hot_cat = torch.tensor([[1,0,0]], device=self.device).repeat(self.num_envs,1)
         if self.task_api.__class__.__name__ == "GoToPosition3DTask":
-            task_id_one_hot_cat = torch.tensor([[0,0,0,1]], device=self.device).repeat(self.num_envs,1)
+            task_id_one_hot_cat = torch.tensor([[1,0,0]], device=self.device).repeat(self.num_envs,1)
         
         # res`ult = {
         #     "general_obs": torch.concat((semantic_emb_cat, general_obs_cat_padded), dim=-1),

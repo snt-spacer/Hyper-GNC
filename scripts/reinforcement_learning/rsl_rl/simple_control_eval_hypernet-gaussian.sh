@@ -1,49 +1,38 @@
 #!/bin/bash
 
 # --- Configuration ---
-OUTPUT_DIR_NAME="multitask_eval_control_hypernet_general_obs_task_id"
+OUTPUT_DIR_NAME="mtrl_control_eval_intball_hypernet_beta"
 BASE_OUTPUT_DIR="/workspace/isaaclab/source/isaaclab_tasks/isaaclab_tasks/rans/utils/${OUTPUT_DIR_NAME}"
 mkdir -p "$BASE_OUTPUT_DIR"
 EVALUATION_LOG_FILE="${BASE_OUTPUT_DIR}/evaluation_run_$(date +"%Y-%m-%d_%H-%M-%S").log"
 
 # Define your robot and tasks
 robot="IntBall2"
-BASE_TASKS=(GoToPose3D TrackVelocities3D GoThroughPoses3D GoToPosition3DWithObstacles)
-num_envs=64 # Base number of environments, adjust if needed
-algorithm="ppo-beta-memory" #ppo, ppo-memory, ppo-beta, ppo-beta-memory
-runs_per_env=2
+BASE_TASKS=(GoToPose3D TrackVelocities3D GoThroughPoses3D)
+num_envs=126 # Base number of environments, adjust if needed
+algorithm="ppo-memory" #ppo, ppo-memory, ppo-beta, ppo-beta-memory
+runs_per_env=4
 
 ########################################################################################################################
-# IntBall2
+# IntBall2 Hypernet Gaussian
 ########################################################################################################################
-# Hypernet Beta MTCR
-# MODEL_PATHS=(
-# /workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_mtcr/2026-01-12_18-22-26_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/model_3999.pt
-# /workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_mtcr/2026-01-12_19-49-43_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/model_3999.pt
-# /workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_mtcr/2026-01-12_21-16-52_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/model_3999.pt
-# /workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_mtcr/2026-01-12_22-43-59_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/model_3999.pt
-# /workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_mtcr/2026-01-13_00-12-04_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/model_3999.pt
-# )
-
-
-# # Hypernet Beta MTCR Task ID
-# MODEL_PATHS=(
-# /workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_mtcr_taskID/2026-01-12_18-32-27_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/model_3999.pt
-# /workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_mtcr_taskID/2026-01-12_19-44-33_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/model_3999.pt
-# /workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_mtcr_taskID/2026-01-12_20-56-37_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/model_3999.pt
-# /workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_mtcr_taskID/2026-01-12_22-08-30_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/model_3999.pt
-# /workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_mtcr_taskID/2026-01-12_23-20-50_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/model_3999.pt
-
-# )
-
-# Hypernet Beta MTCR SemEmb
 MODEL_PATHS=(
-/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_mtcr_semEmb/2026-01-12_18-33-32_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/model_3999.pt
-/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_mtcr_semEmb/2026-01-12_19-43-40_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/model_3999.pt
-/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_mtcr_semEmb/2026-01-12_20-53-36_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/model_3999.pt
-/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_mtcr_semEmb/2026-01-12_22-03-24_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/model_3999.pt
-/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_mtcr_semEmb/2026-01-12_23-13-13_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/model_3999.pt
+/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_simple_gaussian/2026-01-14_13-24-47_rsl-rl_ppo-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-1/model_3999.pt
+/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_simple_gaussian/2026-01-14_14-12-46_rsl-rl_ppo-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-2/model_3999.pt
+/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_simple_gaussian/2026-01-14_15-00-58_rsl-rl_ppo-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-3/model_3999.pt
+/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_simple_gaussian/2026-01-14_15-48-57_rsl-rl_ppo-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-4/model_3999.pt
+/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_simple_gaussian/2026-01-14_16-36-55_rsl-rl_ppo-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D_IntBall2_r-0_seed-5/model_3999.pt
 )
+
+# # Task ID
+# MODEL_PATHS=()
+
+
+# #SembEmb
+# MODEL_PATHS=()
+
+
+
 
 
 
@@ -101,6 +90,7 @@ do
         --checkpoint="${model_path}" \
         --algorithm="${algorithm}" \
         --runs_per_env="${runs_per_env}" \
+        env.train_flag=False \
         env.robot_name="${robot}" \
         env.tasks_names="[${EVAL_TASKS_NAMES}]" #>> "$EVALUATION_LOG_FILE" 2>&1
 
