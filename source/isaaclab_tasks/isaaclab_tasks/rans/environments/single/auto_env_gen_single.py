@@ -215,9 +215,9 @@ class SingleEnv(DirectRLEnv):
         #     "semantic_emb": semantic_emb_cat
         # }`
         result = {
-            "general_obs": general_obs_cat_padded,
-            "task_id_one_hot": task_id_one_hot_cat,
-            "semantic_emb": semantic_emb_cat
+            "general_obs": general_obs_cat_padded.float(),
+            "task_id_one_hot": task_id_one_hot_cat.float(),
+            "semantic_emb": semantic_emb_cat.float()
         }
         return {"policy": result}
     

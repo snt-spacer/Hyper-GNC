@@ -72,3 +72,5 @@ multitask*/
 source/isaaclab_tasks/isaaclab_tasks/rans/utils/multiTask_scripts_plus_summaries/*
 source/isaaclab_tasks/isaaclab_tasks/rans/utils/multiTask_scripts_plus_summaries/*
 source/isaaclab_tasks/isaaclab_tasks/rans/utils/mtrl_control_eval_intball_hypernet_beta/*
+source/isaaclab_tasks/isaaclab_tasks/rans/utils/train_logs/*
+source/isaaclab_tasks/isaaclab_tasks/rans/utils/train_eval_models_logs/*
