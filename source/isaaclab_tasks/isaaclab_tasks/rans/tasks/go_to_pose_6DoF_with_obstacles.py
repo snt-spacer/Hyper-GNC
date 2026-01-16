@@ -776,13 +776,13 @@ class GoToPose3DWithObstaclesTask(TaskCore):
         ), dim=-1)
 
         # **Step 12: Randomly decide how many obstacles to show**
-        num_visible_obstacles_per_env = self._rng.sample_integer_torch(
-            low=1, high=self._task_cfg.max_num_vis_obstacles, shape=(1,), ids=env_ids
-        )
-        mask = torch.arange(self._task_cfg.max_num_vis_obstacles, device=self._device).unsqueeze(0) < num_visible_obstacles_per_env.unsqueeze(1)
+        num_visible_obstacles_per_env = torch.round(self._gen_actions[env_ids, 7] * (self._task_cfg.max_num_vis_obstacles - self._task_cfg.min_num_obstacles) + self._task_cfg.min_num_obstacles)
+
+        mask = torch.arange(self._task_cfg.max_num_vis_obstacles, device=self._device).unsqueeze(
+            0
+        ) < num_visible_obstacles_per_env.unsqueeze(1)
         
         return obstacles_positions, mask
-
 
     def create_task_visualization(self) -> None:
         """

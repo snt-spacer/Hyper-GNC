@@ -25,8 +25,8 @@ class GoToPosition3DWithObstaclesCfg(GoToPosition3DCfg):
     """Collision threshold. Defaults to 10.0"""
 
     # Obstacles
-    obstacles_height: float = 0.5
-    """Height of the obstacles. Defaults to 0.5 m."""
+    obstacles_height: float = 0.1
+    """Height of the obstacles. Defaults to 0.1 m."""
     min_obstacle_height: float = -2.0
     """Minimal height of the obstacles. Defaults to 0.0 m."""
     max_obstacle_height: float = 2.0
@@ -35,24 +35,25 @@ class GoToPosition3DWithObstaclesCfg(GoToPosition3DCfg):
     """The minimum distance between the points sampled to create the obstacles grid. Should be between 0 and 1. Smaller values can create more complex env."""
     max_num_vis_obstacles: int = 8
     """Max number of obstacles visible in the environment. Defaults to 8."""
-    obstacle_radius: float = 0.2
-    """Radius of the obstacles. Defaults to 0.2 m."""
+    min_num_obstacles: int = 3
+    """Min number of obstacles visible in the environment. Defaults to 3."""
+    obstacle_radius: float = 0.1
+    """Radius of the obstacles. Defaults to 0.1 m."""
     obstacles_storage_height_pos: float = -500.0
     """Height where to store the obstacles. Defaults to -2.0 m."""
     max_obstacle_distance_from_target: float = 10
     """Maximal distance between the target and the obstacles. Defaults to 10 m."""
-    min_num_obstacles: int = 0
-    """Minimal number of obstacles in the environment. Defaults to 1."""
-    min_obstacle_distance_from_target: float = 0.3
+    min_obstacle_distance_from_target: float = 1.0
     """Minimal distance between the target and the obstacles. Defaults to 1 m."""
-    min_obstacle_distance_from_robot: float = 0.5
+    min_obstacle_distance_from_robot: float = 0.8
     """Minimal distance between the robot and the obstacles. Defaults to 1 m."""
     min_distance_between_obstacle: float = 1.5
     """Minimal distance between the obstacles. Defaults to 0.5 m."""
-    collision_penalty: float = -30.0
+    collision_penalty: float = -50.0
     """Penalty for colliding with an obstacle. Defaults to -10.0."""
     collision_penalty_weight: float = 1.0
     """Weight for the collision penalty. Defaults to 1.0."""
+
 
     # ISS box
     iss_box_storage_height_pos: float = -500.0

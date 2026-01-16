@@ -17,12 +17,17 @@ COMMON_ARGS="--task=${TASK} --headless --num_envs=${NUM_ENVS} --runs_per_env=${r
 # Array of checkpoint paths (relative to BASE_LOG_DIR)
 
 #Experts
+# CHECKPOINTS=(
+#     2026-01-08_08-29-19_rsl-rl_ppo_GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/model_3999.pt
+#     2026-01-08_09-05-51_rsl-rl_ppo_GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/model_3999.pt
+#     2026-01-08_09-42-02_rsl-rl_ppo_GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/model_3999.pt
+#     2026-01-08_10-18-21_rsl-rl_ppo_GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/model_3999.pt
+#     2026-01-08_10-54-56_rsl-rl_ppo_GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/model_3999.pt
+# )
+
+# New Expert
 CHECKPOINTS=(
-    2026-01-08_08-29-19_rsl-rl_ppo_GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/model_3999.pt
-    2026-01-08_09-05-51_rsl-rl_ppo_GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/model_3999.pt
-    2026-01-08_09-42-02_rsl-rl_ppo_GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/model_3999.pt
-    2026-01-08_10-18-21_rsl-rl_ppo_GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/model_3999.pt
-    2026-01-08_10-54-56_rsl-rl_ppo_GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/model_3999.pt
+    2026-01-16_10-42-52_rsl-rl_ppo_GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/model_3999.pt
 )
 
 

@@ -34,25 +34,27 @@ class GoToPose3DWithObstaclesCfg(GoToPose3DCfg):
     
 
     # Obstacles
-    obstacles_height: float = 0.5
-    """Height of the obstacles. Defaults to 0.5 m."""
+    obstacles_height: float = 0.1
+    """Height of the obstacles. Defaults to 0.1 m."""
     min_obstacle_height: float = -2.0
     """Minimal height of the obstacles. Defaults to 0.0 m."""
     max_obstacle_height: float = 2.0
     """Maximal height of the obstacles. Defaults to 0.0 m."""
     minimum_point_distance = 0.05
     """The minimum distance between the points sampled to create the obstacles grid. Should be between 0 and 1. Smaller values can create more complex env."""
-    max_num_vis_obstacles: int = 100
+    max_num_vis_obstacles: int = 8
     """Max number of obstacles visible in the environment. Defaults to 8."""
-    obstacle_radius: float = 0.2
-    """Radius of the obstacles. Defaults to 0.2 m."""
+    min_num_obstacles: int = 3
+    """Min number of obstacles visible in the environment. Defaults to 3."""
+    obstacle_radius: float = 0.1
+    """Radius of the obstacles. Defaults to 0.1 m."""
     obstacles_storage_height_pos: float = -500.0
     """Height where to store the obstacles. Defaults to -2.0 m."""
     max_obstacle_distance_from_target: float = 10
     """Maximal distance between the target and the obstacles. Defaults to 10 m."""
-    min_obstacle_distance_from_target: float = 0.3
+    min_obstacle_distance_from_target: float = 1.0
     """Minimal distance between the target and the obstacles. Defaults to 1 m."""
-    min_obstacle_distance_from_robot: float = 1
+    min_obstacle_distance_from_robot: float = 0.8
     """Minimal distance between the robot and the obstacles. Defaults to 1 m."""
     min_distance_between_obstacle: float = 1.5
     """Minimal distance between the obstacles. Defaults to 0.5 m."""
