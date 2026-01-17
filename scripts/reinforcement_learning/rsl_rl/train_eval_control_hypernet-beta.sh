@@ -9,14 +9,14 @@ TASKS_NAMES="GoToPose3D,TrackVelocities3D,GoThroughPoses3D,GoToPosition3DWithObs
 # Evaluation parameters
 EVAL_NUM_ENVS=64 # Base number of environments, adjust if needed
 RUNS_PER_ENV=2
-MODEL_NUM="2"
+MODEL_NUM="3999"
 ZERO_SHOT_TASKS=(GoToPose3DBox GoToPosition3D)
 
 mkdir -p "$OUTPUT_LOGS_PATH"
 mkdir -p "$OUTPUT_MODELS_PATH"
 
 start_time=$(date +%s.%N)
-for SEED in {1..1}
+for SEED in {1..5}
 do
     # Training
     echo "No worries is training, go touch some grass."
