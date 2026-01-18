@@ -13,10 +13,10 @@ class SingleRobotMultiTaskPPORunnerCfg(RslRlOnPolicyRunnerCfg):
     num_steps_per_env = 16
     max_iterations = 4000
     save_interval = 1000
-    experiment_name = "multitask_memory_control_beta_s_new_obstacles"
+    experiment_name = "multitask_memory_control_beta_s_new_obstacles_taskID"
     logger = "wandb"
     wandb_kwargs = {
-        "project": "multitask_memory_control_beta_s_new_obstacles",
+        "project": "multitask_memory_control_beta_s_new_obstacles_taskID",
         "entity": "spacer-rl",
         "group": "zeroG",
     }

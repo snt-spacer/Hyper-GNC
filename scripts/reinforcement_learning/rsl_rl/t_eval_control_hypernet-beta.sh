@@ -10,7 +10,7 @@ TASKS_NAMES="GoToPose3D,TrackVelocities3D,GoThroughPoses3D,GoToPosition3DWithObs
 # Evaluation parameters
 EVAL_NUM_ENVS=64
 RUNS_PER_ENV=2
-MODEL_NUM="2999"
+MODEL_NUM="3000"
 ZERO_SHOT_TASKS=(GoToPose3DBox GoToPosition3D)
 
 # List of model directories to evaluate
