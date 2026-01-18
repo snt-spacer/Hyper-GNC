@@ -106,8 +106,8 @@ RUN git clone https://github.com/AntoineRichard/skrl.git /root/skrl && \
 #     ${ISAACLAB_PATH}/_isaac_sim/python.sh -m pip install --editable /root/rsl_rl
 
 # Hypernet BRANCH
-RUN git clone -b ricard/test_new_policy_control https://github.com/ricard-inho/rsl_rl.git /root/rsl_rl && \
-    ${ISAACLAB_PATH}/_isaac_sim/python.sh -m pip install --editable /root/rsl_rl
+# RUN git clone -b ricard/test_new_policy_control https://github.com/ricard-inho/rsl_rl.git /root/rsl_rl && \
+#     ${ISAACLAB_PATH}/_isaac_sim/python.sh -m pip install --editable /root/rsl_rl
 
 
 # Hypernet MultiCrit BRANCH
@@ -123,8 +123,8 @@ RUN git clone -b ricard/test_new_policy_control https://github.com/ricard-inho/r
 #     ${ISAACLAB_PATH}/_isaac_sim/python.sh -m pip install --editable /root/rsl_rl
 
 #Multi-critic branch
-# RUN git clone -b ricard/test_new_policy_control_multi-critic https://github.com/ricard-inho/rsl_rl.git /root/rsl_rl && \
-#     ${ISAACLAB_PATH}/_isaac_sim/python.sh -m pip install --editable /root/rsl_rl
+RUN git clone -b ricard/test_new_policy_control_multi-critic https://github.com/ricard-inho/rsl_rl.git /root/rsl_rl && \
+    ${ISAACLAB_PATH}/_isaac_sim/python.sh -m pip install --editable /root/rsl_rl
 
 
 # # PC-Grad
