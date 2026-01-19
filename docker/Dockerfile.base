@@ -99,20 +99,20 @@ RUN echo "export ISAACLAB_PATH=${ISAACLAB_PATH}" >> ${HOME}/.bashrc && \
 
 RUN ${ISAACLAB_PATH}/_isaac_sim/python.sh -m pip install --upgrade pip
 
-RUN git clone https://github.com/AntoineRichard/skrl.git /root/skrl && \
-    ${ISAACLAB_PATH}/_isaac_sim/python.sh -m pip install --editable /root/skrl
+# RUN git clone https://github.com/AntoineRichard/skrl.git /root/skrl && \
+#     ${ISAACLAB_PATH}/_isaac_sim/python.sh -m pip install --editable /root/skrl
 
 # RUN git clone https://github.com/ricard-inho/rsl_rl.git /root/rsl_rl && \
 #     ${ISAACLAB_PATH}/_isaac_sim/python.sh -m pip install --editable /root/rsl_rl
 
 # Hypernet BRANCH
-# RUN git clone -b ricard/test_new_policy_control https://github.com/ricard-inho/rsl_rl.git /root/rsl_rl && \
-#     ${ISAACLAB_PATH}/_isaac_sim/python.sh -m pip install --editable /root/rsl_rl
+RUN git clone -b ricard/test_new_policy_control https://github.com/ricard-inho/rsl_rl.git /root/rsl_rl && \
+    ${ISAACLAB_PATH}/_isaac_sim/python.sh -m pip install --editable /root/rsl_rl
 
 
 # Hypernet MultiCrit BRANCH
-RUN git clone -b ricard/test_new_policy_control_hyper_mtcr https://github.com/ricard-inho/rsl_rl.git /root/rsl_rl && \
-    ${ISAACLAB_PATH}/_isaac_sim/python.sh -m pip install --editable /root/rsl_rl
+# RUN git clone -b ricard/test_new_policy_control_hyper_mtcr https://github.com/ricard-inho/rsl_rl.git /root/rsl_rl && \
+#     ${ISAACLAB_PATH}/_isaac_sim/python.sh -m pip install --editable /root/rsl_rl
 
 # Hypernet PCGrad BRANCH
 # RUN git clone -b ricard/test_new_policy_control_hyper_pcg https://github.com/ricard-inho/rsl_rl.git /root/rsl_rl && \
