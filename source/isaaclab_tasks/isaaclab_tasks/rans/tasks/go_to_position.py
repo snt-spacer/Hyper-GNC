@@ -219,10 +219,12 @@ class GoToPositionTask(TaskCore):
         #     self._robot._thrusters_active_mask[self._env_ids]
         # ), dim=-1)  # [masses, com_x, com_y, thrusters_active_mask]
         task_id_one_hot = F.one_hot(torch.tensor([self._task_uid], device=self._device), num_classes=self._num_tasks).squeeze(0).repeat(self._num_envs, 1)
-        task_obs = task_id_one_hot
+        semantic_emb = torch.zeros((self._num_envs, 5), device=self._device)
+        semantic_emb[:, 0] = self._rng.sample_uniform_torch(low=0.8, high=1.0, shape=1, ids=self._env_ids)
+        semantic_emb[:, 3] = self._rng.sample_uniform_torch(low=0.8, high=1.0, shape=1, ids=self._env_ids)
 
         # Concatenate the task observations with the robot observations
-        return torch.concat((self._task_data, self._robot.get_observations(env_ids=self._env_ids)), dim=-1), task_obs
+        return torch.concat((self._robot.get_observations(env_ids=self._env_ids), self._task_data), dim=-1), task_id_one_hot, semantic_emb
 
     def compute_rewards(self) -> torch.Tensor:
         """
@@ -329,7 +331,7 @@ class GoToPositionTask(TaskCore):
         reward_action_rate_at_target = (
             self._task_cfg.weight_action_rate_at_target * position_tracking_precision * (1.0 - torch.tanh(action_rate / self._task_cfg.tanh_std_action_rate_at_target))
         )
-        self.scalar_logger.log("task_reward", "GoToPosition/EMA/action_rate_at_target", reward_action_rate_at_target)
+        self.scalar_logger.log("task_reward", "GoToPosition/EMA/action_rate_at_target", reward_action_rate_at_target * self._task_cfg.weight_action_rate_at_target)
 
 
         # Return the reward by combining the different components and adding the robot rewards
@@ -339,8 +341,8 @@ class GoToPositionTask(TaskCore):
             + heading_rew * self._task_cfg.heading_weight
             + linear_velocity_rew * self._task_cfg.linear_velocity_weight
             + angular_velocity_rew * self._task_cfg.angular_velocity_weight
-            + reward_action_rate_at_target
-            # + boundary_rew * self._task_cfg.boundary_weight
+            # + reward_action_rate_at_target * self._task_cfg.weight_action_rate_at_target
+            + boundary_rew * self._task_cfg.boundary_weight
         ) + self._robot.compute_rewards(env_ids=self._env_ids)
 
         self.scalar_logger.log("task_reward", "GoToPosition/AVG/individual_reward", reward)

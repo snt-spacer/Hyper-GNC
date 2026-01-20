@@ -129,7 +129,7 @@ class MultiTaskEnv(DirectRLEnv):
 
         self.set_debug_vis(self.cfg.debug_vis)
 
-        task_combined_obs = 54 + self.cfg.action_space + 4 #5 semantic embedding #4 #Task ID 
+        task_combined_obs = 54 + self.cfg.action_space #+ 4 #5 semantic embedding #4 #Task ID 
         self.observation_buffer = torch.zeros((self.num_envs, task_combined_obs), device=self.device, dtype=torch.float32)
         self.semantic_embedding = torch.zeros((self.num_envs, 5), device=self.device, dtype=torch.float32)
         self.one_hot_task_ids = torch.zeros((self.num_envs, self.num_tasks), device=self.device, dtype=torch.int64)
@@ -286,17 +286,17 @@ class MultiTaskEnv(DirectRLEnv):
             semantic_emb_cat = torch.cat(semantic_emb_list, dim=0).type(torch.float32)
             
 
-        # result = {
-        #     "general_obs": general_obs_cat,
-        #     "task_id_one_hot": task_id_one_hot_cat,
-        #     "semantic_emb": semantic_emb_cat
-        # }
-        
         result = {
-            "general_obs": torch.concat((task_id_one_hot_cat, general_obs_cat), dim=-1),
+            "general_obs": general_obs_cat,
             "task_id_one_hot": task_id_one_hot_cat,
             "semantic_emb": semantic_emb_cat
         }
+        
+        # result = {
+        #     "general_obs": torch.concat((task_id_one_hot_cat, general_obs_cat), dim=-1),
+        #     "task_id_one_hot": task_id_one_hot_cat,
+        #     "semantic_emb": semantic_emb_cat
+        # }
         
         return {"policy": result}
 
@@ -438,6 +438,16 @@ class MultiTaskEnv(DirectRLEnv):
                 curriculum_level = 1.0 / (1.0 + torch.exp(torch.tensor(-7.0 * (progress - 0.5))))
                 curriculum_level = curriculum_level.item()
                 gen_actions[:, 7] = curriculum_level
+            # elif task_api.__class__.__name__ == "GoToPositionWithObstaclesTask" and self.cfg.train_flag:
+            #     gen_actions = torch.rand((len(shifted_tasks_env_ids[i]), task_api.num_gen_actions), device=task_api._device)
+            #     # Curriculum for obstacle count (gen_action[7])
+            #     # 4000 rsl_rl epochs * 16 steps/env per epoch = 64000 environment steps
+            #     total_steps = 64000
+            #     progress = min(1.0, self.common_step_counter / total_steps) # linear progress from 0 to 1 over total_steps
+            #     # Sigmoid curve: 1 / (1 + e^(-7(x-0.5)))
+            #     curriculum_level = 1.0 / (1.0 + torch.exp(torch.tensor(-7.0 * (progress - 0.5))))
+            #     curriculum_level = curriculum_level.item()
+            #     gen_actions[:, 5] = curriculum_level
             
             else:
                 gen_actions = None

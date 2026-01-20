@@ -64,3 +64,4 @@ from .track_velocities_6DoF_metrics import TrackVelocities3DMetrics
 from .go_to_pose_6DoF_with_obstacles_metrics import GoToPose3DBoxMetrics
 from .velo_stabilization_6DoF_metrics import VeloStabilization3DMetrics
 from .go_to_position_6DoF_metrics import GoToPosition3DMetrics
+from .go_to_position_with_obstacles_metrics import GoToPositionWithObstaclesMetrics
