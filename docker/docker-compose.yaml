@@ -60,6 +60,9 @@ x-default-isaac-lab-volumes: &default-isaac-lab-volumes
   - type: volume
     source: isaac-lab-data
     target: ${DOCKER_ISAACLAB_PATH}/data_storage
+  - type: bind
+    source: ${HOME}/rsl_rl # Path local to the host machine, depends on the custom path.
+    target: /root/rsl_rl
 
 x-default-isaac-lab-environment: &default-isaac-lab-environment
   - ISAACSIM_PATH=${DOCKER_ISAACLAB_PATH}/_isaac_sim

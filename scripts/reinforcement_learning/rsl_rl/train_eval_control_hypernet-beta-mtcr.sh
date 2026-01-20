@@ -21,7 +21,7 @@ do
     # Training
     echo "No worries is training, go touch some grass."
     echo "Seed: $SEED"
-    OUTPUT_FILE="${OUTPUT_LOGS_PATH}hypernet-beta-mtcr_seed-${SEED}.txt"
+    OUTPUT_FILE="${OUTPUT_LOGS_PATH}hypernet-beta-s-mtcr-semEmb_seed-${SEED}.txt"
     rm -f $OUTPUT_FILE
     ./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/train_control.py \
         --headless \

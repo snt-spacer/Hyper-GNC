@@ -1,9 +1,9 @@
 #!/bin/bash
-ALGORITHM="ppo-beta-memory"
+ALGORITHM="ppo"
 ROBOT="IntBall2"
 OUTPUT_LOGS_PATH="/workspace/isaaclab/source/isaaclab_tasks/isaaclab_tasks/rans/utils/train_logs/"
 OUTPUT_MODELS_PATH="/workspace/isaaclab/source/isaaclab_tasks/isaaclab_tasks/rans/utils/train_eval_models_logs/"
-CONFIG_PATH="/workspace/isaaclab/source/isaaclab_tasks/isaaclab_tasks/rans/environments/single_robot_multi_task/agents/rsl_rl_ppo-beta-memory_cfg.py"
+CONFIG_PATH="/workspace/isaaclab/source/isaaclab_tasks/isaaclab_tasks/rans/environments/single_robot_multi_task/agents/rsl_rl_ppo_cfg.py"
 TASKS_NAMES="GoToPose3D,TrackVelocities3D,GoThroughPoses3D,GoToPosition3DWithObstacles"
 
 # Evaluation parameters
@@ -21,7 +21,7 @@ do
     # Training
     echo "No worries is training, go touch some grass."
     echo "Seed: $SEED"
-    OUTPUT_FILE="${OUTPUT_LOGS_PATH}hypernet-beta-s-HobsTI-32_seed-${SEED}.txt"
+    OUTPUT_FILE="${OUTPUT_LOGS_PATH}pcgrad-semEmb_seed-${SEED}.txt"
     rm -f $OUTPUT_FILE
     ./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/train_control.py \
         --headless \

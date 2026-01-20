@@ -16,12 +16,12 @@ mkdir -p "$OUTPUT_LOGS_PATH"
 mkdir -p "$OUTPUT_MODELS_PATH"
 
 start_time=$(date +%s.%N)
-for SEED in {5..5}
+for SEED in {1..5}
 do
     # Training
     echo "No worries is training, go touch some grass."
     echo "Seed: $SEED"
-    OUTPUT_FILE="${OUTPUT_LOGS_PATH}hypernet-beta-mtcr-pcgrad_seed-${SEED}.txt"
+    OUTPUT_FILE="${OUTPUT_LOGS_PATH}hypernet-beta-mtcr-pcgrad-semEmb_seed-${SEED}.txt"
     rm -f $OUTPUT_FILE
     ./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/train_control.py \
         --headless \

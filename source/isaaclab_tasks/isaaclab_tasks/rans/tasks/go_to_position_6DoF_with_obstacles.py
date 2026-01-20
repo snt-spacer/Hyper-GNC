@@ -105,6 +105,7 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
             "position_error",
             "local_pos_error",
             "target_orientations",
+            "collided_signal",
         ]
     
     @property
@@ -117,6 +118,7 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
             "position_error": ["(N, 3)"],
             "local_pos_error": ["(N, 3)"],
             "target_orientations": ["(N, 4)"],
+            "collided_signal": ["(N, 1)"],
         }
     
     @property
@@ -134,6 +136,7 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
             "position_error": self._position_error,
             "local_pos_error": self._local_pos_error,
             "target_orientations": self._target_orientations,
+            "collided_signal": self.collided_signal,
         }
 
     def initialize_buffers(self, env_ids: torch.Tensor | None = None) -> None:

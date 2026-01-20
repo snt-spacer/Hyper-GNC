@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Configuration
-ALGORITHM="ppo-beta-memory"
+ALGORITHM="ppo-multi-critic"
 ROBOT="IntBall2"
 OUTPUT_LOGS_PATH="/workspace/isaaclab/source/isaaclab_tasks/isaaclab_tasks/rans/utils/train_logs/"
 OUTPUT_MODELS_PATH="/workspace/isaaclab/source/isaaclab_tasks/isaaclab_tasks/rans/utils/train_eval_models_logs/"
@@ -10,16 +10,13 @@ TASKS_NAMES="GoToPose3D,TrackVelocities3D,GoThroughPoses3D,GoToPosition3DWithObs
 # Evaluation parameters
 EVAL_NUM_ENVS=64
 RUNS_PER_ENV=2
-MODEL_NUM="3000"
+MODEL_NUM="3999"
 ZERO_SHOT_TASKS=(GoToPose3DBox GoToPosition3D)
 
 # List of model directories to evaluate
 MODEL_PATHS=(
-    "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_new_obstacles/2026-01-16_23-28-10_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1"
-    "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_new_obstacles/2026-01-17_01-20-50_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2"
-    "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_new_obstacles/2026-01-17_03-15-20_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3"
-    "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_new_obstacles/2026-01-17_05-09-07_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4"
-    "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_new_obstacles/2026-01-17_07-03-03_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5"
+    "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_new_obstacles_taskID/2026-01-17_13-18-43_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2"
+    "/workspace/isaaclab/logs/rsl_rl/mtrl_intball2_multi_critic_new_obstacles_taskID/2026-01-18_01-10-31_rsl-rl_ppo-multi-critic_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4"
 )
 
 mkdir -p "$OUTPUT_LOGS_PATH"

@@ -10,16 +10,12 @@ TASKS_NAMES="GoToPose3D,TrackVelocities3D,GoThroughPoses3D,GoToPosition3DWithObs
 # Evaluation parameters
 EVAL_NUM_ENVS=64
 RUNS_PER_ENV=2
-MODEL_NUM="3000"
+MODEL_NUM="3999"
 ZERO_SHOT_TASKS=(GoToPose3DBox GoToPosition3D)
 
 # List of model directories to evaluate
 MODEL_PATHS=(
-    "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_new_obstacles/2026-01-16_23-28-10_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-1"
-    "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_new_obstacles/2026-01-17_01-20-50_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-2"
-    "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_new_obstacles/2026-01-17_03-15-20_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-3"
-    "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_new_obstacles/2026-01-17_05-09-07_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-4"
-    "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_new_obstacles/2026-01-17_07-03-03_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5"
+    "/workspace/isaaclab/logs/rsl_rl/multitask_memory_control_beta_s_mtcr_pcgrad_new_obstacles_semEmb/2026-01-20_03-58-51_rsl-rl_ppo-beta-memory_GoToPose3D-TrackVelocities3D-GoThroughPoses3D-GoToPosition3DWithObstacles_IntBall2_r-0_seed-5"
 )
 
 mkdir -p "$OUTPUT_LOGS_PATH"
