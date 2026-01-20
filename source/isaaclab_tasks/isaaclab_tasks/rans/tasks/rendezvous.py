@@ -478,9 +478,9 @@ class RendezvousTask(TaskCore):
         # Return the reward by combining the different components and adding the robot rewards
         reward = (
             
-            # (position_rew) * (orientation_rew) * self._task_cfg.progress_weight
-            position_rew * self._task_cfg.position_weight
-            + orientation_rew * self._task_cfg.orientation_weight
+            (position_rew) * (orientation_rew) * self._task_cfg.progress_weight
+            # position_rew * self._task_cfg.position_weight
+            # + orientation_rew * self._task_cfg.orientation_weight
             + heading_to_target_rew * self._task_cfg.target_heading_weight
             + linear_velocity_rew * self._task_cfg.linear_velocity_weight
             + angular_velocity_rew * self._task_cfg.angular_velocity_weight
