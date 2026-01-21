@@ -30,13 +30,13 @@ class GoToPositionWithObstaclesCfg(GoToPositionCfg):
     # Obstacles
     minimum_point_distance = 0.05
     """The minimum distance between the points sampled to create the obstacles grid. Should be between 0 and 1. Smaller values can create more complex env."""
-    max_num_vis_obstacles: int = 8
+    max_num_vis_obstacles: int = 4
     """Max number of obstacles visible in the environment. Defaults to 8."""
     obstacle_radius: float = 0.2
     """Radius of the obstacles. Defaults to 0.2 m."""
     obstacles_height: float = 0.5
     """Height of the obstacles. Defaults to 0.5 m."""
-    obstacles_storage_height_pos: float = -3.0
+    obstacles_storage_height_pos: float = -500.0
     """Height where to store the obstacles. Defaults to -2.0 m."""
     max_obstacle_distance_from_target: float = 10
     """Maximal distance between the target and the obstacles. Defaults to 10 m."""
@@ -46,9 +46,12 @@ class GoToPositionWithObstaclesCfg(GoToPositionCfg):
     """Minimal distance between the robot and the obstacles. Defaults to 1 m."""
     min_distance_between_obstacle: float = 0.5
     """Minimal distance between the obstacles. Defaults to 0.5 m."""
+    min_num_obstacles: int = 3
+    """Minimum number of obstacles in the environment. Defaults to 3."""
 
     # Spaces
     observation_space: int = 15
+    gen_space: int = 6
 
     collision_penalty: float = -10.0
     progress_weight: float = 1.0

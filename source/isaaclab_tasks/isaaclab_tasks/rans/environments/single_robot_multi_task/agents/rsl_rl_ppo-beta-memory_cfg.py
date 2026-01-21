@@ -11,12 +11,12 @@ from isaaclab_rl.rsl_rl import RslRlOnPolicyRunnerCfg, RslRlPpoActorCriticBetaMe
 @configclass
 class SingleRobotMultiTaskPPORunnerCfg(RslRlOnPolicyRunnerCfg):
     num_steps_per_env = 16
-    max_iterations = 4000
+    max_iterations = 8000
     save_interval = 1000
-    experiment_name = "multitask_memory_control_beta_S_mtcr_pcgrad_new_obstacles_TaskID"
+    experiment_name = "hypernet_sim2real_FP_s"
     logger = "wandb"
     wandb_kwargs = {
-        "project": "multitask_memory_control_beta_S_mtcr_pcgrad_new_obstacles_TaskID",
+        "project": "hypernet_sim2real_FP_s",
         "entity": "spacer-rl",
         "group": "zeroG",
     }
@@ -30,7 +30,7 @@ class SingleRobotMultiTaskPPORunnerCfg(RslRlOnPolicyRunnerCfg):
         clip_actions_range=[-1, 1],
         use_embeddings=False,
         embeddings_size=5,
-        generator_size=(32,),
+        generator_size=(64, 64),
         num_memory_obs=5, # task specific dimension
         network_type="hybrid", #pure, hybrid
     )

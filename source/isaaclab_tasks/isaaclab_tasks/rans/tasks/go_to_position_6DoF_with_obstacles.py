@@ -517,7 +517,7 @@ class GoToPosition3DWithObstaclesTask(TaskCore):
         # Collision check
         collisions = torch.squeeze(
             torch.max(torch.norm(self._robot.contacts.data.force_matrix_w[self._env_ids], dim=-1), dim=-1)[0], dim=-1
-        )
+        )[self._env_ids]
         self.collided_signal = torch.where(collisions > 0, 1.0, 0.0).unsqueeze(-1)
         collision_penalty_rew = (self.collided_signal * self._task_cfg.collision_penalty).squeeze()
 

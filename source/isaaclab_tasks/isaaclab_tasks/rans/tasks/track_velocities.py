@@ -263,17 +263,17 @@ class TrackVelocitiesTask(TaskCore):
         mean_velocity_distance = torch.stack((angular_velocity_distance,lateral_velocity_distance,linear_velocity_distance), dim=-1).mean(dim=-1)
         mean_velocity_tracking_precision = 1.0 - torch.tanh(mean_velocity_distance / self._task_cfg.mean_velocity_tolerance)
         action_rate = self._robot.action_rate[self._env_ids]
-        reward_action_rate_at_target = (
-            self._task_cfg.weight_action_rate_at_target * mean_velocity_tracking_precision * (1.0 - torch.tanh(action_rate / self._task_cfg.tanh_std_action_rate_at_target))
-        )
-        self.scalar_logger.log("task_reward", "TrackVelocities/EMA/action_rate_at_target", reward_action_rate_at_target)
+        # reward_action_rate_at_target = (
+        #     self._task_cfg.weight_action_rate_at_target * mean_velocity_tracking_precision * (1.0 - torch.tanh(action_rate / self._task_cfg.tanh_std_action_rate_at_target))
+        # )
+        # self.scalar_logger.log("task_reward", "TrackVelocities/EMA/action_rate_at_target", reward_action_rate_at_target)
 
         # Return the reward by combining the different components and adding the robot rewards
         reward = (
             linear_velocity_rew * self._task_cfg.linear_velocity_weight
             + lateral_velocity_rew * self._task_cfg.lateral_velocity_weight
             + angular_velocity_rew * self._task_cfg.angular_velocity_weight
-            + reward_action_rate_at_target
+            # + reward_action_rate_at_target
         ) + self._robot.compute_rewards(env_ids=self._env_ids)
 
         self.scalar_logger.log("task_reward", "TrackVelocities/AVG/individual_reward", reward)

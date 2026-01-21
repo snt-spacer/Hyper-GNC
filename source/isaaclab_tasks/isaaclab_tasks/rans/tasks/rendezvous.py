@@ -347,10 +347,13 @@ class RendezvousTask(TaskCore):
             randomizer.observations(observations=self._task_data)
 
         task_id_one_hot = F.one_hot(torch.tensor([self._task_uid], device=self._device), num_classes=self._num_tasks).squeeze(0).repeat(self._num_envs, 1)
-        task_obs = task_id_one_hot
-
-        # Concatenate the task observations with the robot observations
-        return torch.concat((self._task_data, self._robot.get_observations(env_ids=self._env_ids)), dim=-1), task_obs
+        semantic_emb = torch.zeros((self._num_envs, 5), device=self._device)
+        semantic_emb[:, 0] = self._rng.sample_uniform_torch(low=0.7, high=1.0, shape=1, ids=self._env_ids)
+        semantic_emb[:, 1] = self._rng.sample_uniform_torch(low=0.8, high=1.0, shape=1, ids=self._env_ids)
+        semantic_emb[:, 2] = self._rng.sample_uniform_torch(low=0.6, high=1.0, shape=1, ids=self._env_ids)
+        
+        # Concatenate task observations with robot's internal observations
+        return torch.concat((self._robot.get_observations(env_ids=self._env_ids), self._task_data), dim=-1), task_id_one_hot, semantic_emb
 
     def compute_rewards(self) -> torch.Tensor:
         """
@@ -401,7 +404,7 @@ class RendezvousTask(TaskCore):
         self.scalar_logger.log("task_state", "Rendezvous/AVG/absolute_angular_velocity", angular_velocity)
 
         # orientation reward (encourages the robot to orient w/ the target orientation)
-        orientation_rew = torch.exp(-heading_dist / self._task_cfg.position_heading_exponential_reward_coeff)
+        orientation_rew = torch.exp(-heading_dist / self._task_cfg.heading_exponential_reward_coeff)
 
         # target heading reward (encourages the robot to face the target)
         heading_to_target_rew = torch.exp(-target_heading_dist / self._task_cfg.target_heading_exponential_reward_coeff)
@@ -459,8 +462,8 @@ class RendezvousTask(TaskCore):
         self.scalar_logger.log("task_reward", "Rendezvous/AVG/linear_velocity", linear_velocity_rew * self._task_cfg.linear_velocity_weight)
         self.scalar_logger.log("task_reward", "Rendezvous/AVG/angular_velocity", angular_velocity_rew * self._task_cfg.angular_velocity_weight)
         self.scalar_logger.log("task_reward", "Rendezvous/AVG/boundary", boundary_rew * self._task_cfg.boundary_weight)
-        self.scalar_logger.log("task_reward", "Rendezvous/AVG/orientation", orientation_rew * self._task_cfg.position_heading_weight)
-        self.scalar_logger.log("task_reward", "Rendezvous/AVG/target_heading", heading_to_target_rew)
+        self.scalar_logger.log("task_reward", "Rendezvous/AVG/orientation", orientation_rew * self._task_cfg.orientation_weight)
+        self.scalar_logger.log("task_reward", "Rendezvous/AVG/target_heading", heading_to_target_rew * self._task_cfg.target_heading_weight)
         self.scalar_logger.log("task_reward", "Rendezvous/AVG/position_orientation", (position_rew) * (orientation_rew) * self._task_cfg.progress_weight)
         self.scalar_logger.log("task_reward", "Rendezvous/AVG/position_rew", position_rew)
         self.scalar_logger.log("task_reward", "Rendezvous/SUM/num_goals", goal_reached)
@@ -474,14 +477,15 @@ class RendezvousTask(TaskCore):
 
         # Return the reward by combining the different components and adding the robot rewards
         reward = (
-            # (progress_rew) * (heading_to_target_rew) * self._task_cfg.progress_weight
+            
             (position_rew) * (orientation_rew) * self._task_cfg.progress_weight
-            # + orientation_rew * self._task_cfg.position_heading_weight
-            # + heading_to_target_rew * self._task_cfg.target_heading_weight
+            # position_rew * self._task_cfg.position_weight
+            # + orientation_rew * self._task_cfg.orientation_weight
+            + heading_to_target_rew * self._task_cfg.target_heading_weight
             + linear_velocity_rew * self._task_cfg.linear_velocity_weight
             + angular_velocity_rew * self._task_cfg.angular_velocity_weight
             # + reward_action_rate_at_target
-            # + boundary_rew * self._task_cfg.boundary_weight
+            + boundary_rew * self._task_cfg.boundary_weight
             + self._task_cfg.time_penalty
             + self._task_cfg.reached_bonus * goal_reached
         ) + self._robot.compute_rewards(env_ids=self._env_ids)  # type: ignore[return-value]

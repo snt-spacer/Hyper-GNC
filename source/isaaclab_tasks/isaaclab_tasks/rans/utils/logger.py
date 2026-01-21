@@ -143,7 +143,6 @@ class ScalarLogger:
 
     def sum_logs(self, type, name, value):
         """Sum operation when adding a new data point to the logs."""
-
         return self._step_logs[type][name] + value
 
     def ema_logs(self, type, name, value):

@@ -80,7 +80,7 @@ class GoToPoseCfg(TaskCoreCfg):
     angular_velocity_weight: float = -0.05
     boundary_weight: float = -10.0
     progress_weight: float = 0.2
-    weight_action_rate_at_target: float = 1.0
+    weight_action_rate_at_target: float = 0.0 #1.0
     tanh_std_action_rate_at_target: float = 0.2
 
     # Randomization

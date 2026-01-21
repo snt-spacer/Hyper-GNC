@@ -84,15 +84,15 @@ class RendezvousCfg(TaskCoreCfg):
 
     # Tolerance
     position_tolerance: float = 0.01
-    """Tolerance for the position of the robot. Defaults to 1cm."""
-    heading_tolerance: float = math.pi * 15.0 / 180.0
-    """Tolerance for the heading of the robot. Defaults to 15 degrees."""
+    """Tolerance for the position of the robot. Defaults to 8cm."""
+    heading_tolerance: float = math.pi * 10.0 / 180.0
+    """Tolerance for the heading of the robot. Defaults to 10 degrees."""
     maximum_robot_distance: float = 30.0
     """Maximal distance between the robot and the target position. Defaults to 10 m."""
 
 
     # Reward Would be good to have a config for each reward type
-    position_heading_exponential_reward_coeff: float = 0.25
+    heading_exponential_reward_coeff: float = 1.0
     position_exponential_reward_coeff: float = 1.0
     target_heading_exponential_reward_coeff: float = 1.0
     linear_velocity_min_value: float = 0.0
@@ -102,7 +102,8 @@ class RendezvousCfg(TaskCoreCfg):
     boundary_exponential_reward_coeff: float = 1.0
 
     progress_weight: float = 1.0
-    position_heading_weight: float = 0.05
+    position_weight: float = 1.0
+    orientation_weight: float = 1.0
     target_heading_weight: float = 1.0
     linear_velocity_weight: float = -0.00
     angular_velocity_weight: float = -0.05

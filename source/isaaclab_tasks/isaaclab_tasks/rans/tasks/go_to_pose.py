@@ -272,13 +272,13 @@ class GoToPoseTask(TaskCore):
         # boundary reward
         boundary_rew = torch.exp(-boundary_dist / self._task_cfg.boundary_exponential_reward_coeff)
         # progress reward
-        # progress_rew = progress * (self._task_cfg.maximum_robot_distance - self._position_dist)
-        progress_rew = 1 - torch.clamp(
-            torch.linalg.norm(self._target_positions[:, :2] - self._robot.root_link_pos_w[self._env_ids, :2], dim=-1)
-            / (self._task_cfg.maximum_robot_distance + EPS),
-            min=0.0,
-            max=1.0,
-        )
+        progress_rew = progress * (self._task_cfg.maximum_robot_distance - self._position_dist)
+        # progress_rew = 1 - torch.clamp(
+        #     torch.linalg.norm(self._target_positions[:, :2] - self._robot.root_link_pos_w[self._env_ids, :2], dim=-1)
+        #     / (self._task_cfg.maximum_robot_distance + EPS),
+        #     min=0.0,
+        #     max=1.0,
+        # )
 
         # Checks if the goal is reached
         position_goal_is_reached = (self._position_dist < self._task_cfg.position_tolerance).int()
@@ -299,7 +299,7 @@ class GoToPoseTask(TaskCore):
         reward_action_rate_at_target = (
             self._task_cfg.weight_action_rate_at_target * position_tracking_precision * (1.0 - torch.tanh(action_rate / self._task_cfg.tanh_std_action_rate_at_target))
         )
-        self.scalar_logger.log("task_reward", "GoToPose/EMA/action_rate_at_target", reward_action_rate_at_target)
+        self.scalar_logger.log("task_reward", "GoToPose/EMA/action_rate_at_target", reward_action_rate_at_target * self._task_cfg.weight_action_rate_at_target)
 
 
         # Return the reward by combining the different components and adding the robot rewards
@@ -309,9 +309,9 @@ class GoToPoseTask(TaskCore):
             # + progress_rew * self._task_cfg.progress_weight
             + linear_velocity_rew * self._task_cfg.linear_velocity_weight
             + angular_velocity_rew * self._task_cfg.angular_velocity_weight
-            + reward_action_rate_at_target
-            # + boundary_rew * self._task_cfg.boundary_weight
-            # + progress_rew * self._task_cfg.progress_weight
+            # + reward_action_rate_at_target * self._task_cfg.weight_action_rate_at_target
+            + boundary_rew * self._task_cfg.boundary_weight
+            + progress_rew * self._task_cfg.progress_weight
         ) + self._robot.compute_rewards(env_ids=self._env_ids)
 
         self.scalar_logger.log("task_reward", "GoToPose/AVG/individual_reward", reward)

@@ -68,7 +68,7 @@ class TaskCore:
 
         # Multi-tasking
         self._num_tasks = num_tasks
-        self._env_ids = env_ids
+        self._env_ids: torch.Tensor | None = env_ids
 
         # Logs
         self.create_logs()

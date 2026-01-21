@@ -43,14 +43,14 @@ class GoToPositionCfg(TaskCoreCfg):
     # Tolerance
     position_tolerance: float = 0.01
     """Tolerance for the position of the robot. Defaults to 1cm."""
-    maximum_robot_distance: float = 25.0
-    """Maximal distance between the robot and the target pose. Defaults to 15 m."""
+    maximum_robot_distance: float = 10.0
+    """Maximal distance between the robot and the target pose. Defaults to 10 m."""
     reset_after_n_steps_in_tolerance: int = 100
     """Reset the environment after n steps in tolerance. Defaults to 100 steps."""
 
     # Reward Would be good to have a config for each reward type
     position_exponential_reward_coeff: float = 1.0
-    heading_exponential_reward_coeff: float = 0.25
+    heading_exponential_reward_coeff: float = 1.0
     min_heading_dist_scaler: float = 0.5
     max_heading_dist_scaler: float = 2.5
     linear_velocity_min_value: float = 0.0
@@ -59,17 +59,17 @@ class GoToPositionCfg(TaskCoreCfg):
     angular_velocity_max_value: float = 0.9
     boundary_exponential_reward_coeff: float = 1.0
     position_weight: float = 1.0
-    progress_weight: float = 0.2
-    heading_weight: float = 0.25
+    progress_weight: float = 0.0 # 0.2
+    heading_weight: float = 1.0
     linear_velocity_weight: float = -0.05
     angular_velocity_weight: float = -0.05
     boundary_weight: float = -10.0
-    weight_action_rate_at_target: float = 1.0
+    weight_action_rate_at_target: float = 0.0 #1.0
     tanh_std_action_rate_at_target: float = 0.2
 
     min_heading_dist_scaler: float = 0.5
     max_heading_dist_scaler: float = 2.5
-    heading_weight: float = 0.25
+    heading_weight: float = 1.0
 
     # Randomization
     noisy_observation_cfg: NoisyObservationsCfg = NoisyObservationsCfg(
