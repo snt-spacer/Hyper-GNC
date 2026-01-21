@@ -62,7 +62,7 @@ def modify_rendezvous_config():
         file.writelines(new_content)
 
 
-modify_rendezvous_config()
+# modify_rendezvous_config()
 
 # clear out sys.argv for Hydra
 sys.argv = [sys.argv[0]] + hydra_args

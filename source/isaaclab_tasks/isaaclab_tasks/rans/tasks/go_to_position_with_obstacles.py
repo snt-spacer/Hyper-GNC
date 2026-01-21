@@ -9,7 +9,7 @@ import isaacsim.core.utils.prims as prim_utils
 
 import isaaclab.sim as sim_utils
 from isaaclab.assets import RigidObjectCfg, RigidObjectCollection, RigidObjectCollectionCfg
-from isaaclab.markers import SPHERE_CFG, VisualizationMarkers, VisualizationMarkersCfg
+from isaaclab.markers import SPHERE_CFG, VisualizationMarkers, VisualizationMarkersCfg, PIN_SPHERE_CFG
 
 from isaaclab.utils import math as math_utils
 
@@ -572,23 +572,23 @@ class GoToPositionWithObstaclesTask(TaskCore):
         initial_pose = torch.zeros((num_resets, 7), device=self._device, dtype=torch.float32)
 
         # Position
-        # r = (
-        #     self._gen_actions[env_ids, 0] * (self._task_cfg.spawn_max_dist - self._task_cfg.spawn_min_dist)
-        #     + self._task_cfg.spawn_min_dist
-        # )
-        # theta = self._rng.sample_uniform_torch(-math.pi, math.pi, 1, ids=env_ids)
-        # initial_pose[:, 0] = r * torch.cos(theta) + self._target_positions[env_ids, 0]
-        # initial_pose[:, 1] = r * torch.sin(theta) + self._target_positions[env_ids, 1]
+        r = (
+            self._gen_actions[env_ids, 0] * (self._task_cfg.spawn_max_dist - self._task_cfg.spawn_min_dist)
+            + self._task_cfg.spawn_min_dist
+        )
+        theta = self._rng.sample_uniform_torch(-math.pi, math.pi, 1, ids=env_ids)
+        initial_pose[:, 0] = r * torch.cos(theta) + self._target_positions[env_ids, 0]
+        initial_pose[:, 1] = r * torch.sin(theta) + self._target_positions[env_ids, 1]
 
-        # # chunck_size = self.scene.num_envs // self._num_tasks
-        # # start_indx = (self._task_uid - 1) * chunck_size
-        # # shifted_env_ids = env_ids + start_indx
-        # initial_pose[:, 2] = self._robot_origins[self._env_ids[env_ids], 2]
-        x_range = (-0.7, 0.56)
-        y_range = (-2.7, 2.7)
-        initial_pose[:, 0] = self._rng.sample_uniform_torch(*x_range, 1, ids=env_ids).squeeze(-1) + self._env_origins[env_ids, 0]
-        initial_pose[:, 1] = self._rng.sample_uniform_torch(*y_range, 1, ids=env_ids).squeeze(-1) + self._env_origins[env_ids, 1]
+        # chunck_size = self.scene.num_envs // self._num_tasks
+        # start_indx = (self._task_uid - 1) * chunck_size
+        # shifted_env_ids = env_ids + start_indx
         initial_pose[:, 2] = self._robot_origins[self._env_ids[env_ids], 2]
+        # x_range = (-0.7, 0.56)
+        # y_range = (-2.7, 2.7)
+        # initial_pose[:, 0] = self._rng.sample_uniform_torch(*x_range, 1, ids=env_ids).squeeze(-1) + self._env_origins[env_ids, 0]
+        # initial_pose[:, 1] = self._rng.sample_uniform_torch(*y_range, 1, ids=env_ids).squeeze(-1) + self._env_origins[env_ids, 1]
+        # initial_pose[:, 2] = self._robot_origins[self._env_ids[env_ids], 2]
 
         # Orientation
         # Compute the heading to the target
@@ -747,9 +747,9 @@ class GoToPositionWithObstaclesTask(TaskCore):
         """
 
         # Define visual markers: sphere for the goal and pose marker for the robot
-        goal_marker_cfg = SPHERE_CFG.copy()
-        goal_marker_cfg.markers["sphere"].radius = 0.05
-        goal_marker_cfg.markers["sphere"].visual_material = sim_utils.PreviewSurfaceCfg(diffuse_color=(0.0, 1.0, 0.0))
+        goal_marker_cfg = PIN_SPHERE_CFG.copy()
+        # goal_marker_cfg.markers["sphere"].radius = 0.05
+        # goal_marker_cfg.markers["sphere"].visual_material = sim_utils.PreviewSurfaceCfg(diffuse_color=(0.0, 1.0, 0.0))
         robot_marker_cfg = SPHERE_CFG.copy()
         robot_marker_cfg.markers["sphere"].radius = 0.01
 

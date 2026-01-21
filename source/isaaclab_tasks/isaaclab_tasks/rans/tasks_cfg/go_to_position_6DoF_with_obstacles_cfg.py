@@ -15,6 +15,26 @@ from .go_to_position_6DoF_cfg import GoToPosition3DCfg
 @configclass
 class GoToPosition3DWithObstaclesCfg(GoToPosition3DCfg):
     """Configuration for the GoToPosition with obstacles task in 3D space."""
+    
+    spawn_min_dist: float = 2.5
+    """Minimal distance between the spawn pose and the target pose in m. Defaults to 0.5 m."""
+    spawn_max_dist: float = 5.0
+    """Maximal distance between the spawn pose and the target pose in m. Defaults to 5.0 m."""
+    spawn_min_heading_dist: float = 0.0
+    """Minimal angle between the spawn orientation and the angle required to be looking at the target in rad.
+    Defaults to 0.0 rad."""
+    spawn_max_heading_dist: float = math.pi
+    """Maximal angle between the spawn orientation and the angle required to be looking at the target in rad.
+    Defaults to pi rad."""
+    spawn_min_lin_vel: float = 0.0
+    """Minimal linear velocity at spawn pose in m/s. Defaults to 0.0 m/s."""
+    spawn_max_lin_vel: float = 0.1
+    """Maximal linear velocity at spawn pose in m/s. Defaults to 0.75 m/s."""
+    spawn_min_ang_vel: float = 0.0
+    """Minimal angular velocity at spawn in rad/s. Defaults to 0.0 rad/s."""
+    spawn_max_ang_vel: float = 0.1
+    """Maximal angular velocity at spawn in rad/s. Defaults to 0.2 rad/s."""
+
 
     # Tolerance
     minimum_obstacle_distance_to_target: float = 1.0
@@ -45,7 +65,7 @@ class GoToPosition3DWithObstaclesCfg(GoToPosition3DCfg):
     """Maximal distance between the target and the obstacles. Defaults to 10 m."""
     min_obstacle_distance_from_target: float = 1.0
     """Minimal distance between the target and the obstacles. Defaults to 1 m."""
-    min_obstacle_distance_from_robot: float = 0.8
+    min_obstacle_distance_from_robot: float = 1.5
     """Minimal distance between the robot and the obstacles. Defaults to 1 m."""
     min_distance_between_obstacle: float = 1.5
     """Minimal distance between the obstacles. Defaults to 0.5 m."""
