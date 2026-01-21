@@ -49,7 +49,7 @@ class GoToPositionCfg(TaskCoreCfg):
     """Reset the environment after n steps in tolerance. Defaults to 100 steps."""
 
     # Reward Would be good to have a config for each reward type
-    position_exponential_reward_coeff: float = 1.0
+    position_exponential_reward_coeff: float = 0.8
     heading_exponential_reward_coeff: float = 1.0
     min_heading_dist_scaler: float = 0.5
     max_heading_dist_scaler: float = 2.5

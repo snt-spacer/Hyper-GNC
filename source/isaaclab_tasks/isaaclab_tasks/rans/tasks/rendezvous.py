@@ -478,14 +478,14 @@ class RendezvousTask(TaskCore):
         # Return the reward by combining the different components and adding the robot rewards
         reward = (
             
-            # (position_rew) * (orientation_rew) * self._task_cfg.progress_weight
-            position_rew * self._task_cfg.position_weight
-            + orientation_rew * self._task_cfg.orientation_weight
-            + heading_to_target_rew * self._task_cfg.target_heading_weight
+            (position_rew) * (orientation_rew) * self._task_cfg.progress_weight
+            # position_rew * self._task_cfg.position_weight
+            # + orientation_rew * self._task_cfg.orientation_weight
+            # + heading_to_target_rew * self._task_cfg.target_heading_weight
             + linear_velocity_rew * self._task_cfg.linear_velocity_weight
             + angular_velocity_rew * self._task_cfg.angular_velocity_weight
             # + reward_action_rate_at_target
-            + boundary_rew * self._task_cfg.boundary_weight
+            # + boundary_rew * self._task_cfg.boundary_weight
             + self._task_cfg.time_penalty
             + self._task_cfg.reached_bonus * goal_reached
         ) + self._robot.compute_rewards(env_ids=self._env_ids)  # type: ignore[return-value]

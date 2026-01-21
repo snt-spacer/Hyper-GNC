@@ -4,7 +4,7 @@ ROBOT="FloatingPlatform"
 OUTPUT_LOGS_PATH="/workspace/isaaclab/source/isaaclab_tasks/isaaclab_tasks/rans/utils/train_logs/"
 OUTPUT_MODELS_PATH="/workspace/isaaclab/source/isaaclab_tasks/isaaclab_tasks/rans/utils/train_eval_models_logs/"
 CONFIG_PATH="/workspace/isaaclab/source/isaaclab_tasks/isaaclab_tasks/rans/environments/single_robot_multi_task/agents/rsl_rl_ppo-memory_cfg.py"
-TASKS_NAMES="GoToPose, TrackVelocities, Rendezvous" #, GoToPositionWithObstacles" #TrackVelocities,Rendezvous" #,GoToPositionWithObstacles
+TASKS_NAMES="GoToPose, TrackVelocities, Rendezvous, GoToPositionWithObstacles" #, GoToPositionWithObstacles" #TrackVelocities,Rendezvous" #,GoToPositionWithObstacles
 
 # Evaluation parameters
 EVAL_NUM_ENVS=64 # Base number of environments, adjust if needed
@@ -25,12 +25,12 @@ do
     rm -f $OUTPUT_FILE
     ./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/train_control.py \
         --headless \
-        --num_envs=4095 \
+        --num_envs=4096 \
         --task=Isaac-RANS-MultiTask-v0 \
         env.robot_name=$ROBOT \
         env.tasks_names="[${TASKS_NAMES}]" \
         --algorithm=$ALGORITHM \
-        --seed=$SEED >> $OUTPUT_FILE 2>&1
+        --seed=$SEED #>> $OUTPUT_FILE 2>&1
 
     if [ $? -eq 0 ]; then
         echo "✓ Training completed successfully."

@@ -12,7 +12,7 @@ from isaaclab_rl.rsl_rl import RslRlOnPolicyRunnerCfg, RslRlPpoActorCriticMemory
 class SingleRobotMultiTaskPPORunnerCfg(RslRlOnPolicyRunnerCfg):
     num_steps_per_env = 16
     max_iterations = 4000
-    save_interval = 1000
+    save_interval = 500
     experiment_name = "hypernet_sim2real_FP_s"
     logger = "wandb"
     wandb_kwargs = {

@@ -67,9 +67,9 @@ class RendezvousCfg(TaskCoreCfg):
     """Minimal cone spread between the goals. Defaults to 0.0 rad."""
     goal_max_cone_spread: float = math.pi
     """Maximal cone spread between the goals. Defaults to pi rad."""
-    max_num_goals: int = 10
+    max_num_goals: int = 15
     """Maximal number of goals. Defaults to 10."""
-    min_num_goals: int = 6
+    min_num_goals: int = 5
     """Minimal number of goals. Defaults to 6."""
     loop: bool = True
     """Whether the goals should loop or not. Defaults to False."""
@@ -83,8 +83,8 @@ class RendezvousCfg(TaskCoreCfg):
     """Number of subsequent goals available in the observation. Defaults to 2."""
 
     # Tolerance
-    position_tolerance: float = 0.01
-    """Tolerance for the position of the robot. Defaults to 1cm."""
+    position_tolerance: float = 0.03
+    """Tolerance for the position of the robot. Defaults to 10cm."""
     heading_tolerance: float = math.pi * 15.0 / 180.0
     """Tolerance for the heading of the robot. Defaults to 15 degrees."""
     maximum_robot_distance: float = 30.0
@@ -101,9 +101,9 @@ class RendezvousCfg(TaskCoreCfg):
     angular_velocity_max_value: float = 0.9
     boundary_exponential_reward_coeff: float = 1.0
 
-    progress_weight: float = 1.0
-    position_weight: float = 1.0
-    orientation_weight: float = 1.0
+    progress_weight: float = 0.8
+    position_weight: float = 0.8
+    orientation_weight: float = 0.8
     target_heading_weight: float = 1.0
     linear_velocity_weight: float = -0.00
     angular_velocity_weight: float = -0.05

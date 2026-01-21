@@ -338,7 +338,7 @@ class GoToPositionTask(TaskCore):
         reward =  (
             position_rew * self._task_cfg.position_weight
             # + progress_rew * self._task_cfg.progress_weight
-            + heading_rew * self._task_cfg.heading_weight
+            # + heading_rew * self._task_cfg.heading_weight
             + linear_velocity_rew * self._task_cfg.linear_velocity_weight
             + angular_velocity_rew * self._task_cfg.angular_velocity_weight
             # + reward_action_rate_at_target * self._task_cfg.weight_action_rate_at_target
