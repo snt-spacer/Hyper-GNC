@@ -13,11 +13,11 @@ class SinglePPORunnerCfg(RslRlOnPolicyRunnerCfg):
     num_steps_per_env = 16
     max_iterations = 4000
     save_interval = 1000
-    experiment_name = "intball_experts"
+    experiment_name = "rss_experts"
     logger = "wandb"
-    wandb_project = "intball_experts"
+    wandb_project = "rss_experts"
     wandb_kwargs = {
-        "project": "intball_experts",
+        "project": "rss_experts",
         "entity": "spacer-rl",
         "group": "zeroG",
     }

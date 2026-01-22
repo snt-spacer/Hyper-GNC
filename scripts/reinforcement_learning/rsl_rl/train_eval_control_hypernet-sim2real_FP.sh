@@ -1,5 +1,5 @@
 #!/bin/bash
-ALGORITHM="ppo-memory"
+ALGORITHM="ppo-beta-memory"
 ROBOT="FloatingPlatform"
 OUTPUT_LOGS_PATH="/workspace/isaaclab/source/isaaclab_tasks/isaaclab_tasks/rans/utils/train_logs/"
 OUTPUT_MODELS_PATH="/workspace/isaaclab/source/isaaclab_tasks/isaaclab_tasks/rans/utils/train_eval_models_logs/"

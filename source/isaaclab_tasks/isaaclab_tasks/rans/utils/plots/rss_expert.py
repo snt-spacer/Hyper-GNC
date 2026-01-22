@@ -207,19 +207,213 @@ def main():
         # }
         
         
-        # New Expert
+        # # New Expert
+        # {
+        #     "group_name": "IntBall Expert GoToPosition3DWithObstacles",
+        #     "task_name": "GoToPosition3DWithObstacles",
+        #     "robot_name": "IntBall2",
+        #     "runs": [
+        #         {
+        #             "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/intball_experts/2026-01-16_10-42-52_rsl-rl_ppo_GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/2026-01-16_10-42-52_rsl-rl_ppo_GoToPosition3DWithObstacles_IntBall2_r-0_seed-1_metrics.csv",
+        #             "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/intball_experts/2026-01-16_10-42-52_rsl-rl_ppo_GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/extracted_trajectories_GoToPosition3DWithObstacles.csv",
+        #             "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/intball_experts/2026-01-16_10-42-52_rsl-rl_ppo_GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/env_info.yaml"
+        #         },
+        #     ]
+        # },
+        #
+        #  Expeerst paper rss
         {
-            "group_name": "IntBall Expert GoToPosition3DWithObstacles",
+            "group_name": "IntBall RSS Experts GoToPose3D",
+            "task_name": "GoToPose3D",
+            "robot_name": "IntBall2",
+            "runs": [
+                {
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_09-07-20_rsl-rl_ppo_GoToPose3D_IntBall2_r-0_seed-1/metrics/2026-01-21_09-07-20_rsl-rl_ppo_GoToPose3D_IntBall2_r-0_seed-1_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_09-07-20_rsl-rl_ppo_GoToPose3D_IntBall2_r-0_seed-1/metrics/extracted_trajectories_GoToPose3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_09-07-20_rsl-rl_ppo_GoToPose3D_IntBall2_r-0_seed-1/metrics/env_info.yaml"
+                },
+                {
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_09-27-59_rsl-rl_ppo_GoToPose3D_IntBall2_r-0_seed-2/metrics/2026-01-21_09-27-59_rsl-rl_ppo_GoToPose3D_IntBall2_r-0_seed-2_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_09-27-59_rsl-rl_ppo_GoToPose3D_IntBall2_r-0_seed-2/metrics/extracted_trajectories_GoToPose3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_09-27-59_rsl-rl_ppo_GoToPose3D_IntBall2_r-0_seed-2/metrics/env_info.yaml"
+                },
+                {
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_09-48-50_rsl-rl_ppo_GoToPose3D_IntBall2_r-0_seed-3/metrics/2026-01-21_09-48-50_rsl-rl_ppo_GoToPose3D_IntBall2_r-0_seed-3_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_09-48-50_rsl-rl_ppo_GoToPose3D_IntBall2_r-0_seed-3/metrics/extracted_trajectories_GoToPose3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_09-48-50_rsl-rl_ppo_GoToPose3D_IntBall2_r-0_seed-3/metrics/env_info.yaml"
+                },
+                {
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_10-09-26_rsl-rl_ppo_GoToPose3D_IntBall2_r-0_seed-4/metrics/2026-01-21_10-09-26_rsl-rl_ppo_GoToPose3D_IntBall2_r-0_seed-4_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_10-09-26_rsl-rl_ppo_GoToPose3D_IntBall2_r-0_seed-4/metrics/extracted_trajectories_GoToPose3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_10-09-26_rsl-rl_ppo_GoToPose3D_IntBall2_r-0_seed-4/metrics/env_info.yaml"
+                },
+                {
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_10-30-15_rsl-rl_ppo_GoToPose3D_IntBall2_r-0_seed-5/metrics/2026-01-21_10-30-15_rsl-rl_ppo_GoToPose3D_IntBall2_r-0_seed-5_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_10-30-15_rsl-rl_ppo_GoToPose3D_IntBall2_r-0_seed-5/metrics/extracted_trajectories_GoToPose3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_10-30-15_rsl-rl_ppo_GoToPose3D_IntBall2_r-0_seed-5/metrics/env_info.yaml"
+                }
+            ]
+        },
+        {
+            "group_name": "IntBall RSS Experts TrackVelocities3D",
+            "task_name": "TrackVelocities3D",
+            "robot_name": "IntBall2",
+            "runs": [
+                {
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_10-51-00_rsl-rl_ppo_TrackVelocities3D_IntBall2_r-0_seed-1/metrics/2026-01-21_10-51-00_rsl-rl_ppo_TrackVelocities3D_IntBall2_r-0_seed-1_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_10-51-00_rsl-rl_ppo_TrackVelocities3D_IntBall2_r-0_seed-1/metrics/extracted_trajectories_TrackVelocities3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_10-51-00_rsl-rl_ppo_TrackVelocities3D_IntBall2_r-0_seed-1/metrics/env_info.yaml"
+                },
+                {
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_11-14-08_rsl-rl_ppo_TrackVelocities3D_IntBall2_r-0_seed-2/metrics/2026-01-21_11-14-08_rsl-rl_ppo_TrackVelocities3D_IntBall2_r-0_seed-2_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_11-14-08_rsl-rl_ppo_TrackVelocities3D_IntBall2_r-0_seed-2/metrics/extracted_trajectories_TrackVelocities3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_11-14-08_rsl-rl_ppo_TrackVelocities3D_IntBall2_r-0_seed-2/metrics/env_info.yaml"
+                },
+                {
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_11-37-16_rsl-rl_ppo_TrackVelocities3D_IntBall2_r-0_seed-3/metrics/2026-01-21_11-37-16_rsl-rl_ppo_TrackVelocities3D_IntBall2_r-0_seed-3_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_11-37-16_rsl-rl_ppo_TrackVelocities3D_IntBall2_r-0_seed-3/metrics/extracted_trajectories_TrackVelocities3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_11-37-16_rsl-rl_ppo_TrackVelocities3D_IntBall2_r-0_seed-3/metrics/env_info.yaml"
+                },
+                {
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_12-00-42_rsl-rl_ppo_TrackVelocities3D_IntBall2_r-0_seed-4/metrics/2026-01-21_12-00-42_rsl-rl_ppo_TrackVelocities3D_IntBall2_r-0_seed-4_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_12-00-42_rsl-rl_ppo_TrackVelocities3D_IntBall2_r-0_seed-4/metrics/extracted_trajectories_TrackVelocities3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_12-00-42_rsl-rl_ppo_TrackVelocities3D_IntBall2_r-0_seed-4/metrics/env_info.yaml"
+                },
+                {
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_12-23-58_rsl-rl_ppo_TrackVelocities3D_IntBall2_r-0_seed-5/metrics/2026-01-21_12-23-58_rsl-rl_ppo_TrackVelocities3D_IntBall2_r-0_seed-5_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_12-23-58_rsl-rl_ppo_TrackVelocities3D_IntBall2_r-0_seed-5/metrics/extracted_trajectories_TrackVelocities3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_12-23-58_rsl-rl_ppo_TrackVelocities3D_IntBall2_r-0_seed-5/metrics/env_info.yaml"
+                }
+            ]
+        },
+        {
+            "group_name": "IntBall RSS Experts GoThroughPoses3D",
+            "task_name": "GoThroughPoses3D",
+            "robot_name": "IntBall2",
+            "runs": [
+                {
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_12-47-09_rsl-rl_ppo_GoThroughPoses3D_IntBall2_r-0_seed-1/metrics/2026-01-21_12-47-09_rsl-rl_ppo_GoThroughPoses3D_IntBall2_r-0_seed-1_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_12-47-09_rsl-rl_ppo_GoThroughPoses3D_IntBall2_r-0_seed-1/metrics/extracted_trajectories_GoThroughPoses3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_12-47-09_rsl-rl_ppo_GoThroughPoses3D_IntBall2_r-0_seed-1/metrics/env_info.yaml"
+                },
+                {
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_13-18-42_rsl-rl_ppo_GoThroughPoses3D_IntBall2_r-0_seed-2/metrics/2026-01-21_13-18-42_rsl-rl_ppo_GoThroughPoses3D_IntBall2_r-0_seed-2_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_13-18-42_rsl-rl_ppo_GoThroughPoses3D_IntBall2_r-0_seed-2/metrics/extracted_trajectories_GoThroughPoses3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_13-18-42_rsl-rl_ppo_GoThroughPoses3D_IntBall2_r-0_seed-2/metrics/env_info.yaml"
+                },
+                {
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_13-50-06_rsl-rl_ppo_GoThroughPoses3D_IntBall2_r-0_seed-3/metrics/2026-01-21_13-50-06_rsl-rl_ppo_GoThroughPoses3D_IntBall2_r-0_seed-3_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_13-50-06_rsl-rl_ppo_GoThroughPoses3D_IntBall2_r-0_seed-3/metrics/extracted_trajectories_GoThroughPoses3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_13-50-06_rsl-rl_ppo_GoThroughPoses3D_IntBall2_r-0_seed-3/metrics/env_info.yaml"
+                },
+                {
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_14-21-33_rsl-rl_ppo_GoThroughPoses3D_IntBall2_r-0_seed-4/metrics/2026-01-21_14-21-33_rsl-rl_ppo_GoThroughPoses3D_IntBall2_r-0_seed-4_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_14-21-33_rsl-rl_ppo_GoThroughPoses3D_IntBall2_r-0_seed-4/metrics/extracted_trajectories_GoThroughPoses3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_14-21-33_rsl-rl_ppo_GoThroughPoses3D_IntBall2_r-0_seed-4/metrics/env_info.yaml"
+                },
+                {
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_14-53-01_rsl-rl_ppo_GoThroughPoses3D_IntBall2_r-0_seed-5/metrics/2026-01-21_14-53-01_rsl-rl_ppo_GoThroughPoses3D_IntBall2_r-0_seed-5_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_14-53-01_rsl-rl_ppo_GoThroughPoses3D_IntBall2_r-0_seed-5/metrics/extracted_trajectories_GoThroughPoses3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_14-53-01_rsl-rl_ppo_GoThroughPoses3D_IntBall2_r-0_seed-5/metrics/env_info.yaml"
+                }
+            ]
+        },
+        {
+            "group_name": "IntBall RSS Experts GoToPosition3DWithObstacles",
             "task_name": "GoToPosition3DWithObstacles",
             "robot_name": "IntBall2",
             "runs": [
                 {
-                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/intball_experts/2026-01-16_10-42-52_rsl-rl_ppo_GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/2026-01-16_10-42-52_rsl-rl_ppo_GoToPosition3DWithObstacles_IntBall2_r-0_seed-1_metrics.csv",
-                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/intball_experts/2026-01-16_10-42-52_rsl-rl_ppo_GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/extracted_trajectories_GoToPosition3DWithObstacles.csv",
-                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/intball_experts/2026-01-16_10-42-52_rsl-rl_ppo_GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/env_info.yaml"
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_15-24-35_rsl-rl_ppo_GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/2026-01-21_15-24-35_rsl-rl_ppo_GoToPosition3DWithObstacles_IntBall2_r-0_seed-1_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_15-24-35_rsl-rl_ppo_GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/extracted_trajectories_GoToPosition3DWithObstacles.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_15-24-35_rsl-rl_ppo_GoToPosition3DWithObstacles_IntBall2_r-0_seed-1/metrics/env_info.yaml"
                 },
+                {
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_15-50-37_rsl-rl_ppo_GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/2026-01-21_15-50-37_rsl-rl_ppo_GoToPosition3DWithObstacles_IntBall2_r-0_seed-2_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_15-50-37_rsl-rl_ppo_GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/extracted_trajectories_GoToPosition3DWithObstacles.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_15-50-37_rsl-rl_ppo_GoToPosition3DWithObstacles_IntBall2_r-0_seed-2/metrics/env_info.yaml"
+                },
+                {
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_16-16-45_rsl-rl_ppo_GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/2026-01-21_16-16-45_rsl-rl_ppo_GoToPosition3DWithObstacles_IntBall2_r-0_seed-3_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_16-16-45_rsl-rl_ppo_GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/extracted_trajectories_GoToPosition3DWithObstacles.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_16-16-45_rsl-rl_ppo_GoToPosition3DWithObstacles_IntBall2_r-0_seed-3/metrics/env_info.yaml"
+                },
+                {
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_16-42-35_rsl-rl_ppo_GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/2026-01-21_16-42-35_rsl-rl_ppo_GoToPosition3DWithObstacles_IntBall2_r-0_seed-4_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_16-42-35_rsl-rl_ppo_GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/extracted_trajectories_GoToPosition3DWithObstacles.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_16-42-35_rsl-rl_ppo_GoToPosition3DWithObstacles_IntBall2_r-0_seed-4/metrics/env_info.yaml"
+                },
+                {
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_17-08-33_rsl-rl_ppo_GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/2026-01-21_17-08-33_rsl-rl_ppo_GoToPosition3DWithObstacles_IntBall2_r-0_seed-5_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_17-08-33_rsl-rl_ppo_GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/extracted_trajectories_GoToPosition3DWithObstacles.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_17-08-33_rsl-rl_ppo_GoToPosition3DWithObstacles_IntBall2_r-0_seed-5/metrics/env_info.yaml"
+                }
             ]
         },
+        {
+            "group_name": "IntBall RSS Experts GoToPosition3D",
+            "task_name": "GoToPosition3D",
+            "robot_name": "IntBall2",
+            "runs": [
+                {
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_17-34-36_rsl-rl_ppo_GoToPosition3D_IntBall2_r-0_seed-1/metrics/2026-01-21_17-34-36_rsl-rl_ppo_GoToPosition3D_IntBall2_r-0_seed-1_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_17-34-36_rsl-rl_ppo_GoToPosition3D_IntBall2_r-0_seed-1/metrics/extracted_trajectories_GoToPosition3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_17-34-36_rsl-rl_ppo_GoToPosition3D_IntBall2_r-0_seed-1/metrics/env_info.yaml"
+                },
+                {
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_17-54-51_rsl-rl_ppo_GoToPosition3D_IntBall2_r-0_seed-2/metrics/2026-01-21_17-54-51_rsl-rl_ppo_GoToPosition3D_IntBall2_r-0_seed-2_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_17-54-51_rsl-rl_ppo_GoToPosition3D_IntBall2_r-0_seed-2/metrics/extracted_trajectories_GoToPosition3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_17-54-51_rsl-rl_ppo_GoToPosition3D_IntBall2_r-0_seed-2/metrics/env_info.yaml"
+                },
+                {
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_18-14-59_rsl-rl_ppo_GoToPosition3D_IntBall2_r-0_seed-3/metrics/2026-01-21_18-14-59_rsl-rl_ppo_GoToPosition3D_IntBall2_r-0_seed-3_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_18-14-59_rsl-rl_ppo_GoToPosition3D_IntBall2_r-0_seed-3/metrics/extracted_trajectories_GoToPosition3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_18-14-59_rsl-rl_ppo_GoToPosition3D_IntBall2_r-0_seed-3/metrics/env_info.yaml"
+                },
+                {
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_18-35-14_rsl-rl_ppo_GoToPosition3D_IntBall2_r-0_seed-4/metrics/2026-01-21_18-35-14_rsl-rl_ppo_GoToPosition3D_IntBall2_r-0_seed-4_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_18-35-14_rsl-rl_ppo_GoToPosition3D_IntBall2_r-0_seed-4/metrics/extracted_trajectories_GoToPosition3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_18-35-14_rsl-rl_ppo_GoToPosition3D_IntBall2_r-0_seed-4/metrics/env_info.yaml"
+                },
+                {
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_18-55-27_rsl-rl_ppo_GoToPosition3D_IntBall2_r-0_seed-5/metrics/2026-01-21_18-55-27_rsl-rl_ppo_GoToPosition3D_IntBall2_r-0_seed-5_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_18-55-27_rsl-rl_ppo_GoToPosition3D_IntBall2_r-0_seed-5/metrics/extracted_trajectories_GoToPosition3D.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_18-55-27_rsl-rl_ppo_GoToPosition3D_IntBall2_r-0_seed-5/metrics/env_info.yaml"
+                }
+            ]
+        },
+        {
+            "group_name": "IntBall RSS Experts GoToPose3DBox",
+            "task_name": "GoToPose3DBox",
+            "robot_name": "IntBall2",
+            "runs": [
+                {
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_19-15-27_rsl-rl_ppo_GoToPose3DBox_IntBall2_r-0_seed-1/metrics/2026-01-21_19-15-27_rsl-rl_ppo_GoToPose3DBox_IntBall2_r-0_seed-1_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_19-15-27_rsl-rl_ppo_GoToPose3DBox_IntBall2_r-0_seed-1/metrics/extracted_trajectories_GoToPose3DBox.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_19-15-27_rsl-rl_ppo_GoToPose3DBox_IntBall2_r-0_seed-1/metrics/env_info.yaml"
+                },
+                {
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_19-50-26_rsl-rl_ppo_GoToPose3DBox_IntBall2_r-0_seed-2/metrics/2026-01-21_19-50-26_rsl-rl_ppo_GoToPose3DBox_IntBall2_r-0_seed-2_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_19-50-26_rsl-rl_ppo_GoToPose3DBox_IntBall2_r-0_seed-2/metrics/extracted_trajectories_GoToPose3DBox.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_19-50-26_rsl-rl_ppo_GoToPose3DBox_IntBall2_r-0_seed-2/metrics/env_info.yaml"
+                },
+                {
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_20-25-26_rsl-rl_ppo_GoToPose3DBox_IntBall2_r-0_seed-3/metrics/2026-01-21_20-25-26_rsl-rl_ppo_GoToPose3DBox_IntBall2_r-0_seed-3_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_20-25-26_rsl-rl_ppo_GoToPose3DBox_IntBall2_r-0_seed-3/metrics/extracted_trajectories_GoToPose3DBox.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_20-25-26_rsl-rl_ppo_GoToPose3DBox_IntBall2_r-0_seed-3/metrics/env_info.yaml"
+                },
+                {
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_21-00-58_rsl-rl_ppo_GoToPose3DBox_IntBall2_r-0_seed-4/metrics/2026-01-21_21-00-58_rsl-rl_ppo_GoToPose3DBox_IntBall2_r-0_seed-4_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_21-00-58_rsl-rl_ppo_GoToPose3DBox_IntBall2_r-0_seed-4/metrics/extracted_trajectories_GoToPose3DBox.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_21-00-58_rsl-rl_ppo_GoToPose3DBox_IntBall2_r-0_seed-4/metrics/env_info.yaml"
+                },
+                {
+                    "metrics_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_21-35-57_rsl-rl_ppo_GoToPose3DBox_IntBall2_r-0_seed-5/metrics/2026-01-21_21-35-57_rsl-rl_ppo_GoToPose3DBox_IntBall2_r-0_seed-5_metrics.csv",
+                    "trajectories_csv": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_21-35-57_rsl-rl_ppo_GoToPose3DBox_IntBall2_r-0_seed-5/metrics/extracted_trajectories_GoToPose3DBox.csv",
+                    "env_info_yaml": "/workspace/isaaclab/logs/rsl_rl/rss_experts/2026-01-21_21-35-57_rsl-rl_ppo_GoToPose3DBox_IntBall2_r-0_seed-5/metrics/env_info.yaml"
+                }
+            ]
+        }
     ]
     
     
@@ -261,7 +455,7 @@ def main():
         "zoom_in": False,
     }
 
-    save_plots_folder_path = "/workspace/isaaclab/source/isaaclab_tasks/isaaclab_tasks/rans/utils/multiTask_scripts_plus_summaries/new_experts_rss_7_0" # Specify the folder path where you want to save the plots
+    save_plots_folder_path = "/workspace/isaaclab/source/isaaclab_tasks/isaaclab_tasks/rans/utils/multiTask_scripts_plus_summaries/rss_experts_7_0" # Specify the folder path where you want to save the plots
     if not os.path.exists(save_plots_folder_path):
         os.makedirs(save_plots_folder_path)
 
