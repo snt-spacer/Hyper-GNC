@@ -81,6 +81,11 @@ run_full_cycle() {
 mkdir -p "$OUTPUT_LOGS_PATH" "$OUTPUT_MODELS_PATH"
 reset_all
 
+#  ---------------------------------------------------------
+# PHASE 0: Baseline (No Randomization)
+# ---------------------------------------------------------
+run_full_cycle "BASELINE_NO_RANDOMIZATION"
+
 # ---------------------------------------------------------
 # PHASE 1: Mass Only
 # ---------------------------------------------------------

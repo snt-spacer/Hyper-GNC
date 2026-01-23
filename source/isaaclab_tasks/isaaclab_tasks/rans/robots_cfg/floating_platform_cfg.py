@@ -42,15 +42,15 @@ class FloatingPlatformRobotCfg(RobotCoreCfg):
     """Split the thrust between the thrusters"""
 
     # Randomization
-    mass_rand_cfg: MassRandomizationCfg = MassRandomizationCfg(enable=True, randomization_modes=["uniform"], body_name="Cylinder", max_delta=0.15)
-    com_rand_cfg: CoMRandomizationCfg = CoMRandomizationCfg(enable=True, randomization_modes=["uniform"], body_name="Cylinder", max_delta=0.15)
+    mass_rand_cfg: MassRandomizationCfg = MassRandomizationCfg(enable=False, randomization_modes=["uniform"], body_name="Cylinder", max_delta=0.2)
+    com_rand_cfg: CoMRandomizationCfg = CoMRandomizationCfg(enable=False, randomization_modes=["uniform"], body_name="Cylinder", max_delta=0.2)
     
     wrench_rand_cfg = WrenchRandomizationCfg(
-        enable=True,
+        enable=False,
         randomization_modes=["constant_uniform"],
         body_name="Cylinder",
-        uniform_force=(0, 0.3),
-        uniform_torque=(0, 0.3),
+        uniform_force=(0, 0.4),
+        uniform_torque=(0, 0.4),
         normal_force=(0, 0.3),
         normal_torque=(0, 0.15),
     )
