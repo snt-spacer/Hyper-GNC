@@ -60,30 +60,30 @@ def main():
                 rand_df = pd.read_csv(path_to_metrics).dropna()
                 
                 if task == 'GoToPose':
-                    base_metric_1 = base_df["final_position_distance.m"].mean()
-                    base_metric_2 = base_df["final_orientation_error.rad"].mean()
+                    base_pose_metric_1 = base_df["final_position_distance.m"].mean()
+                    base_pose_metric_2 = base_df["final_orientation_error.rad"].mean()
                     pose_metric_1 = rand_df["final_position_distance.m"].mean()
                     pose_metric_2 = rand_df["final_orientation_error.rad"].mean()
-                    pose_score = (base_metric_1 / pose_metric_1) + (base_metric_2 / pose_metric_2)
+                    pose_score = (pose_metric_1 / base_pose_metric_1) + (pose_metric_2 / base_pose_metric_2)
                     rand_score += pose_score
                 elif task == 'TrackVelocities':
-                    base_metric_1 = base_df["linear_velocity_error.m/s"].mean()
-                    base_metric_2 = base_df["lateral_velocity_error.m/s"].mean()
-                    base_metric_3 = base_df["angular_velocity_error.m/s"].mean()
+                    base_track_metric_1 = base_df["linear_velocity_error.m/s"].mean()
+                    base_track_metric_2 = base_df["lateral_velocity_error.m/s"].mean()
+                    base_track_metric_3 = base_df["angular_velocity_error.m/s"].mean()
                     track_metric_1 = rand_df["linear_velocity_error.m/s"].mean()
                     track_metric_2 = rand_df["lateral_velocity_error.m/s"].mean()
                     track_metric_3 = rand_df["angular_velocity_error.m/s"].mean()
-                    track_score = (base_metric_1 / track_metric_1) + (base_metric_2 / track_metric_2) + (base_metric_3 / track_metric_3)
+                    track_score = (track_metric_1 / base_track_metric_1) + (track_metric_2 / base_track_metric_2) + (track_metric_3 / base_track_metric_3)
                     rand_score += track_score
                 elif task == 'Rendezvous':
-                    base_metric_1 = base_df["mean_orientation_error.rad"].mean()
+                    base_rend_metric_1 = base_df["mean_orientation_error.rad"].mean()
                     rend_metric_1 = rand_df["mean_orientation_error.rad"].mean()
-                    rend_score = (base_metric_1 / rend_metric_1)
+                    rend_score = (rend_metric_1 / base_rend_metric_1)
                     rand_score += rend_score
                 elif task == 'GoToPositionWithObstacles':
-                    base_metric_1 = base_df["final_position_distance.m"].mean()
+                    base_posi_metric_1 = base_df["final_position_distance.m"].mean()
                     posi_metric_1 = rand_df["final_position_distance.m"].mean()
-                    posi_score = (base_metric_1 / posi_metric_1)
+                    posi_score = (posi_metric_1 / base_posi_metric_1)
                     rand_score += posi_score
             else:
                 print(f"Metrics file not found for {task} in either base or randomized path.")
