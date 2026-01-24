@@ -46,10 +46,12 @@ class BaseTaskMetrics(AutoRegister):
     def generate_metrics(
             self, 
             trajectories: dict, 
+            cutoff_indices: torch.Tensor,
             trajectories_masks: torch.Tensor, 
         ) -> None:
 
         self.trajectories = trajectories
+        self.cutoff_indices = cutoff_indices - 1
         self.trajectories_masks = trajectories_masks
 
         for metric_fnc in self.get_registered_methods().values():

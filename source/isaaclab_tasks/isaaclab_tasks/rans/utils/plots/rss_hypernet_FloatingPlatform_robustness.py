@@ -9,8 +9,7 @@ import glob
 import yaml
 
 def main():
-    base = "/workspace/isaaclab/logs/rsl_rl/hypernet_sim2real_FP_s/2026-01-23_09-03-43_rsl-rl_ppo-memory_GoToPose-TrackVelocities-Rendezvous-GoToPositionWithObstacles_FloatingPlatform_r-0_seed-1"
-    
+    base = "/workspace/isaaclab/logs/rsl_rl/BASELINE_NO_RANDOMIZATION/2026-01-23_09-03-43_rsl-rl_ppo-memory_GoToPose-TrackVelocities-Rendezvous-GoToPositionWithObstacles_FloatingPlatform_r-0_seed-1"
     com_1 = '/workspace/isaaclab/logs/rsl_rl/MASS_ONLY_D0.05/2026-01-21_20-12-20_rsl-rl_ppo-memory_GoToPose-TrackVelocities-Rendezvous-GoToPositionWithObstacles_FloatingPlatform_r-0_seed-1'
     com_2 = '/workspace/isaaclab/logs/rsl_rl/MASS_ONLY_D0.1/2026-01-21_21-34-00_rsl-rl_ppo-memory_GoToPose-TrackVelocities-Rendezvous-GoToPositionWithObstacles_FloatingPlatform_r-0_seed-1'
     com_3 = '/workspace/isaaclab/logs/rsl_rl/MASS_ONLY_D0.15/2026-01-21_22-55-28_rsl-rl_ppo-memory_GoToPose-TrackVelocities-Rendezvous-GoToPositionWithObstacles_FloatingPlatform_r-0_seed-1'
@@ -43,6 +42,7 @@ def main():
     
         
     for randomization in randomizations:
+        rand_score = 0
         for task in tasks:
             base_date = base.split('/')[6].split("_")[0]
             base_time = base.split('/')[6].split("_")[1]
@@ -55,7 +55,6 @@ def main():
             metrics_file_name = f"{rand_date}_{rand_time}_rsl-rl_ppo-memory_{task}_FloatingPlatform_r-0_seed-1_metrics.csv"
             path_to_metrics = os.path.join(randomization, "metrics", metrics_file_name)
             
-            rand_score = 0
             if os.path.exists(base_path_to_metrics) and os.path.exists(path_to_metrics):
                 rand_df = pd.read_csv(path_to_metrics).dropna()
                 
@@ -64,8 +63,11 @@ def main():
                     base_pose_metric_2 = base_df["final_orientation_error.rad"].mean()
                     pose_metric_1 = rand_df["final_position_distance.m"].mean()
                     pose_metric_2 = rand_df["final_orientation_error.rad"].mean()
-                    pose_score = (pose_metric_1 / base_pose_metric_1) + (pose_metric_2 / base_pose_metric_2)
+                    pose_score = ((pose_metric_1 / base_pose_metric_1) + (pose_metric_2 / base_pose_metric_2)) / 2
                     rand_score += pose_score
+                    
+                    print(f"Randomization: {randomization.split('/')[5]}, Task: {task}, Pose Score: {pose_score}, Rand Score: {rand_score}")
+
                 elif task == 'TrackVelocities':
                     base_track_metric_1 = base_df["linear_velocity_error.m/s"].mean()
                     base_track_metric_2 = base_df["lateral_velocity_error.m/s"].mean()
@@ -73,23 +75,37 @@ def main():
                     track_metric_1 = rand_df["linear_velocity_error.m/s"].mean()
                     track_metric_2 = rand_df["lateral_velocity_error.m/s"].mean()
                     track_metric_3 = rand_df["angular_velocity_error.m/s"].mean()
-                    track_score = (track_metric_1 / base_track_metric_1) + (track_metric_2 / base_track_metric_2) + (track_metric_3 / base_track_metric_3)
+                    track_score = ((track_metric_1 / base_track_metric_1) + (track_metric_2 / base_track_metric_2) + (track_metric_3 / base_track_metric_3)) / 3
                     rand_score += track_score
+                    print(f"Randomization: {randomization.split('/')[5]}, Task: {task}, Track Score: {track_score}, Rand Score: {rand_score}")
+                    
+                    
                 elif task == 'Rendezvous':
-                    base_rend_metric_1 = base_df["mean_orientation_error.rad"].mean()
-                    rend_metric_1 = rand_df["mean_orientation_error.rad"].mean()
-                    rend_score = (rend_metric_1 / base_rend_metric_1)
+                    base_rend_metric_1 = base_df["orientation_error.rad"].mean()
+                    rend_metric_1 = rand_df["orientation_error.rad"].mean()
+                    base_rend_metric_2 = base_df["success_rate.u"].mean()
+                    rend_metric_2 = rand_df["success_rate.u"].mean()
+                    rend_score = (rend_metric_1 / base_rend_metric_1) + (rend_metric_2 / base_rend_metric_2) / 2
                     rand_score += rend_score
+                    print(f"Randomization: {randomization.split('/')[5]}, Task: {task}, Rend Score: {rend_score}, Rand Score: {rand_score}")
+                    
                 elif task == 'GoToPositionWithObstacles':
                     base_posi_metric_1 = base_df["final_position_distance.m"].mean()
                     posi_metric_1 = rand_df["final_position_distance.m"].mean()
                     posi_score = (posi_metric_1 / base_posi_metric_1)
                     rand_score += posi_score
+                    print(f"Randomization: {randomization.split('/')[5]}, Task: {task}, Pos Score: {posi_score}, Rand Score: {rand_score}")
+                    print(base_posi_metric_1, posi_metric_1, posi_score)
+                    # breakpoint()
+
             else:
                 print(f"Metrics file not found for {task} in either base or randomized path.")
                     
-        dict_results[randomization.split('/')[5]] = rand_score / 7 # Average over 7 metrics
+        dict_results[randomization.split('/')[5]] = rand_score / 4  # Average over 4 tasks
     fig, axes = plt.subplots(1, 4, figsize=(15, 4), sharey=True)
+
+    
+    print(dict_results)
 
     # Define groupings and their labels
     groups = [
@@ -117,7 +133,7 @@ def main():
         
         # Formatting
         axes[i].set_xlabel(label, fontsize=14)
-        axes[i].set_ylim(0, 1.1)
+        # axes[i].set_ylim(0, 2)
         axes[i].set_facecolor('#f0f0f0') # Light gray background like the image
         axes[i].tick_params(axis='both', which='major', labelsize=10)
 

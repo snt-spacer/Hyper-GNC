@@ -20,7 +20,6 @@ class GoToPoseMetrics(BaseTaskMetrics, Registerable):
     def final_position_distance(self):
         """ Difference between the target position and the final position of the robot. """
         print("[INFO][METRICS][TASK] Final position delta")
-
         masked_distances = self.trajectories['position_distance'] * self.trajectories_masks
         final_position_delta = masked_distances[torch.arange(0, masked_distances.shape[0], device=masked_distances.device), self.last_true_index]
         self.metrics["final_position_distance.m"] = final_position_delta

@@ -48,6 +48,7 @@ parser.add_argument(
     default="PPO",
     help="The RL algorithm used for training the rsl-rl agent.",
 )
+parser.add_argument("--skip_first_reset", action="store_true", default=False, help="Skip the first reset when collecting evaluation data.")
 # append RSL-RL cli arguments
 cli_args.add_rsl_rl_args(parser)
 # append AppLauncher cli args
@@ -191,7 +192,9 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
     plots_dir = os.path.join(log_dir, "plots")
     if not os.path.exists(plots_dir):
         os.makedirs(plots_dir)
-        
+    
+    
+    skip_first_reset = args_cli.skip_first_reset
     if "MultiTask" in args_cli.task:
         robot_name = env.env.get_wrapper_attr('robot_api')._robot_cfg.robot_name
         tasks_apis = env.env.get_wrapper_attr('tasks_apis')
@@ -216,7 +219,7 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
                 device=args_cli.device,
                 num_runs_per_env=args_cli.runs_per_env,
                 task_index=i,
-                skip_first_reset=True
+                skip_first_reset=skip_first_reset
             )
             eval_metrics_list.append(eval_metrics)
         
@@ -231,7 +234,7 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
             folder_path=log_dir, 
             device=env.unwrapped.device,
             num_runs_per_env=args_cli.runs_per_env,
-            skip_first_reset=True
+            skip_first_reset=skip_first_reset
         )
 
     print(f"[INFO]: Loading model checkpoint from: {resume_path}")
@@ -274,10 +277,14 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
         # For single task: use the original approach
         data = {k: [] for k in env.env.get_wrapper_attr('eval_data_keys')}
         data["dones"] = []
+        task_completion_counts = torch.zeros(env_cfg.scene.num_envs, dtype=torch.int32, device=env.device).unsqueeze(-1)
+
 
     # reset environment
     obs, _ = env.get_observations()
     timestep = 0
+    
+    runs_per_env_threshold = args_cli.runs_per_env + 1 if args_cli.skip_first_reset else args_cli.runs_per_env
 
     # simulate environment
     while simulation_app.is_running():
@@ -287,75 +294,62 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
             # agent stepping
             actions = policy(obs)
             # env stepping
-            obs, _, dones, _ = env.step(actions)
-
+            obs, rew, dones, extras = env.step(actions)
+            
             if "MultiTask" in args_cli.task:
-                # Collect data from all tasks (including robot data for each task)
                 for i, task_api in enumerate(tasks_apis):
-                    # Get task-specific data
-                    task_eval_data = task_api.eval_data
-                    
-                    # Get robot data for this task's environments
-                    robot_eval_data = env.env.get_wrapper_attr('robot_api').eval_data
                     task_start_idx = sum(task_chunk_sizes[:i])
                     task_end_idx = task_start_idx + task_chunk_sizes[i]
-                    task_robot_data = {k: v[task_start_idx:task_end_idx] for k, v in robot_eval_data.items()}
-                    
-                    # Combine task and robot data
-                    combined_data = {**task_eval_data, **task_robot_data}
-                    
-                    # if i == 2:
-                    #     print(f"Ang vel err: {combined_data['error_angular_velocity'][0].item()}, Target ang vel: {combined_data['angular_velocity_target'][0].item()} actual: {combined_data['angular_velocity'][0][2].item()}")
-                    
-
-                    for k, v in combined_data.items():
-                        tasks_data[i][k].append(v.clone())
-                    
-                    # Get task-specific dones
                     task_dones = dones[task_start_idx:task_end_idx]
                     tasks_data[i]["dones"].append(task_dones)
-                    
-                    # Update completion counts
-                    if torch.any(task_dones == 1):
-                        completed_indices = torch.where(task_dones == 1)[0]
-                        task_completion_counts[i][completed_indices] += 1
-                        
-                # Check if all tasks have completed their required runs
-                all_tasks_completed = True
-                for i in range(num_tasks):
-                    if not torch.all(task_completion_counts[i] >= args_cli.runs_per_env + 1).item():
-                        all_tasks_completed = False
-                        break
-                
-                if all_tasks_completed:
-                    # print(f"[INFO] All tasks completed {args_cli.runs_per_env} runs per environment.")
-                    break
-                    
+                    task_completion_counts[i] += task_dones.int()
             else:
-                # Single task evaluation (original logic)
-                new_data = copy.deepcopy(env.env.unwrapped.eval_data)
-                for k, v in new_data.items():
-                    data[k].append(v)
-
                 data["dones"].append(dones)
+                task_completion_counts += dones.int()
 
-                # # Log to wandb at episode end for these envs
-                # if use_wandb and torch.any(dones == 1):
-                #     # Log task logs
-                #     task_logger = getattr(env.env.get_wrapper_attr('task_api'), 'scalar_logger', None)
-                #     if task_logger is not None:
-                #         log_dict = task_logger.compute_extras()
-                #         wandb.log({"task/" + k: v.item() if hasattr(v, 'item') else v for k, v in log_dict.items()})
-                #     # Log robot logs
-                #     robot_logger = getattr(env.env.get_wrapper_attr('robot_api'), 'scalar_logger', None)
-                #     if robot_logger is not None:
-                #         robot_log_dict = robot_logger.compute_extras()
-                #         wandb.log({"robot/" + k: v.item() if hasattr(v, 'item') else v for k, v in robot_log_dict.items()})
+           
+            if skip_first_reset:
+                if torch.all(torch.tensor(task_completion_counts) >= 1).item():
+                    skip_first_reset = False
+            else:
+                if "MultiTask" in args_cli.task:
+                    # Check if all tasks have completed their required runs
+                    all_tasks_completed = True
+                    for i in range(num_tasks):
+                        if not torch.all(task_completion_counts[i] >= runs_per_env_threshold).item():
+                            all_tasks_completed = False
+                            break
+                    
+                    if all_tasks_completed:
+                        # print(f"[INFO] All tasks completed {args_cli.runs_per_env} runs per environment.")
+                        break
+                    
+                    # Collect data from all tasks (including robot data for each task)
+                    for i, task_api in enumerate(tasks_apis):
+                        # Get task-specific data
+                        task_eval_data = task_api.eval_data
+                        
+                        # Get robot data for this task's environments
+                        robot_eval_data = env.env.get_wrapper_attr('robot_api').eval_data
+                        task_start_idx = sum(task_chunk_sizes[:i])
+                        task_end_idx = task_start_idx + task_chunk_sizes[i]
+                        task_robot_data = {k: v[task_start_idx:task_end_idx] for k, v in robot_eval_data.items()}
+                        
+                        # Combine task and robot data
+                        combined_data = {**task_eval_data, **task_robot_data}
 
-                # Check if the number of runs per env is reached
-                if torch.all(torch.sum(torch.cat(data["dones"], dim=-1).view(-1, env_cfg.scene.num_envs), dim=0) >= args_cli.runs_per_env + 1).item():
-                    # print(f"[INFO] Collected {args_cli.runs_per_env} runs per env.")
-                    break
+                        for k, v in combined_data.items():
+                            tasks_data[i][k].append(v.clone()) 
+                        
+                else:
+                    if torch.all(task_completion_counts >= runs_per_env_threshold).item():
+                        break
+                    # Single task evaluation (original logic)
+                    new_data = copy.deepcopy(env.env.unwrapped.eval_data)
+                    for k, v in new_data.items():
+                        data[k].append(v)
+                
+                
 
         if args_cli.video:
             timestep += 1
@@ -380,13 +374,13 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
             task_data_processed = {k: torch.stack(v, dim=0) for k, v in tasks_data[i].items()}  
             eval_metrics.calculate_metrics(data=task_data_processed)
             # Save extracted trajectories
-            eval_metrics.save_extracted_trajectories_to_csv()   
+            # eval_metrics.save_extracted_trajectories_to_csv()   
     else:
         # Single task metrics calculation
         data = {k: torch.stack(v, dim=0) for k, v in data.items()}
         eval_metrics.calculate_metrics(data=data)
         # Save extracted trajectories
-        eval_metrics.save_extracted_trajectories_to_csv()
+        # eval_metrics.save_extracted_trajectories_to_csv()
     
 
 if __name__ == "__main__":

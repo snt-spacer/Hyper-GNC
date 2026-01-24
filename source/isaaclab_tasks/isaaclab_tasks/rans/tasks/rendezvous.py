@@ -92,7 +92,8 @@ class RendezvousTask(TaskCore):
             "sin_heading_to_subsequent_goals_error",
             "cos_target_heading_to_subsequent_goals_error",
             "sin_target_heading_to_subsequent_goals_error",
-            "total_goals_reached"
+            "total_goals_reached",
+            "orientation_error",
         ]
     
     @property
@@ -113,7 +114,8 @@ class RendezvousTask(TaskCore):
             "sin_heading_to_subsequent_goals_error": [f".sin(heading)_sub_goal_{i}.u" for i in range(self._task_cfg.num_subsequent_goals - 1)],
             "cos_target_heading_to_subsequent_goals_error": [f".cos(target_heading)_sub_goal_{i}.u" for i in range(self._task_cfg.num_subsequent_goals - 1)],
             "sin_target_heading_to_subsequent_goals_error": [f".sin(target_heading)_sub_goal_{i}.u" for i in range(self._task_cfg.num_subsequent_goals - 1)],
-            "total_goals_reached": [".u"]
+            "total_goals_reached": [".u"],
+            "orientation_error": ["(N,)"],
         }
     
     @property
@@ -176,6 +178,7 @@ class RendezvousTask(TaskCore):
             "cos_target_heading_to_subsequent_goals_error": reshaped_cos_target_heading_to_subsequent_goals_error,
             "sin_target_heading_to_subsequent_goals_error": reshaped_sin_target_heading_to_subsequent_goals_error,
             "total_goals_reached": self.total_goals_reached,
+            "orientation_error": self._orientation_error,
         }
 
     def initialize_buffers(self, env_ids: torch.Tensor | None = None) -> None:
@@ -205,6 +208,7 @@ class RendezvousTask(TaskCore):
         self._ALL_INDICES = torch.arange(self._num_envs, dtype=torch.long, device=self._device)
         self.initial_velocity = torch.zeros((self._num_envs, 6), device=self._device, dtype=torch.float32)
         self.total_goals_reached = torch.zeros((self._num_envs,), device=self._device, dtype=torch.long)
+        self._orientation_error = torch.zeros((self._num_envs,), device=self._device, dtype=torch.float32)  # Orientation error metric
 
     def create_logs(self) -> None:
         """
@@ -286,6 +290,8 @@ class RendezvousTask(TaskCore):
             torch.sin(self._target_heading[self._ALL_INDICES, self._target_index] - heading),
             torch.cos(self._target_heading[self._ALL_INDICES, self._target_index] - heading),
         )
+        
+        self._orientation_error = heading_error.abs()
 
         # Store in buffer
         # breakpoint()

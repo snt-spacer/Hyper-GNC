@@ -46,10 +46,12 @@ class BaseRobotMetrics(AutoRegister):
     def generate_metrics(
             self, 
             trajectories: dict, 
+            cutoff_indices: torch.Tensor,
             trajectories_masks: torch.Tensor, 
         ) -> None:
 
         self.trajectories = trajectories
+        self.cutoff_indices = cutoff_indices - 1
         self.trajectories_masks = trajectories_masks
 
         for metric_fnc in self.get_registered_methods().values():
@@ -75,19 +77,21 @@ class BaseRobotMetrics(AutoRegister):
     
     @AutoRegister.register
     def action_rate(self):
-        print("[INFO][METRICS][ROBOT] Action rate")
-        masked_unaltered_actions = self.trajectories['actions'] * self.trajectories_masks.unsqueeze(-1)
-        action_rate = torch.mean(
-            torch.sum(
-                torch.square(masked_unaltered_actions[:, 1:] - masked_unaltered_actions[:, :-1]), dim=-1
-            )[:, 1:], dim=1)
-        self.metrics["mean_trajectory_action_rate.u"] = action_rate
+        # print("[INFO][METRICS][ROBOT] Action rate")
+        # masked_unaltered_actions = self.trajectories['actions'] * self.trajectories_masks.unsqueeze(-1)
+        # action_rate = torch.mean(
+        #     torch.sum(
+        #         torch.square(masked_unaltered_actions[:, 1:] - masked_unaltered_actions[:, :-1]), dim=-1
+        #     )[:, 1:], dim=1)
+        # self.metrics["mean_trajectory_action_rate.u"] = action_rate
+        pass
 
     @AutoRegister.register
     def energy(self):
-        print("[INFO][METRICS][ROBOT] Energy")
-        masked_actions = self.trajectories['actions'] * self.trajectories_masks.unsqueeze(-1)
+        # print("[INFO][METRICS][ROBOT] Energy")
+        # masked_actions = self.trajectories['actions'] * self.trajectories_masks.unsqueeze(-1)
 
-        energy = torch.stack([torch.mean(row[:end_idx]) for row, end_idx in zip(masked_actions, self.last_true_index)])
-        energy = torch.mean(torch.sum(masked_actions ** 2, dim=-1), dim=1)
-        self.metrics["mean_trajectory_energy.u"] = energy
+        # energy = torch.stack([torch.mean(row[:end_idx]) for row, end_idx in zip(masked_actions, self.last_true_index)])
+        # energy = torch.mean(torch.sum(masked_actions ** 2, dim=-1), dim=1)
+        # self.metrics["mean_trajectory_energy.u"] = energy
+        pass
