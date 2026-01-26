@@ -314,9 +314,9 @@ class GoToPositionWithObstaclesTask(TaskCore):
         self._task_data[:, 2] = torch.sin(target_heading_error)
         self._task_data[:, 3:5] = self._robot.root_com_lin_vel_b[self._env_ids, :2]
         self._task_data[:, 5] = self._robot.root_com_ang_vel_w[self._env_ids, -1]
-        # self._task_data[:, 6:9] = closest_distances
-        # self._task_data[:, 9:12] = torch.cos(obstacles_heading_error)
-        # self._task_data[:, 12:15] = torch.sin(obstacles_heading_error)
+        self._task_data[:, 6:9] = closest_distances
+        self._task_data[:, 9:12] = torch.cos(obstacles_heading_error)
+        self._task_data[:, 12:15] = torch.sin(obstacles_heading_error)
         
         task_id_one_hot = F.one_hot(torch.tensor([self._task_uid], device=self._device), num_classes=self._num_tasks).squeeze(0).repeat(self._num_envs, 1)
         semantic_emb = torch.zeros((self._num_envs, 5), device=self._device)

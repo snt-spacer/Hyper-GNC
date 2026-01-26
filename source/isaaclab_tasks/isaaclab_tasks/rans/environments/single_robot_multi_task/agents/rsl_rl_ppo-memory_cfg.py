@@ -13,10 +13,10 @@ class SingleRobotMultiTaskPPORunnerCfg(RslRlOnPolicyRunnerCfg):
     num_steps_per_env = 16
     max_iterations = 4000
     save_interval = 1000
-    experiment_name = "ALL_ACTIVE_D0.15_W0.3"
+    experiment_name = "ALL_ACTIVE_D0.15_W0.2_Sim2RealFP"
     logger = "wandb"
     wandb_kwargs = {
-        "project": "hypernet_sim2real_FP_s_robustness",
+        "project": "hypernet_sim2real_FP_s_lab",
         "entity": "spacer-rl",
         "group": "zeroG",
     }

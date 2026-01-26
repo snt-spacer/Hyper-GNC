@@ -17,8 +17,11 @@ EVAL_NUM_ENVS=64
 RUNS_PER_ENV=2
 
 # Increments
-DELTAS=(0.05 0.1 0.15 0.2)           # For Mass/CoM
-WRENCH_VALS=(0.1 0.2 0.3 0.4)        # For Wrench Force/Torque
+# DELTAS=(0.05 0.1 0.15 0.2)           # For Mass/CoM
+# WRENCH_VALS=(0.1 0.2 0.3 0.4)        # For Wrench Force/Torque
+
+DELTAS=(0.15)           # For Mass/CoM
+WRENCH_VALS=(0.2)        # For Wrench Force/Torque
 
 # --- 3. HELPER FUNCTIONS ---
 
@@ -36,7 +39,7 @@ run_full_cycle() {
     echo " PROCESS START: $LABEL"
     echo "========================================================="
     
-    OUTPUT_FILE="${OUTPUT_LOGS_PATH}log_${LABEL}_seed-${SEED}.txt"
+    OUTPUT_FILE="${OUTPUT_LOGS_PATH}sim2real_log_${LABEL}_seed-${SEED}.txt"
     rm -f "$OUTPUT_FILE"
 
     # A. Update Experiment Name in Agent Config to prevent overwriting/resuming
@@ -73,7 +76,7 @@ run_full_cycle() {
     # done
 
     # F. Logging Path
-    echo "/workspace/isaaclab/logs/rsl_rl/${EXP_NAME}/${MODEL_NAME}" >> "${OUTPUT_MODELS_PATH}robustness_experiment_summary.txt"
+    echo "/workspace/isaaclab/logs/rsl_rl/${EXP_NAME}/${MODEL_NAME}" >> "${OUTPUT_MODELS_PATH}sim2realFP_summary.txt"
 }
 
 # --- 4. EXECUTION PHASES ---
@@ -84,41 +87,41 @@ reset_all
 #  ---------------------------------------------------------
 # PHASE 0: Baseline (No Randomization)
 # ---------------------------------------------------------
-run_full_cycle "BASELINE_NO_RANDOMIZATION"
+run_full_cycle "BASELINE_NO_RANDOMIZATION_Sim2RealFP"
 
 # ---------------------------------------------------------
 # PHASE 1: Mass Only
 # ---------------------------------------------------------
-for D in "${DELTAS[@]}"; do
-    reset_all
-    # Matches line with mass_rand_cfg and changes enable and max_delta
-    sed -i "/mass_rand_cfg:/ s/enable=False/enable=True/" "$ROBOT_CFG_PATH"
-    sed -i "/mass_rand_cfg:/ s/max_delta=[0-9.]*/max_delta=$D/" "$ROBOT_CFG_PATH"
-    run_full_cycle "MASS_ONLY_D${D}"
-done
+# for D in "${DELTAS[@]}"; do
+#     reset_all
+#     # Matches line with mass_rand_cfg and changes enable and max_delta
+#     sed -i "/mass_rand_cfg:/ s/enable=False/enable=True/" "$ROBOT_CFG_PATH"
+#     sed -i "/mass_rand_cfg:/ s/max_delta=[0-9.]*/max_delta=$D/" "$ROBOT_CFG_PATH"
+#     run_full_cycle "MASS_ONLY_D${D}"
+# done
 
 # ---------------------------------------------------------
 # PHASE 2: CoM Only
 # ---------------------------------------------------------
-for D in "${DELTAS[@]}"; do
-    reset_all
-    # Matches line with com_rand_cfg and changes enable and max_delta
-    sed -i "/com_rand_cfg:/ s/enable=False/enable=True/" "$ROBOT_CFG_PATH"
-    sed -i "/com_rand_cfg:/ s/max_delta=[0-9.]*/max_delta=$D/" "$ROBOT_CFG_PATH"
-    run_full_cycle "COM_ONLY_D${D}"
-done
+# for D in "${DELTAS[@]}"; do
+#     reset_all
+#     # Matches line with com_rand_cfg and changes enable and max_delta
+#     sed -i "/com_rand_cfg:/ s/enable=False/enable=True/" "$ROBOT_CFG_PATH"
+#     sed -i "/com_rand_cfg:/ s/max_delta=[0-9.]*/max_delta=$D/" "$ROBOT_CFG_PATH"
+#     run_full_cycle "COM_ONLY_D${D}"
+# done
 
 # ---------------------------------------------------------
 # PHASE 3: Wrench Only
 # ---------------------------------------------------------
-for W in "${WRENCH_VALS[@]}"; do
-    reset_all
-    # Matches the block from wrench_rand_cfg until the closing ')'
-    sed -i "/wrench_rand_cfg/,/)/ s/enable=False/enable=True/" "$ROBOT_CFG_PATH"
-    sed -i "/uniform_force=/ s/(0, [0-9.]*)/(0, $W)/" "$ROBOT_CFG_PATH"
-    sed -i "/uniform_torque=/ s/(0, [0-9.]*)/(0, $W)/" "$ROBOT_CFG_PATH"
-    run_full_cycle "WRENCH_ONLY_W${W}"
-done
+# for W in "${WRENCH_VALS[@]}"; do
+#     reset_all
+#     # Matches the block from wrench_rand_cfg until the closing ')'
+#     sed -i "/wrench_rand_cfg/,/)/ s/enable=False/enable=True/" "$ROBOT_CFG_PATH"
+#     sed -i "/uniform_force=/ s/(0, [0-9.]*)/(0, $W)/" "$ROBOT_CFG_PATH"
+#     sed -i "/uniform_torque=/ s/(0, [0-9.]*)/(0, $W)/" "$ROBOT_CFG_PATH"
+#     run_full_cycle "WRENCH_ONLY_W${W}"
+# done
 
 # ---------------------------------------------------------
 # PHASE 4: ALL ACTIVATED
@@ -139,7 +142,7 @@ for i in "${!DELTAS[@]}"; do
     sed -i "/uniform_force=/ s/(0, [0-9.]*)/(0, $W)/" "$ROBOT_CFG_PATH"
     sed -i "/uniform_torque=/ s/(0, [0-9.]*)/(0, $W)/" "$ROBOT_CFG_PATH"
     
-    run_full_cycle "ALL_ACTIVE_D${D}_W${W}"
+    run_full_cycle "ALL_ACTIVE_D${D}_W${W}_Sim2RealFP"
 done
 
 echo "Suite complete. Check $OUTPUT_MODELS_PATH/experiment_summary.txt for model locations."

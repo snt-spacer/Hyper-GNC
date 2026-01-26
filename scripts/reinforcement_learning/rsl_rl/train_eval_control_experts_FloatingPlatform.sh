@@ -1,10 +1,10 @@
 #!/bin/bash
 ALGORITHM="ppo"
-ROBOT="IntBall2"
+ROBOT="FloatingPlatform"
 OUTPUT_LOGS_PATH="/workspace/isaaclab/source/isaaclab_tasks/isaaclab_tasks/rans/utils/train_logs/"
 OUTPUT_MODELS_PATH="/workspace/isaaclab/source/isaaclab_tasks/isaaclab_tasks/rans/utils/train_eval_models_logs/"
 CONFIG_PATH="/workspace/isaaclab/source/isaaclab_tasks/isaaclab_tasks/rans/environments/single_robot_multi_task/agents/rsl_rl_ppo_cfg.py"
-TASKS_NAMES="GoToPose3D,TrackVelocities3D,GoThroughPoses3D,GoToPosition3DWithObstacles"
+TASKS_NAMES="GoToPose,TrackVelocities,Rendezvous,GoToPositionWithObstacles"
 
 # Evaluation parameters
 EVAL_NUM_ENVS=64 # Base number of environments, adjust if needed
@@ -15,24 +15,23 @@ mkdir -p "$OUTPUT_LOGS_PATH"
 mkdir -p "$OUTPUT_MODELS_PATH"
 
 TASKS=(
-    "GoToPose3D"
-    "TrackVelocities3D"
-    "GoThroughPoses3D"
-    "GoToPosition3DWithObstacles"
-    "GoToPosition3D"
-    "GoToPose3DBox"
+    "GoToPose"
+    "TrackVelocities"
+    "Rendezvous"
+    "GoToPositionWithObstacles"
+    "GoToPosition"
 )
 
-ROBOT_NAME="IntBall2"
+ROBOT_NAME="FloatingPlatform"
 
 for _task in "${TASKS[@]}"; 
 do
     for SEED in {1..1}
     do
         echo "Training task: ${_task} with seed: ${SEED}"
-        OUTPUT_FILE="${OUTPUT_LOGS_PATH}expert-${_task}-${SEED}.txt"
+        OUTPUT_FILE="${OUTPUT_LOGS_PATH}expert-floatingplatform-${_task}-${SEED}.txt"
         rm -f $OUTPUT_FILE
-        ./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/train_control.py --task=Isaac-RANS-Single-v0 --headless env.robot_name=${ROBOT_NAME} env.task_name=env.tasks_names="[${_task}]" --algorithm=$ALGORITHM --seed=$SEED --num_envs=1024 >> $OUTPUT_FILE 2>&1
+        ./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/train_control.py --task=Isaac-RANS-Single-v0 --headless env.robot_name=${ROBOT_NAME} env.task_name=${_task} --algorithm=$ALGORITHM --seed=$SEED --num_envs=1024 >> $OUTPUT_FILE 2>&1
 
         if [ $? -eq 0 ]; then
             echo "✓ Training completed successfully."

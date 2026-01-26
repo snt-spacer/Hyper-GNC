@@ -89,19 +89,19 @@ def main():
                     rand_score += rend_score
                     print(f"Randomization: {randomization.split('/')[5]}, Task: {task}, Rend Score: {rend_score}, Rand Score: {rand_score}")
                     
-                elif task == 'GoToPositionWithObstacles':
-                    base_posi_metric_1 = base_df["final_position_distance.m"].mean()
-                    posi_metric_1 = rand_df["final_position_distance.m"].mean()
-                    posi_score = (posi_metric_1 / base_posi_metric_1)
-                    rand_score += posi_score
-                    print(f"Randomization: {randomization.split('/')[5]}, Task: {task}, Pos Score: {posi_score}, Rand Score: {rand_score}")
-                    print(base_posi_metric_1, posi_metric_1, posi_score)
-                    # breakpoint()
+                # elif task == 'GoToPositionWithObstacles':
+                #     base_posi_metric_1 = base_df["final_position_distance.m"].mean()
+                #     posi_metric_1 = rand_df["final_position_distance.m"].mean()
+                #     posi_score = (posi_metric_1 / base_posi_metric_1)
+                #     rand_score += posi_score
+                #     print(f"Randomization: {randomization.split('/')[5]}, Task: {task}, Pos Score: {posi_score}, Rand Score: {rand_score}")
+                #     print(base_posi_metric_1, posi_metric_1, posi_score)
+                #     # breakpoint()
 
             else:
                 print(f"Metrics file not found for {task} in either base or randomized path.")
                     
-        dict_results[randomization.split('/')[5]] = rand_score / 4  # Average over 4 tasks
+        dict_results[randomization.split('/')[5]] = rand_score / 3  # Average over 4 tasks
     fig, axes = plt.subplots(1, 4, figsize=(15, 4), sharey=True)
 
     
