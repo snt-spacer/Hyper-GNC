@@ -28,7 +28,7 @@ We introduce a novel hypernetwork-based framework for Multi-Task Reinforcement L
 ### Clone the repo and go to the corresponding branch:
 ```
 git clone 
-cd Isaaclab_RANS
+cd Hyper-GNC
 ```
 
 ### Build and start the docker
