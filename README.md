@@ -16,7 +16,7 @@
 [![License](https://img.shields.io/badge/license-Apache--2.0-yellow.svg)](https://opensource.org/license/apache-2-0)
 
 
-We introduce a novel hypernetwork-based framework for Multi-Task Reinforcement Learning (MTRL) that addresses these limitations by learning a single, generalizable policy for multiple diverse robotic systems and sim2real.
+Autonomous free-flying robots require versatile control policies that can adapt to varying mission objectives under strict resource constraints. We introduce HYPER-GNC, a framework that utilizes hypernetworks to map semantic embeddings to the weight space of a deep actor-critic policy. This approach enables a single, compact controller to master a diverse suite of Guidance, Navigation, and Control tasks (track velocities, docking, navigation with obstacles, and inspection) without the need for task-specific retraining. We demonstrate that our semantic manifold formulation facilitates zero-shot generalization to novel mission profiles. Extensive experimental results show that HYPER-GNC maintains stability under significant physical perturbations and external body wrenches. Finally, we demonstrate the bridge from simulation to reality by deploying our policy on a physical satellite emulator. To support reproducibility, our code and trained models are made publicly available.
 
 
 ## Getting Started
