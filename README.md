@@ -16,11 +16,7 @@
 [![License](https://img.shields.io/badge/license-Apache--2.0-yellow.svg)](https://opensource.org/license/apache-2-0)
 
 
-We introduce a novel hypernetwork-based framework for Multi-Task Reinforcement Learning (MTRL) that addresses these limitations by learning a single, generalizable policy for multiple diverse robotic systems:
-- **High Speed Racing**: Our framework enables a single policy to successfully race on a variety of unseen tracks.
-- **Floating Platform**: a single hypernetwork policy effectively performs four distinct control objectives: stabilization, docking, velocity tracking, and rendezvous.
-- **Sim-to-real**: validation for the floating platform tasks.
-- **Code and Weights**: Opens-source of the entire stack.
+We introduce a novel hypernetwork-based framework for Multi-Task Reinforcement Learning (MTRL) that addresses these limitations by learning a single, generalizable policy for multiple diverse robotic systems and sim2real.
 
 
 ## Getting Started
